@@ -25,10 +25,14 @@ Hello World
 
 Tips：可以在测试时，将`index.html`重定向到线上地址来方便调试，不用每次都打包。
 
-API文档
+API文档和打包
 ===
 
-http://fedev.baidu.com/~berg/docs/ （仅百度内网访问）
+* API文档：http://fedev.baidu.com/~berg/docs/
+* 打包平台：http://fe.baidu.com/--blendui
+
+（仅百度内网访问）
+
 
 背景和目标
 ===
