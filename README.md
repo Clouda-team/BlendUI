@@ -28,7 +28,7 @@ Tips：可以在测试时，将`index.html`重定向到线上地址来方便调�
 API文档
 ===
 
-http://fedev.baidu.com/~berg/docs/
+http://fedev.baidu.com/~berg/docs/ （仅百度内网访问）
 
 背景和目标
 ===
