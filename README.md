@@ -17,13 +17,8 @@ BlendUI能让Webapp的体验和交互与Native媲美。
 Hello World
 ===
 
-## 下载Javascript包
 
-下载BlendUI-0.0.1.min.js，放入开发目录中。此文件提供了BlendUI所有接口。
-
-## 编写html页面
-
-你可以直接下载 `demo/www/` 目录，放入开发目录与BlendUI-0.0.1.min.js同级别的位置。
+你可以直接下载 `demo/www/` 目录，放入开发目录中。
 
 此时，你的开发目录结构应该是：
 
