@@ -27,7 +27,7 @@ Hello World
 |-- www
     |-- index.html
     |-- BlendUI-0.0.1.min.js
-   
+```   
 
 这个测试页面展示了截获`a`链接，通过BlendUI提供的Layer载入打开的效果。
 
