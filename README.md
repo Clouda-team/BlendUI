@@ -27,9 +27,11 @@ Hello World
 
 此时，你的开发目录结构应该是：
 
+```
 |-- BlendUI-0.0.1.min.js
 |-- www
     |-- index.html
+```   
     
 这个测试页面展示了截获`a`链接，通过BlendUI提供的Layer载入打开的效果。
 
