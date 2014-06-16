@@ -19,11 +19,25 @@ Hello World
 
 ## 下载Javascript包
 
+下载BlendUI-0.0.1.min.js，放入开发目录中。此文件提供了BlendUI所有接口。
+
 ## 编写html页面
+
+你可以直接下载 `demo/www/` 目录，放入开发目录与BlendUI-0.0.1.min.js同级别的位置。
+
+此时，你的开发目录结构应该是：
+
+|-- BlendUI-0.0.1.min.js
+|-- www
+    |-- index.html
+    
+这个测试页面展示了截获`a`链接，通过BlendUI提供的Layer载入打开的效果。
 
 ## 打包
 
-Tips：可以在测试时，将`index.html`重定向到线上地址来方便调试，不用每次都打包。
+将整个开发目录压缩成一个zip包，至打包平台(http://fe.baidu.com/--blendui)打包。
+
+Tips：可以在测试时，将`index.html`通过`meta`标签，重定向到线上地址来方便调试，不用每次都打包。
 
 API文档和打包
 ===
