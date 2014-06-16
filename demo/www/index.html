@@ -54,6 +54,14 @@ links.click(function(e){
     });
 });
 
+//返回键退出应用
+var layerApi = main.api.layer;
+layerApi.on("backPressedBeforeExit",function(){
+    if(window.confirm("确定要退出吗?")){
+        layerApi.destroy();
+    }
+});
+
 })(Blend,Blend.Layer,Blend.LayerGroup);
 </script>
 </body>
