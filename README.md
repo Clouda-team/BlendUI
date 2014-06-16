@@ -28,14 +28,15 @@ Hello World
 此时，你的开发目录结构应该是：
 
 ```
-|-- BlendUI-0.0.1.min.js
+
 |-- www
     |-- index.html
-```   
+````|-- BlendUI-0.0.1.min.js
+   
 
 这个测试页面展示了截获`a`链接，通过BlendUI提供的Layer载入打开的效果。
 
-由于打包平台要求，`www`目录中的index.html页面为入口页，请注意。
+按照打包平台要求，`www` 目录为pkg中asset资源包,目录中的index.html页面为入口页，请注意。
 
 ## 打包
 
