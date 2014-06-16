@@ -32,12 +32,14 @@ Hello World
 |-- www
     |-- index.html
 ```   
-    
+
 这个测试页面展示了截获`a`链接，通过BlendUI提供的Layer载入打开的效果。
+
+由于打包平台要求，`www`目录中的index.html页面为入口页，请注意。
 
 ## 打包
 
-将整个开发目录压缩成一个zip包，至打包平台(http://fe.baidu.com/--blendui)打包。
+将整个开发目录压缩成一个zip包，至打包平台( http://fe.baidu.com/--blendui )打包。打包的时间较长，请耐心等待。
 
 Tips：可以在测试时，将`index.html`通过`meta`标签，重定向到线上地址来方便调试，不用每次都打包。
 
