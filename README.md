@@ -27,7 +27,7 @@ Hello World
 |-- www
     |-- index.html
     |-- BlendUI-0.0.1.min.js
-   
+```   
 
 这个测试页面展示了截获`a`链接，通过BlendUI提供的Layer载入打开的效果。
 
@@ -35,7 +35,7 @@ Hello World
 
 ## 打包
 
-将整个开发目录压缩成一个zip包，至打包平台( http://fe.baidu.com/--blendui )打包。打包的时间较长，请耐心等待。
+将`www`目录压缩成一个zip包（注意文件结构，zip解压后应该出来`www`目录，目录中有一个`index.html`文件），至打包平台( http://fe.baidu.com/--blendui )打包。打包的时间较长，请耐心等待。
 
 Tips：可以在测试时，将`index.html`通过`meta`标签，重定向到线上地址来方便调试，不用每次都打包。
 
