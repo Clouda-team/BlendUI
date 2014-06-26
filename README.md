@@ -23,7 +23,6 @@ Hello World
 此时，你的开发目录结构应该是：
 
 ```
-
 |-- www
     |-- index.html
     |-- BlendUI-0.0.1.min.js
