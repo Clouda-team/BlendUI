@@ -164,12 +164,9 @@
             left: 0,
             top: 90
         });
-        $("#nav a").click(function(e){
-            e.preventDefault();
-        });
         $("#nav a").on("click",function(e) {
             e.preventDefault();
-            console.log("clickclickclickclick");
+            //console.log("clickclickclickclick");
             tabs.active($(this).parent()[0].id);
         });
 
