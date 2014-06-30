@@ -23,6 +23,7 @@
 <script type="text/javascript">
 //直接引入BlendUI脚本
 Blend.ready(function(main) {
+    //Blend===main
     /*外链a用BlendUI layer打开*/
     var Layer = main.Layer;
     var links = $("a[target='_blank']");
@@ -52,7 +53,31 @@ Blend.ready(function(main) {
 
 //clouda方式
 /*
-    todo
+    document.addEventListener("blendready",function(){
+        var Layer = Blend.Layer;
+        var links = $("a[target='_blank']");
+        var page = null;
+        links.click(function(e){
+            e.preventDefault();
+            var $t = $(this);
+            var link = $t.attr("href");
+            if(page) page.destroy();
+            page = new Layer({
+                "id":"layerId",
+                "url":link,
+                "active":true
+            });
+        });
+
+        //返回键退出应用
+        var core = Blend.api.core;
+        var layerApi = Blend.api.layer;
+        layerApi.on("backPressedBeforeExit",function(){
+            if(window.confirm("确定要退出吗?")){
+                core.exitApp();
+            }
+        });
+    });
 */
 </script>
 </body>
