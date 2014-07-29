@@ -16,4 +16,4 @@ BlendUI只在最基础的部分使用Native，BlendUI的核心消息机制类似
 文档
 ====
 
-请前往[http://cloudaplus.duapp.com/blendui/introduction/introduction](Clouda+官网)阅读
+请前往[Clouda+官网](http://cloudaplus.duapp.com/blendui/introduction/introduction)阅读
