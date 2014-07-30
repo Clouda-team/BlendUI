@@ -1630,20 +1630,23 @@ define(
 
             blend.register(this);
 
+            this.currentStates = {};
+            this._listener = {};
+
 
             //this.fire('init');
         }
 
         Control.prototype = {
             constructor: Control,
-            nativeObj: {},
-            currentStates: {},
+            // nativeObj: {},
+            currentStates: null,
             /**
              * 事件存储数组
              * @private
              * @property {Object} _listener
              */
-            _listener: {},
+            _listener: null,
 
 
             /**
@@ -2076,7 +2079,7 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
      *
      * @cfg {Number} loadingTime 毫秒ms;
      */
-    Layer.prototype.maxLoadingTime = 1500;
+    Layer.prototype.maxLoadingTime = 800;
 
 
     /**
