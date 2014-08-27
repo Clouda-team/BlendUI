@@ -15,6 +15,15 @@ define(
             a.href = link;
             return a.href;
         };
+        var filterOption = function(options,delKeys){
+            var layerOut = ['left', 'top', 'width', 'height'];
+            var _options = {};
+            for(var n in options){
+                if(options[n] === undefined || (delKeys&&delKeys.indexOf(n)>=0)) continue;
+                _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
+            }
+            return _options;
+        }
 
         // native api回调
         var apiFn = function(handler, args) {
@@ -49,15 +58,9 @@ define(
             if (options.active) {
                 layerInfo.active = options.active;
             }
-            var groupOptions = {};
 
-            //过滤没用字段和devPR;
-            ['left', 'top', 'width', 'height'].forEach(function(n, i) {
-                if (options[n] !== undefined) {
-                    groupOptions[n] = options[n] * devPR;
-                }
-            });
-
+            var groupOptions = filterOption(options,['active']);
+            
             apiFn('addLayerGroup', [JSON.stringify(layerInfo), JSON.stringify(groupOptions)]);
             return groupId;
         };

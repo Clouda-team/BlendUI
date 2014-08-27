@@ -16,7 +16,17 @@ define(
             a.href = link;
             return a.href;
         };
-        
+
+        var filterOption = function(options,delKeys){
+            var layerOut = ['left', 'top', 'width', 'height'];
+            var _options = {};
+            for(var n in options){
+                if(options[n] === undefined || (delKeys&&delKeys.indexOf(n)>=0)) continue;
+                _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
+            }
+            return _options;
+        }
+
         var apiFn = function(handler, args) {
             try {
                 var api = window.nuwa_frame || window.lc_bridge;
@@ -38,12 +48,8 @@ define(
          * @private
          */
         layer.prepare = function(layerId, options) {
-            var layerOptions = {};
-            for(var n in options){
-                if (options[n] !== undefined) {
-                    layerOptions[n] = options[n];
-                }
-            }
+            //subLayer
+            var layerOptions = filterOption(options);
             layerOptions.url = getBasePath(layerOptions.url);
             apiFn('prepareLayer', [layerId, JSON.stringify(layerOptions)]);
             return layerId;
@@ -323,14 +329,11 @@ define(
         };
 
         /**
-         * 设置layer的position属性
+         * 设置layer的position属性{"left","top","height","width"}
          */
-        layer.setLayout = function( values ){
-            for(var i in values){
-                values[i] = values[i]*devPR;
-            }
-            values = JSON.stringify(values);
-            return apiFn('setLayerLayout',[values]);
+        layer.setLayout = function( options ){
+            var _options = filterOption(options);
+            return apiFn('setLayerLayout',[JSON.stringify(_options)]);
         }
 
         return layer;

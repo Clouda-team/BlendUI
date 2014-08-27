@@ -128,7 +128,7 @@ define(function(require) {
      *
      * @cfg {Number} loadingTime 毫秒ms;
      */
-    Layer.prototype.maxLoadingTime = 1500;
+    Layer.prototype.maxLoadingTime = 800;
 
 
     /**

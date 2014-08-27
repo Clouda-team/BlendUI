@@ -47,10 +47,7 @@ define(function(require) {
      * @param {string} [options.left=0] layerGroup距离屏幕left的坐标
      * @param {string} [options.width] layer像素宽度，默认全屏
      * @param {string} [options.height] layer像素高度，默认全屏
-     *
-     * @param {Function} [options.beforerender] webview容器render开始前的回调
-     * @param {Function} [options.afterrender] webview容器render成功的回调
-     * @param {Function} [options.renderfail] webview容器render失败的回调
+    
      * @return this
      */
     var LayerGroup = function(options) {
@@ -73,6 +70,14 @@ define(function(require) {
      */
 
     LayerGroup.prototype.type = 'layerGroup';
+
+    /**
+     * layerGroup是否可以拖动切换
+     *
+     * @cfg {boolean} scrollEnabled
+     */
+
+    LayerGroup.prototype.scrollEnabled = true;
     /**
      * @private
      * 对象初始化, 私有方法;
@@ -209,6 +214,7 @@ define(function(require) {
                 top: me.top,
                 width: me.width,
                 height: me.height,
+                scrollEnabled: me.scrollEnabled,
                 active: me.activeId
             };
             layerGroupApi.create(me.id, me.layers, options);
