@@ -685,7 +685,43 @@ var Zepto = (function() {
 
       return this.each(function(){ this.style.cssText += ';' + css })
     },
-    index: function(element){
+      outerHeight: function (margins) {
+          if (this.length > 0) {
+              if (margins)
+                  return this[0].offsetHeight + parseFloat(this.css('margin-top')) + parseFloat(this.css('margin-bottom'));
+              else
+                  return this[0].offsetHeight;
+          }
+          else return null;
+      },
+      outerWidth: function (margins) {
+          if (this.length > 0) {
+              if (margins)
+                  return this[0].offsetWidth + parseFloat(this.css('margin-right')) + parseFloat(this.css('margin-left'));
+              else
+                  return this[0].offsetWidth;
+          }
+          else return null;
+      },
+
+      transitionEnd: function (callback) {
+          var events = ['webkitTransitionEnd', 'transitionend', 'oTransitionEnd', 'MSTransitionEnd', 'msTransitionEnd'],
+              i, dom = this;
+          function fireCallBack(e) {
+              callback.call(this, e);
+              for (i = 0; i < events.length; i++) {
+                  dom.off(events[i], fireCallBack);
+              }
+          }
+          if (callback) {
+              for (i = 0; i < events.length; i++) {
+                  dom.on(events[i], fireCallBack);
+              }
+          }
+          return this;
+      },
+
+      index: function(element){
       return element ? this.indexOf($(element)[0]) : this.parent().children().indexOf(this[0])
     },
     hasClass: function(name){
