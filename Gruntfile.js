@@ -7,7 +7,7 @@ module.exports = function (grunt) {
             hybrid: {
                 options: {
                     baseUrl: "./",
-                    name : 'third_party/almond',
+                    name : 'src/almond',
                     include : [
                       'src/hybrid/main'
                     ],
@@ -19,7 +19,7 @@ module.exports = function (grunt) {
             web: {
                 options: {
                     baseUrl: "./",
-                    name : 'third_party/almond',
+                    name : 'src/almond',
                     include : [
                       'src/web/main'
                     ],
