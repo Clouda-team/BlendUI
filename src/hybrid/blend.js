@@ -40,6 +40,10 @@ define(
             controls[control.id] = control;
         };
 
+        //ADDED CURRENTID
+        blend.currentLayerId = runtime.layer.getCurrentId();
+        // var delegateLayer = require("./delegateLayer.js");
+
         /**
          * 注销控件
          *
@@ -58,7 +62,13 @@ define(
          * @return {Control}
          */
         blend.get = function(id) {
-            return controls[id];
+            
+            if ( blend.currentLayerId === '0' ) {//layer 0 具备全部的controls 
+                return controls[id];
+            }else{//其他layer 通过 代理 返回fakelayer对象
+                var delegateLayer = require("./delegateLayer.js");
+                return new delegateLayer(id);
+            }
         };
 
         /**
@@ -131,6 +141,7 @@ define(
         }
 
         blend._lanch = function(id,dom){
+            
             mainCall[id]&&mainCall[id].call(blend, dom);
         }
 

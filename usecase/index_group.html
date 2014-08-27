@@ -1,0 +1,199 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>测试 layer group 页面</title>
+    <link rel="stylesheet" href="crema.css">
+
+</head>
+
+<body>
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+    <div class="views">
+        <div class="view">
+            <!-- <div class="navbar">
+                        <div class="navbar-inner">
+                            <div class="center">测试layer</div>
+                        </div>
+                    </div> -->
+            <div class="navbar">
+              <div class="navbar-inner">
+                <div class="left"><a href="index_web.html" class="back link"><i class="icon icon-back-blue"></i><span>后退</span></a></div>
+                <div class="center">
+                    <a href="#tab1" data-active="6" class="button tab-link">active 6</a>
+                    <a href="#tab1" data-active="7" class="button tab-link">active 7</a>
+                    <a href="#tab1" data-active="8" class="button tab-link">active 8</a>
+                </div>
+                <div class="right"><a href="#" class="reload link">reload</a></div>
+              </div>
+            </div>
+            <div class="pages navbar-through">
+                <div class="page page-on-center">
+                    
+                    <div class="page-content">
+                        <div class="content-block">
+                            <a href="#" id="groupopen" class="button button-download">group open</a>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</body>
+<script>
+
+document.addEventListener("blendready",function(){
+
+    console.log("in blendready!");
+    var blend = Blend;
+    var layer = Blend.ui.Layer;
+    var LayerGroup = Blend.ui.LayerGroup;
+
+    $("#groupopen").click(function(){
+        if (typeof lyGroup !=='undefined') lyGroup.destroy();
+        window.lyGroup = new LayerGroup({
+                id:"5",
+                onshow:function(event){
+                    if (event.detail) {//id
+                        $(".tab-link").each(function(){
+                            if ($(this).attr("data-active") == event.detail) {
+                                $(this).addClass("active");
+                            }else{
+                                $(this).removeClass("active");
+                            }
+                        });
+                    }
+                },
+                layers:[
+                    {
+                        id:'6',
+                        url:'sub/index_1.html',
+                        onshow:function(){
+                            //alert("layer_6_show");
+                        },
+                        onhide:function(){
+                            //alert("layer_6_hide");
+                        }
+                    },
+                    {
+                        id:'7',
+                        url:'sub/index_2.html',
+                        onshow:function(){
+                            //alert("layer_7_show");
+                        },
+                        "active":true,
+                        onhide:function(event){
+                            console.log("hide..."+event.detail);
+                        },"ptrFn":function(){
+                            var me = this;
+                            setTimeout(function(){
+                                // alert("refresh callback");
+                                lyGroup.__layers[me.id].endPullRefresh();
+
+                            },1000);
+                
+                        },
+                        'autoload':false
+                    },
+                    {
+                        id:'8',
+                        url:'sub/index_4.html',
+                        onshow:function(){
+                            //alert("layer_8_show");
+                        },
+                        onhide:function(){
+                            //alert("layer_8_hide");
+                        },
+                        "ptrFn":function(){
+                            var me = this;
+                            setTimeout(function(){
+                                // console.log("refresh callback");
+                                lyGroup.__layers[me.id].endPullRefresh();
+
+                            },2000);
+                
+                        },
+                        'autoload':true
+                    }
+                ],
+                onhide:function(event){
+                    console.log("hide!!!"+event.detail);
+                },
+                left:10,
+                top:66,
+                
+            });
+    });
+    
+    $("#groupopen").click();    
+
+
+    $(document).click(function(e){
+        
+        var $t = $(e.target).closest('a');
+        if (!$t.length) return true;
+        if ($t.hasClass("back")) { //有class name back 则 后退，否则，进入
+            lyGroup.out();
+            return false;
+        }
+        if ($t.hasClass("tab-link")) {
+            // _layer.reload('sub/list.html');
+            var id = $t.attr("data-active");
+            lyGroup.active(id);
+            return false;
+        }
+
+    });
+    
+},false);
+</script>
+<script src="../dist/BlendWebUI.js"></script>
+
+<!-- <script src="../third_party/require.js" ></script> -->
+<script>
+    // require(['../src/web/blend','../src/web/dialog/alert','../src/web/slider','../src/web/Layer.js','../src/web/LayerGroup.js'], function (blend, alert,slider,layer,layergroup) {
+        // "use strict";
+        // blend = blend||{};
+        
+        // //dialogs
+        // blend.dialog = {};
+        // blend.dialog.alert = alert;
+
+        // //components
+        // blend.component = {};
+        // blend.component.slider = slider;
+
+        // //layer
+        // blend.Layer = layer;
+        // blend.LayerGroup = layergroup;
+
+        // window.Blend = blend;
+
+        // var e;
+        // if (typeof CustomEvent !== 'undefined') {
+        //     e = new CustomEvent('blendready', {
+        //       // detail: { slideNumber: Math.abs(slideNumber) },
+        //       bubbles: false,
+        //       cancelable: true
+        //     });
+        // }else{
+        //     e  = document.createEvent("Event");
+        //     e.initEvent("blendready",false,false);
+        // }
+        
+        // document.dispatchEvent(e);
+
+    // },null,true);
+
+</script>
+
+</html>

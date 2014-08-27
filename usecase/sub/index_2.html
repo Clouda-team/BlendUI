@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>测试 layer group 页面</title>
+    <link rel="stylesheet" href="../crema.css">
+
+</head>
+
+<body>
+    <div class="statusbar-overlay"></div>
+    <div class="panel-overlay"></div>
+    <div class="views">
+        <div class="view">
+            
+            <div class="pages navbar-through">
+                <div class="page page-on-center">
+<!-- begin -->
+                    
+                    <div class="page-content">
+                        <div class="list-block contacts-block">
+                            <ul>
+                                <li><div class="item-content item-link"> item & link 2</div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link </div></li>
+                                <li><div class="item-content item-link"> item & link last2</div></li>
+                                <li><div class="item-content item-link"> item & link last</div></li>
+                            </ul>
+                        </div>
+                    </div>
+<!-- end -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="../../dist/BlendWebUI.js"></script>
+<script>
+    document.addEventListener("blendready",function(){
+
+        console.log("in blendready!");
+        var blend = Blend;
+        var layer = Blend.Layer;
+        var LayerGroup = Blend.LayerGroup;
+
+        $("#groupopen").click(function(){
+            if (typeof lyGroup !=='undefined') lyGroup.destroy();
+            window.lyGroup = new LayerGroup({
+                    id:"5",
+                    aftershow:function(event){
+                        if (event.detail) {//id
+                            $(".tab-link").each(function(){
+                                if ($(this).attr("data-active") == event.detail) {
+                                    $(this).addClass("active");
+                                }else{
+                                    $(this).removeClass("active");
+                                }
+                            })
+                        }
+                    },
+                    layers:[
+                        {
+                            id:'6',
+                            url:'sub/index_1.html',
+                            onshow:function(){
+                                //alert("layer_6_show");
+                            },
+                            onhide:function(){
+                                //alert("layer_6_hide");
+                            }
+                        },
+                        {
+                            id:'7',
+                            url:'sub/index_2.html',
+                            onshow:function(){
+                                //alert("layer_7_show");
+                            },
+                            "active":true,
+                            onhide:function(){
+                                //alert("layer_7_hide");
+                            },"ptrFn":function(){
+                                var me = this;
+                                setTimeout(function(){
+                                    // alert("refresh callback");
+                                    lyGroup.__layers[me.id].endPullRefresh();
+
+                                },1000);
+                    
+                            },
+                            'autoload':false
+                        },
+                        {
+                            id:'8',
+                            url:'sub/index_4.html',
+                            onshow:function(){
+                                //alert("layer_8_show");
+                            },
+                            onhide:function(){
+                                //alert("layer_8_hide");
+                            },
+                            "ptrFn":function(){
+                                var me = this;
+                                setTimeout(function(){
+                                    // console.log("refresh callback");
+                                    lyGroup.__layers[me.id].endPullRefresh();
+
+                                },2000);
+                    
+                            },
+                            'autoload':true
+                        }
+                    ],
+                    onselected: function( event ){
+                        $("#Menu a").removeClass('cur');
+                        $("#Menu a[data-index='"+event['layerId']+"']").addClass('cur');
+                    },
+                    left:0,
+                    top:44,
+                    
+                });
+        });
+        
+        $("#groupopen").click();    
+
+
+        $(document).click(function(e){
+            
+            var $t = $(e.target).closest('a');
+            if (!$t.length) return true;
+            if ($t.hasClass("back")) { //有class name back 则 后退，否则，进入
+                lyGroup.out();
+                return false;
+            }
+            if ($t.hasClass("tab-link")) {
+                // _layer.reload('sub/list.html');
+                var id = $t.attr("data-active");
+                lyGroup.active(id);
+                return false;
+            }
+
+        });
+        
+    },false);
+
+</script>
+
+</html>

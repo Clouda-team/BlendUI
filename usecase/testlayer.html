@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,initial-scale=1, maximum-scale=3, minimum-scale=1, user-scalable=yes" name="viewport" />
+
+    <title>layer功能测试</title>
+    <link rel="stylesheet" href="">
+    
+    <script src="../dist/BlendWebUI.js"></script>
+    <link rel="stylesheet" href="crema.css">
+</head>
+<body>
+
+<div class="pages">
+    <div class="page">
+        <div class="page-content">
+            <h2>layer功能测试</h2><br/><br/>
+
+            <input type="button" id="create" value="创建layer test"/>
+            <br/>
+            属性默认值
+             {"fx":"slide","reverse":false,"duration":"normal",
+             pullToRefresh:"false"}
+            <br/>
+            <hr/>
+            <input type="button" id="create1" value="设置动画slide"/>
+            <br/>
+            动画设置为slide
+             {"fx":"slide","reverse":false,"duration":"normal"}
+            <hr/>
+            <input type="button" id="create2" value="设置动画pop"/>
+            <br/>
+            <input type="button" id="pullrefresh" value="pullrefresh"/>
+            <br/>
+            
+            pullrefresh
+             {"fx":"pop","reverse":false,"duration":"normal"}
+            <hr/>
+            <input type="button" id="create3" value="设置动画fade"/>
+            <br/>
+            动画设置为fade
+             {"fx":"fade","reverse":false,"duration":"normal"}
+            <hr/>
+            <input type="button" id="resumeLayer" value="重新激活layer test"/><br/>
+            重新激活创建的layer test
+            <br/>
+            <hr/>
+            <input type="button" id="reload" value="改变layer test的url"/><br/>
+            改变layer test的url
+            <br/>
+            <hr/>
+            <input type="button" id="showEvent" value="onshow事件回调"/><br/>
+            当激活创建的layer时进行回调
+            <br/>
+            <hr/>
+            <input type="button" id="hideEvent" value="onhide事件回调"/><br/>
+            当隐藏(调back或者返回键回退)时进行回调
+
+            <hr/>
+            <input type="button" id="afterrenderEvent" value="afterrender事件回调"/>
+            <br/>
+            当webview创建成功时进行回调
+            <hr/>
+            <input type="button" id="onloadEvent" value="onload事件回调"/>
+            <br/>
+            页面加载完成进行回调
+            <hr/>
+            <input type="button" id="changeUrlEvent" value="changeUrl事件回调"/>
+            <br/>
+            页面url改变事件回调
+            <hr/><!-- <input type="button" id="back" value="返回"/><br/> -->
+            <input type="button" id="messageEvent" value="不同layer直接进行消息传递"/>
+            <br/>
+            监听message
+            <hr/>
+            <input type="button" id="selfEvent" value="自定义监听事件，子层可以触发"/>
+            <br/>
+            监听baidu事件
+            <br/>
+            <input type="button" id="menuP" value="监听菜单键"/>
+            <br/>
+            监听菜单事件
+            <br/>
+            <input type="button" id="backKey" value="监听返回键"/>
+            <br/>
+            监听返回键
+            <br/>
+            <input type="button" id="isAvailable" value="isAvailable"/>
+            <br/>
+            isAvailable layer是否可用
+            <br/>
+            <input type="button" id="isActive" value="isActive"/>
+            <br/>
+            isActive 是否已经激活
+            <br/>
+            <input type="button" id="canGoBack" value="canGoBack"/>
+            <br/>
+            canGoback 是否可以webview goback
+            <br/>
+            <input type="button" id="layerClearHistory" value="layerClearHistory"/>
+            <br/>
+            layerClearHistory 清除webview history
+            <br/>
+            <input type="button" id="exitApp" value="exitApp"/>
+            <br/>
+        </div>
+    </div>
+</div>
+        
+exitApp
+</body>
+<script>
+$(document).on("blendready",function(main){
+    main = Blend;
+    var Layer = main.Layer;
+    var LayerGroup = main.LayerGroup
+    var _layer;
+    var _layer1;
+    var layerApi = Layer;//main.api.layer;
+
+    window.nuwa_runtime && nuwa_runtime.removeSplashScreen();
+    
+    _layer = new Layer({
+        'id':"test",
+        "url":"sub/list.html"
+        
+    });
+    var _eval = {
+        create : function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test1",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true
+            });
+        },
+        pullrefresh : function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"testfresh",
+                "url":"sub/list.html",
+                // left:100,
+                "ptrFn":function(){
+                    var me = this;
+                    setTimeout(function(){
+                        // alert("refresh callback");
+                        me.endPullRefresh();
+
+                    },1000);
+        
+                },
+                "active":true
+            });
+        },
+        create1 : function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "reverse":true,
+                "fx":"slide",
+                "duration":"quick"
+            });
+        },
+        create2 : function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "reverse":false,
+                "fx":"pop",
+                "duration":"quick"
+            });
+        },
+        create3 : function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "reverse":false,
+                "fx":"fade",
+                "duration":"quick"
+            });
+        },
+        resumeLayer:function(){
+            _layer.in()
+        },
+        reload:function(){
+            _layer.reload("sub/index_1.html");
+            _layer.in();
+            /*setTimeout(function(){
+                //alert(222);
+                //_layer.replace('http://tieba.baidu.com')
+                _layer.in();
+                console.log(11111);
+            },1000);*/
+        },
+        back :function(){
+            alert('请在test layer上面点击返回按钮测试')
+        },
+        showEvent:function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "onshow":function(){
+                    alert("onshow:"+this.id)
+                }
+            });
+        },
+        hideEvent:function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "onhide":function(){
+                    alert("onhide:"+this.id)
+                }
+            });
+        },
+        afterrenderEvent:function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "afterrender":function(){
+                    alert("afterrender:"+this.id)
+                }
+            });
+        },
+        onloadEvent:function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "onload":function(){
+                    alert("onload:"+this.id)
+                }
+            });
+        },
+        changeUrlEvent:function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test",
+                "url":"sub/list.html",
+                // left:100,
+                "active":true,
+                "changeUrl":function(e){
+                    console.log("changeUrl:"+this.id+"\n"+event['url'])
+                    alert("changeUrl:"+this.id+"\n"+event['url'])
+                }
+            });
+        },
+        messageEvent:function(){
+            layerApi.off('message',"all");
+
+            layerApi.on('message',function(event){
+                alert("接收postMessage 传递的数据为:"+event.data);
+            });
+            _layer.in();
+        },
+        selfEvent:function(){
+            layerApi.off('baidu',"all");
+
+            layerApi.on('baidu',function(event){
+                alert("触发自定义事件baidu:"+event.data.aaa);
+                if(event.callback){
+                    event.callback({ccc:"http://wwww.gagadfsal.&?;"});
+                }
+            });
+
+            /*layerApi.on('book',function(event){
+                //alert(event['reciever']);
+                //alert(event['sender']);
+                //alert(event['origin']);
+                alert("触发自定义事件book:"+event.data.aaa);
+                if(event.callback){
+                    event.callback({ccc:"bbbbb"});
+                }
+            });*/
+
+            _layer.in();
+        },
+        menuP:function(){
+            layerApi.on('menuPressed',function(e){
+                alert("菜单事件" + e['origin']);
+            },"test");
+        },
+        backKey:function(){
+            layerApi.on("layerGoBack",function(){
+                alert('test-layer keyBack');
+            },'test');
+
+            layerApi.on("layerGoBack",function(){
+                alert("0-layer keyBack");
+            });
+        },
+        isAvailable:function(){
+            alert(layerApi.isAvailable('test'));
+        },
+        isActive:function(){
+            alert(_layer.isActive());
+            alert(_layer.isHidden());
+        },
+        canGoBack:function(){
+            alert(_layer.canGoBack());
+        },
+        layerClearHistory:function(){
+            _layer.clearHistory();
+        },
+        exitApp:function(){
+            main.api.core.exitApp();
+        }
+
+    };
+
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+    });
+    $(document).click(function(e){
+        
+        var $t = $(e.target).closest('a');
+        if (!$t.length) return true;
+        if ($t.hasClass("back")) { //有class name back 则 后退，否则，进入
+            _layer.out();
+            return false;
+        }
+        if ($t.hasClass("tab-link")) {
+            // _layer.reload('sub/list.html');
+            var id = $t.attr("data-active");
+            _layer.active(id);
+            return false;
+        }
+
+    });
+
+    
+   
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>
