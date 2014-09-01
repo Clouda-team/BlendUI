@@ -21,21 +21,22 @@ define(
             'backPressedBeforeExit'//返回键退出事件回调
         ];
 
-
-        //todo: 这个变量换一个名字吧，和event很容易混淆
-        var events = {};
-        var callCount = 0;
-
-        //todo: 这两个函数放在这里，然后连入到 layer里面，看着很诡异；
-        //todo: 考虑放到control里面，并且改一个名字？比如叫 bind/unbind/trigger之类的？或者干脆和control里面的合并
+        var handlers = {};
+        var jsonParseFliter = function(key,val){
+            if(val&&val.indexOf&&val.indexOf('function')>=0){
+                 return new Function("return "+val)();
+            }else{
+                return val;
+            }
+        }
 
         event.on = function(type, handler, id, context, isonce) {
             var me = this;
             id = id || (this.getCurrentId && this.getCurrentId()) || 'empty';
             context = context || this;
-            if (events[type]) {
+            if (handlers[type]) {
                 var i = 0,
-                    listeners = events[type]['listener'],
+                    listeners = handlers[type]['listener'],
                     len = listeners.length;
                 for (; i < len; i++) {
                     if (listeners[i].id == id && listeners[i].callback == handler && listeners[i].context == context) {
@@ -43,24 +44,24 @@ define(
                     }
                 }
                 if (i == len) {
-                   events[type]['listener'].push({
+                   handlers[type]['listener'].push({
                      id: id,
                      context: context,
                      callback: handler
                    });
                 }
-                if (!events[type]['listened']) {
-                    document.addEventListener(type, events[type].callback, false);
-                    events[type]['listened'] = true;
+                if (!handlers[type]['listened']) {
+                    document.addEventListener(type, handlers[type].callback, false);
+                    handlers[type]['listened'] = true;
                 }
             }else {
                 //console.log("不支持此事件");
-                events[type] = {};
-                events[type]['listener'] = [];
+                handlers[type] = {};
+                handlers[type]['listener'] = [];
                 if (_type.indexOf(type) < 0) {
-                    events[type]['callback'] = function(event) {
-                        var parseData = JSON.parse(decodeURIComponent(event.data));
-                        var listeners = events[type]['listener'];
+                    handlers[type]['callback'] = function(event) {
+                        var parseData = JSON.parse(decodeURIComponent(event.data),jsonParseFliter);
+                        var listeners = handlers[type]['listener'];
                         event.origin = event['sender'] || parseData.origin;
                         event.data = parseData.data;
                         event.detail = event.origin;
@@ -76,8 +77,8 @@ define(
                         isonce && me.off(type);
                     };
                 }else {
-                    events[type]['callback'] = function(event) {
-                       var listeners = events[type]['listener'];
+                    handlers[type]['callback'] = function(event) {
+                       var listeners = handlers[type]['listener'];
                         for (var i = 0, len = listeners.length; i < len; i++) {
                             if (listeners[i].id == event['origin']) {
                                 event.detail = event.origin;
@@ -93,14 +94,14 @@ define(
         event.off = function(type, handler, id, context) {
             id = id || (this.getCurrentId && this.getCurrentId()) || 'empty';
             context = context || this;
-            if (events[type]) {
+            if (handlers[type]) {
                 if (!handler) {
-                    document.removeEventListener(type, events[type].callback);
-                    events[type]['listened'] = false;
-                    events[type]['listener'] = [];
+                    document.removeEventListener(type, handlers[type].callback);
+                    handlers[type]['listened'] = false;
+                    handlers[type]['listener'] = [];
                 }else {
                     var i = 0,
-                        listeners = events[type]['listener'],
+                        listeners = handlers[type]['listener'],
                         isAll = handler == 'all',
                         len = listeners.length;
 
@@ -110,9 +111,9 @@ define(
                             break;
                         }
                     }
-                    if (listeners.length == 0 && events[type]['listened']) {
-                        document.removeEventListener(type, events[type].callback);
-                        events[type]['listened'] = false;
+                    if (listeners.length == 0 && handlers[type]['listened']) {
+                        document.removeEventListener(type, handlers[type].callback);
+                        handlers[type]['listened'] = false;
                     }
                 }
             }else {

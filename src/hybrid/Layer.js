@@ -84,9 +84,7 @@ define(function(require) {
      * @return this
      */
     var Layer = function(options) {
-        /*if(!(this instanceof Layer)){
-            return new Layer(options);
-        }*/
+        options = options||{};
         if(options.url) options.url= getBasePath(options.url);
         Control.call(this, options);
         console.info('Time createLayer:'+ (__time = +new Date));

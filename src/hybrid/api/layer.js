@@ -17,6 +17,14 @@ define(
             return a.href;
         };
 
+        var stringifyFilter = function(key,val){
+            if(typeof val ==="function"){
+                return val.toString();
+            }else{
+                return val;
+            }
+        };
+
         var filterOption = function(options,delKeys){
             var layerOut = ['left', 'top', 'width', 'height'];
             var _options = {};
@@ -256,7 +264,7 @@ define(
                 layer.on(messData.callEvent, handler);
              }
 
-             apiFn('layerPostMessage', [sender, targetId, type, encodeURIComponent(JSON.stringify(messData))]);
+             apiFn('layerPostMessage', [sender, targetId, type, encodeURIComponent(JSON.stringify(messData,stringifyFilter))]);
         };
 
         /**

@@ -1,4 +1,5 @@
-(function () {/**
+(function () {
+/**
  * @license almond 0.2.9 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
@@ -722,21 +723,22 @@ define(
             'backPressedBeforeExit'//返回键退出事件回调
         ];
 
-
-        //todo: 这个变量换一个名字吧，和event很容易混淆
-        var events = {};
-        var callCount = 0;
-
-        //todo: 这两个函数放在这里，然后连入到 layer里面，看着很诡异；
-        //todo: 考虑放到control里面，并且改一个名字？比如叫 bind/unbind/trigger之类的？或者干脆和control里面的合并
+        var handlers = {};
+        var jsonParseFliter = function(key,val){
+            if(val&&val.indexOf&&val.indexOf('function')>=0){
+                 return new Function("return "+val)();
+            }else{
+                return val;
+            }
+        }
 
         event.on = function(type, handler, id, context, isonce) {
             var me = this;
             id = id || (this.getCurrentId && this.getCurrentId()) || 'empty';
             context = context || this;
-            if (events[type]) {
+            if (handlers[type]) {
                 var i = 0,
-                    listeners = events[type]['listener'],
+                    listeners = handlers[type]['listener'],
                     len = listeners.length;
                 for (; i < len; i++) {
                     if (listeners[i].id == id && listeners[i].callback == handler && listeners[i].context == context) {
@@ -744,24 +746,24 @@ define(
                     }
                 }
                 if (i == len) {
-                   events[type]['listener'].push({
+                   handlers[type]['listener'].push({
                      id: id,
                      context: context,
                      callback: handler
                    });
                 }
-                if (!events[type]['listened']) {
-                    document.addEventListener(type, events[type].callback, false);
-                    events[type]['listened'] = true;
+                if (!handlers[type]['listened']) {
+                    document.addEventListener(type, handlers[type].callback, false);
+                    handlers[type]['listened'] = true;
                 }
             }else {
                 //console.log("不支持此事件");
-                events[type] = {};
-                events[type]['listener'] = [];
+                handlers[type] = {};
+                handlers[type]['listener'] = [];
                 if (_type.indexOf(type) < 0) {
-                    events[type]['callback'] = function(event) {
-                        var parseData = JSON.parse(decodeURIComponent(event.data));
-                        var listeners = events[type]['listener'];
+                    handlers[type]['callback'] = function(event) {
+                        var parseData = JSON.parse(decodeURIComponent(event.data),jsonParseFliter);
+                        var listeners = handlers[type]['listener'];
                         event.origin = event['sender'] || parseData.origin;
                         event.data = parseData.data;
                         event.detail = event.origin;
@@ -777,8 +779,8 @@ define(
                         isonce && me.off(type);
                     };
                 }else {
-                    events[type]['callback'] = function(event) {
-                       var listeners = events[type]['listener'];
+                    handlers[type]['callback'] = function(event) {
+                       var listeners = handlers[type]['listener'];
                         for (var i = 0, len = listeners.length; i < len; i++) {
                             if (listeners[i].id == event['origin']) {
                                 event.detail = event.origin;
@@ -794,14 +796,14 @@ define(
         event.off = function(type, handler, id, context) {
             id = id || (this.getCurrentId && this.getCurrentId()) || 'empty';
             context = context || this;
-            if (events[type]) {
+            if (handlers[type]) {
                 if (!handler) {
-                    document.removeEventListener(type, events[type].callback);
-                    events[type]['listened'] = false;
-                    events[type]['listener'] = [];
+                    document.removeEventListener(type, handlers[type].callback);
+                    handlers[type]['listened'] = false;
+                    handlers[type]['listener'] = [];
                 }else {
                     var i = 0,
-                        listeners = events[type]['listener'],
+                        listeners = handlers[type]['listener'],
                         isAll = handler == 'all',
                         len = listeners.length;
 
@@ -811,9 +813,9 @@ define(
                             break;
                         }
                     }
-                    if (listeners.length == 0 && events[type]['listened']) {
-                        document.removeEventListener(type, events[type].callback);
-                        events[type]['listened'] = false;
+                    if (listeners.length == 0 && handlers[type]['listened']) {
+                        document.removeEventListener(type, handlers[type].callback);
+                        handlers[type]['listened'] = false;
                     }
                 }
             }else {
@@ -846,6 +848,14 @@ define(
             var a = document.createElement('a');
             a.href = link;
             return a.href;
+        };
+
+        var stringifyFilter = function(key,val){
+            if(typeof val ==="function"){
+                return val.toString();
+            }else{
+                return val;
+            }
         };
 
         var filterOption = function(options,delKeys){
@@ -1087,7 +1097,7 @@ define(
                 layer.on(messData.callEvent, handler);
              }
 
-             apiFn('layerPostMessage', [sender, targetId, type, encodeURIComponent(JSON.stringify(messData))]);
+             apiFn('layerPostMessage', [sender, targetId, type, encodeURIComponent(JSON.stringify(messData,stringifyFilter))]);
         };
 
         /**
@@ -1484,60 +1494,8 @@ define(
 
 );
 
-/**
- * Layer类，内含一个web容器，可以放置在手机屏幕的任何位置，动画可自定义
- * @class Layer
- * @extends Control
- * @static
- * @inheritable
- */
-define('src/hybrid/delegateLayer.js',['./runtime','./api/layer'],function(runtime,layer) {
-
-    // var layer = require('./api/Layer.js');
-    var layerid = layer.getCurrentId();
-    // var events = require('./api/event.js');
-
-    //这里判断代理类 负责是 接收事件 还是 发送事件
-    //layer 0 是接收事件， 其他layer是发送事件
-    var funcs = ['in','out','reload','replace','stopPullRefresh','stopLoading','getUrl'
-    ,'canGoBack','clearHistory','isActive','destroy'];
-
-    var delegateLayer = function(id) {
-        this.id = id;
-        return this;
-    };
-
-    if ( layerid === '0' ) { //接收
-        console.log("events delegate Layer 0 init..");
-        for(var i=0,len=funcs.length;i<len;i++) {
-            (function(n){
-                runtime.layer.on("delegate"+funcs[n],function(e){
-                    console.log("layer 00 recieved...." + JSON.stringify(e.data));
-                    // var blend = require('./blend');
-                    Blend.ui.get(e.data.id)[funcs[n]].apply(Blend.ui.get(e.data.id),e.data.args);
-                });
-            })(i)
-        }
-    }
-
-    //注册发送方法
-    for(var i=0,len=funcs.length;i<len;i++) {
-        (function(n){
-            delegateLayer.prototype[funcs[n]] = function(){
-                runtime.layer.fire("delegate"+funcs[n],'0',{id:layerid,args:arguments});
-            };
-        })(i);
-        
-    }
-    // }
-    //TODO 
-    // 如何与 layer 进行杂融 new Layer 也能自动注册到 layer 0 上面去...
-    
-
-    return delegateLayer;
-});
 define(
-    'src/hybrid/blend',['require','../common/lib','./runtime','./delegateLayer.js'],function(require) {
+    'src/hybrid/blend',['require','../common/lib','./runtime'],function(require) {
         var lib = require('../common/lib');
         var runtime = require('./runtime');
 
@@ -1600,13 +1558,7 @@ define(
          * @return {Control}
          */
         blend.get = function(id) {
-            
-            if ( blend.currentLayerId === '0' ) {//layer 0 具备全部的controls 
-                return controls[id];
-            }else{//其他layer 通过 代理 返回fakelayer对象
-                var delegateLayer = require("./delegateLayer.js");
-                return new delegateLayer(id);
-            }
+            return controls[id];
         };
 
         /**
@@ -2124,9 +2076,7 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
      * @return this
      */
     var Layer = function(options) {
-        /*if(!(this instanceof Layer)){
-            return new Layer(options);
-        }*/
+        options = options||{};
         if(options.url) options.url= getBasePath(options.url);
         Control.call(this, options);
         console.info('Time createLayer:'+ (__time = +new Date));
@@ -2872,7 +2822,79 @@ define('src/hybrid/Slider',['require','./blend','../common/lib','./runtime','./C
     return Slider;
 });
 
-require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/hybrid/Slider'], function(blend, Layer, LayerGroup, Slider) {
+/**
+ * 通过消息传递在基础集中创建layer
+ */
+define('src/hybrid/delegateLayer',['require','./blend','./Layer'],function(require) {
+    var blend = require('./blend');
+    var layerClass = require('./Layer');
+    var layerId = blend.getLayerId();
+    var protos = new layerClass();
+
+    var delegateLayer = function(id){
+        this.id = id||layerId;
+    };
+
+    var delegateMethod = "delegateMethod";
+    var delegateCreate = "delegateCreate";
+
+    if(layerId=='0'){
+        //触发函数
+        blend.on(delegateMethod,function(e){
+            var data = e.data;
+            var method = data.method;
+            var args = data.args;
+            var id = data.id;
+            blend.get(id)[method].apply(blend.get(id),args);
+        });
+        //创建layer
+        blend.on(delegateCreate,function(e){
+            //alert(JSON.stringify(e.data));
+            new layerClass(e.data);
+        });
+    }
+
+    for(var i in protos){
+        // 方法可以通过delegate进行操作，属性不能直接获取
+        delegateLayer.prototype[i] = (function(attr){
+            if(typeof protos[attr] =='function'){
+                return function(){
+                    var me = this;
+                    blend.fire(delegateMethod,'0',{
+                        id: me.id,
+                        args:arguments,
+                        method:attr
+                    });
+                }
+            }else{
+                return function(){
+                    console.log('delegate error')
+                }
+            }
+        })(i);
+    }
+
+
+
+    blend.getLayer = function(id){
+        var layer = blend.get(id);
+        if(layer){
+            return layer;
+        }else{
+            return new delegateLayer(id);
+        }
+    }
+
+    blend.createLayer = function(options){
+        if(layerId==='0'){
+            return new Layer(options);
+        }else{
+            blend.fire(delegateCreate,'0',options);
+            return blend.getLayer(options.id);
+        }
+    }
+});
+require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/hybrid/Slider','src/hybrid/delegateLayer'], function(blend, Layer, LayerGroup, Slider) {
     /*window.Blend = window.Blend || {};
     window.Blend.ui = blend ||{};
     window.Blend.Layer = Layer;
@@ -2907,5 +2929,4 @@ require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/h
 
 
 define("src/hybrid/main", function(){});
-
 }());

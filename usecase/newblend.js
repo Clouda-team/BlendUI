@@ -4,25 +4,40 @@
     var layer = blend.Layer;
 
     blend.layerInit("info",function(){
-        console.log("info page......")
-        var mylayer = blend.get("info");
-
-        $("a.back").click(function(){
+        console.log("info page......");
+        //alert(blend.getLayer);
+        var mylayer = blend.getLayer("info");
+        $("a.back").click(function(e){
             console.log("click.... back... out....")
             mylayer.out();
             return false;
         });
 
-        $("a.reload").click(function(){
-            mylayer.reload('newblend2.html');
-            return false;
+        $("a.reload").click(function(e){
+            /*mylayer.reload('newblend2.html');
+            return false;*/
+            blend.createLayer({
+                id:'baidu',
+                url:"http://news.baidu.com",
+                active:true,
+                "afterrender":function(){
+                    alert("onrender...");
+                }
+                ,"onload":function(event){
+                    alert("onload...");
+                }
+                ,"onhide":function(e){
+                    alert("onhide...")
+                }
+            });
+            e.preventDefault();
         });
         
     });
 
     blend.layerInit("0",function(){
         $(document).click(function(e){
-            blend.fire("layercreates","0",{data1:123,data2:[1,2,3]});
+            //blend.fire("layercreates","0",{data1:123,data2:[1,2,3]});
 
             var _layer = window._layer;
             var $t = $(e.target).closest('a');
@@ -34,15 +49,18 @@
                 "id":"info",
                 "url": $t.attr('href'),
                 "active":true
-                ,"onrender":function(){
-                    console.log("onrender...");
+                ,"afterrender":function(){
+                    alert("onrender...");
                 }
                 ,"onload":function(event){
-                    console.log("onload...");
+                    alert("onload...");
                 }
                 ,"changeUrl":function(event){
                     // console.log("onload");
                     console.log(event['url'])
+                }
+                ,"onhide":function(e){
+                    alert("onhide...")
                 }
                 ,"ptrFn":function(){
                     setTimeout(function(){

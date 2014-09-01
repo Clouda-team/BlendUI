@@ -1,52 +1,74 @@
 /**
- * Layer类，内含一个web容器，可以放置在手机屏幕的任何位置，动画可自定义
- * @class Layer
- * @extends Control
- * @static
- * @inheritable
+ * 通过插件的形式为blend添加delegate,使其在底层layer上集中创建layer和使用layer方法
+ * 通过消息传递在集中创建layer,为JSON.stringify和parse增加filter支持函数传递
+ * delegate创建的layer不能直接获取layer属性 如layer.id
  */
-define(['./runtime','./api/layer'],function(runtime,layer) {
+define(function(require) {
+    var blend = require('./blend');
+    var layerClass = require('./Layer');
+    var layerId = blend.getLayerId();
+    var protos = new layerClass();
 
-    // var layer = require('./api/Layer.js');
-    var layerid = layer.getCurrentId();
-    // var events = require('./api/event.js');
-
-    //这里判断代理类 负责是 接收事件 还是 发送事件
-    //layer 0 是接收事件， 其他layer是发送事件
-    var funcs = ['in','out','reload','replace','stopPullRefresh','stopLoading','getUrl'
-    ,'canGoBack','clearHistory','isActive','destroy'];
-
-    var delegateLayer = function(id) {
-        this.id = id;
-        return this;
+    var delegateLayer = function(id){
+        this.id = id||layerId;
     };
 
-    if ( layerid === '0' ) { //接收
-        console.log("events delegate Layer 0 init..");
-        for(var i=0,len=funcs.length;i<len;i++) {
-            (function(n){
-                runtime.layer.on("delegate"+funcs[n],function(e){
-                    console.log("layer 00 recieved...." + JSON.stringify(e.data));
-                    // var blend = require('./blend');
-                    Blend.ui.get(e.data.id)[funcs[n]].apply(Blend.ui.get(e.data.id),e.data.args);
-                });
-            })(i)
+    var delegateMethod = "delegateMethod";
+    var delegateCreate = "delegateCreate";
+
+    if(layerId=='0'){
+        //触发函数
+        blend.on(delegateMethod,function(e){
+            var data = e.data;
+            var method = data.method;
+            var args = data.args;
+            var id = data.id;
+            blend.get(id)[method].apply(blend.get(id),args);
+        });
+        //创建layer
+        blend.on(delegateCreate,function(e){
+            //alert(JSON.stringify(e.data));
+            new layerClass(e.data);
+        });
+    }
+
+    for(var i in protos){
+        // 方法可以通过delegate进行操作，属性不能直接获取
+        delegateLayer.prototype[i] = (function(attr){
+            if(typeof protos[attr] =='function'){
+                return function(){
+                    var me = this;
+                    blend.fire(delegateMethod,'0',{
+                        id: me.id,
+                        args:arguments,
+                        method:attr
+                    });
+                }
+            }else{
+                return function(){
+                    console.log('delegate error')
+                }
+            }
+        })(i);
+    }
+
+
+
+    blend.getLayer = function(id){
+        var layer = blend.get(id);
+        if(layer){
+            return layer;
+        }else{
+            return new delegateLayer(id);
         }
     }
 
-    //注册发送方法
-    for(var i=0,len=funcs.length;i<len;i++) {
-        (function(n){
-            delegateLayer.prototype[funcs[n]] = function(){
-                runtime.layer.fire("delegate"+funcs[n],'0',{id:layerid,args:arguments});
-            };
-        })(i);
-        
+    blend.createLayer = function(options){
+        if(layerId==='0'){
+            return new Layer(options);
+        }else{
+            blend.fire(delegateCreate,'0',options);
+            return blend.getLayer(options.id);
+        }
     }
-    // }
-    //TODO 
-    // 如何与 layer 进行杂融 new Layer 也能自动注册到 layer 0 上面去...
-    
-
-    return delegateLayer;
 });

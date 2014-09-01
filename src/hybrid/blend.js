@@ -62,13 +62,7 @@ define(
          * @return {Control}
          */
         blend.get = function(id) {
-            
-            if ( blend.currentLayerId === '0' ) {//layer 0 具备全部的controls 
-                return controls[id];
-            }else{//其他layer 通过 代理 返回fakelayer对象
-                var delegateLayer = require("./delegateLayer.js");
-                return new delegateLayer(id);
-            }
+            return controls[id];
         };
 
         /**

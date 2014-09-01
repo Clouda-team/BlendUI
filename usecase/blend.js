@@ -1,4 +1,4 @@
-if( !navigator.userAgent.match(/BlendUI/i) ){
+if( 0 && !navigator.userAgent.match(/BlendUI/i) ){
     document.write('<script src="../dist/BlendWebUI.js"></script>');
 }else{
     document.write('<script src="./lib/zepto.js"></script>');
