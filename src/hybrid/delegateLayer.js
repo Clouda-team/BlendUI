@@ -52,9 +52,15 @@ define(function(require) {
         })(i);
     }
 
+// new Layer();
+// $.layer({}) //new Layer 
+//$.layergroup({}) //new LayerGroup
+//$("info")  control的实例  > layder
+//$("slider") control > slider in.out
+// $zepto
 
 
-    blend.getLayer = function(id){
+    blend.get = function(id){
         var layer = blend.get(id);
         if(layer){
             return layer;

@@ -5,8 +5,8 @@
 
     blend.layerInit("info",function(){
         console.log("info page......");
-        //alert(blend.getLayer);
-        var mylayer = blend.getLayer("info");
+        //console.log(blend.get);
+        var mylayer = blend.get("info");
         $("a.back").click(function(e){
             console.log("click.... back... out....")
             mylayer.out();
@@ -21,13 +21,13 @@
                 url:"http://news.baidu.com",
                 active:true,
                 "afterrender":function(){
-                    alert("onrender...");
+                    console.log("onrender...");
                 }
                 ,"onload":function(event){
-                    alert("onload...");
+                    console.log("onload...");
                 }
                 ,"onhide":function(e){
-                    alert("onhide...")
+                    console.log("onhide...")
                 }
             });
             e.preventDefault();
@@ -50,17 +50,17 @@
                 "url": $t.attr('href'),
                 "active":true
                 ,"afterrender":function(){
-                    alert("onrender...");
+                    console.log("onrender...");
                 }
                 ,"onload":function(event){
-                    alert("onload...");
+                    console.log("onload...");
                 }
                 ,"changeUrl":function(event){
                     // console.log("onload");
                     console.log(event['url'])
                 }
                 ,"onhide":function(e){
-                    alert("onhide...")
+                    console.log("onhide...")
                 }
                 ,"ptrFn":function(){
                     setTimeout(function(){
