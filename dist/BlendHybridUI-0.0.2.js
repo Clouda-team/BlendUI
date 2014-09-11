@@ -1182,7 +1182,7 @@ define(
 );
 
 define(
-    'src/hybrid/api/layerGroup',['require','./config','./event'],function(require) {
+    'src/hybrid/api/layerGroup',['require','./config','./event','./layer'],function(require) {
 
         /**
          * @class blend.Api.layer
@@ -1191,6 +1191,7 @@ define(
          */
         var config = require('./config');
         var event = require('./event');
+        var layer = require('./layer');
         var layerGroup = {};
         var devPR = config.DEVICE_PR;
         var getBasePath = function(link ) {
@@ -1293,18 +1294,30 @@ define(
             return groupId;
         };
 
-        /*layerGroup.toggleScroll = function(groupId) {
-            layerGroup.setScroll(groupId, !layerGroup.isScroll(groupId));
+        layerGroup.toggleScroll = function(layerId,groupId) {
+            if(arguments.length==1){
+               groupId =  layerId;
+               layerId = layer.getCurrentId(); 
+            }
+            layerGroup.setScroll(layerId,groupId, !layerGroup.isScroll(layerId, groupId));
         };
 
-        layerGroup.isScroll = function(groupId ) {
+        layerGroup.isScroll = function(layerId, groupId) {
+            if(arguments.length==1){
+               groupId =  layerId;
+               layerId = layer.getCurrentId(); 
+            }
             return apiFn('canLayerGroupScroll', arguments);
         };
 
-        layerGroup.setScroll = function(groupId, isCan) {
-            //console.log(groupId+"=="+isCan);
+        layerGroup.setScroll = function(layerId, groupId, isCan) {
+            if(arguments.length==2){
+                isCan = groupId;
+                groupId = layerId;
+                layerId = layer.getCurrentId();
+            }
             apiFn('setCanLayerGroupScroll', arguments);
-        };*/
+        };
 
 
         //todo: layergroup也支持跨webview的event吧
@@ -1507,7 +1520,7 @@ define(
         var controls = {};
         var isIOS = /iP(ad|hone|od)/.test(navigator.userAgent);
 
-        //有些sb android手机只执行一次runtimeready
+        //有些android手机只执行一次runtimeready
         document.addEventListener('runtimeready', function() {
            blend.readyState = true;
         },false);
@@ -2365,7 +2378,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
     var isRuntimeEnv = true;//main.inRuntime();//runtime.isRuntimeEnv&&runtime.isRuntimeEnv();
     var layerGroupApi = runtime.layerGroup;
     var layerApi = runtime.layer;
-
+    var layerId = layerApi.getCurrentId();
     /**
      * @constructor;
      *
@@ -2412,6 +2425,15 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
     lib.inherits(LayerGroup, Control);
 
     LayerGroup.prototype.constructor = LayerGroup;
+
+
+    /**
+     * layerGroup依附的layer id；
+     *
+     * @cfg {String} layerId
+     */
+
+    LayerGroup.prototype.layerId =  layerId;
 
     /**
      * 组件的类型
@@ -2633,25 +2655,19 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
      */
     LayerGroup.prototype.destroy = function() {
         Control.prototype.destroy.apply(this, arguments);
-        //todo
-        if (isRuntimeEnv) {
-
-        }else {
-
-        }
     };
 
-    /*LayerGroup.prototype.isScroll = function() {
-        return layerGroupApi.isScroll(this.id);
+    LayerGroup.prototype.isScroll = function() {
+        return layerGroupApi.isScroll(this.layerId, this.id);
     };
 
     LayerGroup.prototype.setScroll = function(isCan) {
-        layerGroupApi.setScroll(this.id, isCan);
+        layerGroupApi.setScroll(this.layerId, this.id, isCan);
     };
 
     LayerGroup.prototype.toggleScroll = function() {
-        layerGroupApi.toggleScroll(this.id);
-    };*/
+        layerGroupApi.toggleScroll(this.layerId, this.id);
+    };
 
 
     return LayerGroup;
@@ -2822,84 +2838,7 @@ define('src/hybrid/Slider',['require','./blend','../common/lib','./runtime','./C
     return Slider;
 });
 
-/**
- * 通过消息传递在基础集中创建layer
- */
-define('src/hybrid/delegateLayer',['require','./blend','./Layer'],function(require) {
-    var blend = require('./blend');
-    var layerClass = require('./Layer');
-    var layerId = blend.getLayerId();
-    var protos = new layerClass();
-
-    var delegateLayer = function(id){
-        this.id = id||layerId;
-    };
-
-    var delegateMethod = "delegateMethod";
-    var delegateCreate = "delegateCreate";
-
-    if(layerId=='0'){
-        //触发函数
-        blend.on(delegateMethod,function(e){
-            var data = e.data;
-            var method = data.method;
-            var args = data.args;
-            var id = data.id;
-            blend.get(id)[method].apply(blend.get(id),args);
-        });
-        //创建layer
-        blend.on(delegateCreate,function(e){
-            //alert(JSON.stringify(e.data));
-            new layerClass(e.data);
-        });
-    }
-
-    for(var i in protos){
-        // 方法可以通过delegate进行操作，属性不能直接获取
-        delegateLayer.prototype[i] = (function(attr){
-            if(typeof protos[attr] =='function'){
-                return function(){
-                    var me = this;
-                    blend.fire(delegateMethod,'0',{
-                        id: me.id,
-                        args:arguments,
-                        method:attr
-                    });
-                }
-            }else{
-                return function(){
-                    console.log('delegate error')
-                }
-            }
-        })(i);
-    }
-
-
-
-    blend.getLayer = function(id){
-        var layer = blend.get(id);
-        if(layer){
-            return layer;
-        }else{
-            return new delegateLayer(id);
-        }
-    }
-
-    blend.createLayer = function(options){
-        if(layerId==='0'){
-            return new Layer(options);
-        }else{
-            blend.fire(delegateCreate,'0',options);
-            return blend.getLayer(options.id);
-        }
-    }
-});
-require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/hybrid/Slider','src/hybrid/delegateLayer'], function(blend, Layer, LayerGroup, Slider) {
-    /*window.Blend = window.Blend || {};
-    window.Blend.ui = blend ||{};
-    window.Blend.Layer = Layer;
-    window.Blend.LayerGroup = LayerGroup;
-    window.Blend.Slider = Slider;*/
+require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/hybrid/Slider'], function(blend, Layer, LayerGroup, Slider) {
     blend = blend||{};
     blend.Layer = Layer;
     blend.LayerGroup = LayerGroup;

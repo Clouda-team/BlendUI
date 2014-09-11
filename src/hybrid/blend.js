@@ -11,7 +11,7 @@ define(
         var controls = {};
         var isIOS = /iP(ad|hone|od)/.test(navigator.userAgent);
 
-        //有些sb android手机只执行一次runtimeready
+        //有些android手机只执行一次runtimeready
         document.addEventListener('runtimeready', function() {
            blend.readyState = true;
         },false);

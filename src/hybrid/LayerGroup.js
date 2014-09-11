@@ -15,7 +15,7 @@ define(function(require) {
     var isRuntimeEnv = true;//main.inRuntime();//runtime.isRuntimeEnv&&runtime.isRuntimeEnv();
     var layerGroupApi = runtime.layerGroup;
     var layerApi = runtime.layer;
-
+    var layerId = layerApi.getCurrentId();
     /**
      * @constructor;
      *
@@ -62,6 +62,15 @@ define(function(require) {
     lib.inherits(LayerGroup, Control);
 
     LayerGroup.prototype.constructor = LayerGroup;
+
+
+    /**
+     * layerGroup依附的layer id；
+     *
+     * @cfg {String} layerId
+     */
+
+    LayerGroup.prototype.layerId =  layerId;
 
     /**
      * 组件的类型
@@ -283,25 +292,19 @@ define(function(require) {
      */
     LayerGroup.prototype.destroy = function() {
         Control.prototype.destroy.apply(this, arguments);
-        //todo
-        if (isRuntimeEnv) {
-
-        }else {
-
-        }
     };
 
-    /*LayerGroup.prototype.isScroll = function() {
-        return layerGroupApi.isScroll(this.id);
+    LayerGroup.prototype.isScroll = function() {
+        return layerGroupApi.isScroll(this.layerId, this.id);
     };
 
     LayerGroup.prototype.setScroll = function(isCan) {
-        layerGroupApi.setScroll(this.id, isCan);
+        layerGroupApi.setScroll(this.layerId, this.id, isCan);
     };
 
     LayerGroup.prototype.toggleScroll = function() {
-        layerGroupApi.toggleScroll(this.id);
-    };*/
+        layerGroupApi.toggleScroll(this.layerId, this.id);
+    };
 
 
     return LayerGroup;

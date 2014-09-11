@@ -8,6 +8,7 @@ define(
          */
         var config = require('./config');
         var event = require('./event');
+        var layer = require('./layer');
         var layerGroup = {};
         var devPR = config.DEVICE_PR;
         var getBasePath = function(link ) {
@@ -110,18 +111,30 @@ define(
             return groupId;
         };
 
-        /*layerGroup.toggleScroll = function(groupId) {
-            layerGroup.setScroll(groupId, !layerGroup.isScroll(groupId));
+        layerGroup.toggleScroll = function(layerId,groupId) {
+            if(arguments.length==1){
+               groupId =  layerId;
+               layerId = layer.getCurrentId(); 
+            }
+            layerGroup.setScroll(layerId,groupId, !layerGroup.isScroll(layerId, groupId));
         };
 
-        layerGroup.isScroll = function(groupId ) {
+        layerGroup.isScroll = function(layerId, groupId) {
+            if(arguments.length==1){
+               groupId =  layerId;
+               layerId = layer.getCurrentId(); 
+            }
             return apiFn('canLayerGroupScroll', arguments);
         };
 
-        layerGroup.setScroll = function(groupId, isCan) {
-            //console.log(groupId+"=="+isCan);
+        layerGroup.setScroll = function(layerId, groupId, isCan) {
+            if(arguments.length==2){
+                isCan = groupId;
+                groupId = layerId;
+                layerId = layer.getCurrentId();
+            }
             apiFn('setCanLayerGroupScroll', arguments);
-        };*/
+        };
 
 
         //todo: layergroup也支持跨webview的event吧
