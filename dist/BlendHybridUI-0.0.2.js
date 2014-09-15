@@ -1307,7 +1307,7 @@ define(
                groupId =  layerId;
                layerId = layer.getCurrentId(); 
             }
-            return apiFn('canLayerGroupScroll', arguments);
+            return apiFn('canLayerGroupScroll', [layerId, groupId]);
         };
 
         layerGroup.setScroll = function(layerId, groupId, isCan) {
@@ -1316,7 +1316,9 @@ define(
                 groupId = layerId;
                 layerId = layer.getCurrentId();
             }
-            apiFn('setCanLayerGroupScroll', arguments);
+            setTimeout(function(){
+                apiFn('setCanLayerGroupScroll', [layerId, groupId, isCan])
+            },100);
         };
 
 
