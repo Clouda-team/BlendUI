@@ -14,23 +14,9 @@
         });
 
         $("a.reload").click(function(e){
-            /*mylayer.reload('newblend2.html');
-            return false;*/
-            blend.createLayer({
-                id:'baidu',
-                url:"http://news.baidu.com",
-                active:true,
-                "afterrender":function(){
-                    console.log("onrender...");
-                }
-                ,"onload":function(event){
-                    console.log("onload...");
-                }
-                ,"onhide":function(e){
-                    console.log("onhide...")
-                }
-            });
-            e.preventDefault();
+            mylayer.reload("item.html");
+            // e.preventDefault();
+            return false;
         });
         
     });

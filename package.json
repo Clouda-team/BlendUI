@@ -1,6 +1,16 @@
 {
   "name": "BlendUI",
+  "description": "A Hybrid Javascript Framework For Mobile WebApp",
   "version": "0.0.2",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Clouda-team/BlendUI.git"
+  },
+  "bin": {
+    "blendui": "./npm-tools/blendui"
+  },
+  "author": "Clouda+ team",
+  "license": "MIT",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-jshint": "^0.10.0",
