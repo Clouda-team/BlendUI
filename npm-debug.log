@@ -1,0 +1,175 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish', './' ]
+2 info using npm@1.4.9
+3 info using node@v0.10.28
+4 verbose publish [ './' ]
+5 verbose cache add [ './', null ]
+6 verbose cache add name=undefined spec="./" args=["./",null]
+7 verbose parsed url { protocol: null,
+7 verbose parsed url   slashes: null,
+7 verbose parsed url   auth: null,
+7 verbose parsed url   host: null,
+7 verbose parsed url   port: null,
+7 verbose parsed url   hostname: null,
+7 verbose parsed url   hash: null,
+7 verbose parsed url   search: null,
+7 verbose parsed url   query: null,
+7 verbose parsed url   pathname: './',
+7 verbose parsed url   path: './',
+7 verbose parsed url   href: './' }
+8 silly lockFile 0ee6c175- ./
+9 verbose lock ./ /Users/fw1/.npm/0ee6c175-.lock
+10 verbose tar pack [ '/var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz',
+10 verbose tar pack   './' ]
+11 verbose tarball /var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+12 verbose folder ./
+13 info prepublish BlendUI@0.0.2
+14 silly lockFile 04cb2bca-tar tar://./
+15 verbose lock tar://./ /Users/fw1/.npm/04cb2bca-tar.lock
+16 silly lockFile 8cfbb185-7512-0-41226560343056917-tmp-tgz tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+17 verbose lock tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz /Users/fw1/.npm/8cfbb185-7512-0-41226560343056917-tmp-tgz.lock
+18 silly lockFile 04cb2bca-tar tar://./
+19 silly lockFile 04cb2bca-tar tar://./
+20 silly lockFile 8cfbb185-7512-0-41226560343056917-tmp-tgz tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+21 silly lockFile 8cfbb185-7512-0-41226560343056917-tmp-tgz tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+22 verbose tar unpack /var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+23 silly lockFile 617be4bf-rs-fw1-npm-BlendUI-0-0-2-package tar:///Users/fw1/.npm/BlendUI/0.0.2/package
+24 verbose lock tar:///Users/fw1/.npm/BlendUI/0.0.2/package /Users/fw1/.npm/617be4bf-rs-fw1-npm-BlendUI-0-0-2-package.lock
+25 silly lockFile 8cfbb185-7512-0-41226560343056917-tmp-tgz tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+26 verbose lock tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz /Users/fw1/.npm/8cfbb185-7512-0-41226560343056917-tmp-tgz.lock
+27 silly gunzTarPerm modes [ '755', '644' ]
+28 silly gunzTarPerm extractEntry package.json
+29 silly gunzTarPerm extractEntry .npmignore
+30 silly gunzTarPerm extractEntry README.md
+31 silly gunzTarPerm extractEntry Gruntfile.js
+32 silly gunzTarPerm extractEntry npm-tools/blendui
+33 silly gunzTarPerm modified mode [ 'npm-tools/blendui', 416, 420 ]
+34 silly gunzTarPerm extractEntry test/blend.js
+35 silly gunzTarPerm extractEntry test/index.html
+36 silly gunzTarPerm extractEntry dist/BlendHybridUI-0.0.1.js
+37 silly gunzTarPerm extractEntry dist/BlendHybridUI-0.0.1.min.js
+38 silly gunzTarPerm extractEntry dist/BlendHybridUI-0.0.2.js
+39 silly gunzTarPerm extractEntry dist/BlendHybridUI-0.0.2.min.js
+40 silly gunzTarPerm extractEntry dist/BlendWebUI.js
+41 silly gunzTarPerm extractEntry dist/BlendWebUI.min.js
+42 silly gunzTarPerm extractEntry res/bdloading.png
+43 silly gunzTarPerm extractEntry res/crema.css
+44 silly gunzTarPerm extractEntry src/almond.js
+45 silly gunzTarPerm extractEntry src/common/lib.js
+46 silly gunzTarPerm extractEntry src/common/lib/lang.js
+47 silly gunzTarPerm extractEntry src/common/lib/string.js
+48 silly gunzTarPerm extractEntry src/hybrid/Control.js
+49 silly gunzTarPerm extractEntry src/hybrid/Layer.js
+50 silly gunzTarPerm extractEntry src/hybrid/LayerGroup.js
+51 silly gunzTarPerm extractEntry src/hybrid/Slider.js
+52 silly gunzTarPerm extractEntry src/hybrid/blend.js
+53 silly gunzTarPerm extractEntry src/hybrid/delegateLayer.js
+54 silly gunzTarPerm extractEntry src/hybrid/main.js
+55 silly gunzTarPerm extractEntry src/hybrid/runtime.js
+56 silly gunzTarPerm extractEntry src/hybrid/api/component.js
+57 silly gunzTarPerm extractEntry src/hybrid/api/config.js
+58 silly gunzTarPerm extractEntry src/hybrid/api/core.js
+59 silly gunzTarPerm extractEntry src/hybrid/api/event.js
+60 silly gunzTarPerm extractEntry src/hybrid/api/layer.js
+61 silly gunzTarPerm extractEntry src/hybrid/api/layerGroup.js
+62 silly gunzTarPerm extractEntry src/hybrid/api/component/slider.js
+63 silly gunzTarPerm extractEntry src/web/Actions.js
+64 silly gunzTarPerm extractEntry src/web/LayerGroup.js
+65 silly gunzTarPerm extractEntry src/web/Navbar.js
+66 silly gunzTarPerm extractEntry src/web/Popover.js
+67 silly gunzTarPerm extractEntry src/web/Layer.js
+68 silly gunzTarPerm extractEntry src/web/Control.js
+69 silly gunzTarPerm extractEntry src/web/WebControl.js
+70 silly gunzTarPerm extractEntry src/web/api.js
+71 silly gunzTarPerm extractEntry src/web/blend.js
+72 silly gunzTarPerm extractEntry src/web/configs.js
+73 silly gunzTarPerm extractEntry src/web/Dialog.js
+74 silly gunzTarPerm extractEntry src/web/events.js
+75 silly gunzTarPerm extractEntry src/web/Popup.js
+76 silly gunzTarPerm extractEntry src/web/main.js
+77 silly gunzTarPerm extractEntry src/web/Slider.js
+78 silly gunzTarPerm extractEntry src/web/dialog/Confirm.js
+79 silly gunzTarPerm extractEntry src/web/dialog/Preloader.js
+80 silly gunzTarPerm extractEntry src/web/dialog/Prompt.js
+81 silly gunzTarPerm extractEntry src/web/dialog/alert.js
+82 silly gunzTarPerm extractEntry src/web/layer/layerGroupApi.js
+83 silly gunzTarPerm extractEntry src/web/layer/layerapi.js
+84 silly gunzTarPerm extractEntry usecase/css/crema.css
+85 silly gunzTarPerm extractEntry usecase/css/main.css
+86 silly gunzTarPerm extractEntry usecase/img/list.png
+87 silly gunzTarPerm extractEntry usecase/index.html
+88 silly gunzTarPerm extractEntry usecase/item.html
+89 silly gunzTarPerm extractEntry usecase/js/BlendHybridUI-0.0.2.js
+90 silly gunzTarPerm extractEntry usecase/js/BlendWebUI.js
+91 silly gunzTarPerm extractEntry usecase/js/all.js
+92 silly gunzTarPerm extractEntry usecase/js/blend.js
+93 silly gunzTarPerm extractEntry usecase/js/lib/zepto.js
+94 warn excluding symbolic link usecase/js/BlendHybridUI-0.0.2.js -> /Users/fw1/.npm/BlendUI/0.0.2/package/BlendUI/dist/BlendHybridUI-0.0.2.js
+95 warn excluding symbolic link usecase/js/BlendWebUI.js -> /Users/fw1/.npm/BlendUI/0.0.2/package/BlendUI/dist/BlendWebUI.js
+96 silly lockFile 617be4bf-rs-fw1-npm-BlendUI-0-0-2-package tar:///Users/fw1/.npm/BlendUI/0.0.2/package
+97 silly lockFile 617be4bf-rs-fw1-npm-BlendUI-0-0-2-package tar:///Users/fw1/.npm/BlendUI/0.0.2/package
+98 silly lockFile 8cfbb185-7512-0-41226560343056917-tmp-tgz tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+99 silly lockFile 8cfbb185-7512-0-41226560343056917-tmp-tgz tar:///var/folders/qm/yz1078td42z4q0k5jx80zlr80000gn/T/npm-2612-oQysoxUI/1410779217512-0.41226560343056917/tmp.tgz
+100 silly lockFile 0ee6c175- ./
+101 silly lockFile 0ee6c175- ./
+102 silly publish { name: 'BlendUI',
+102 silly publish   description: 'A Hybrid Javascript Framework For Mobile WebApp',
+102 silly publish   version: '0.0.2',
+102 silly publish   repository:
+102 silly publish    { type: 'git',
+102 silly publish      url: 'https://github.com/Clouda-team/BlendUI.git' },
+102 silly publish   bin: { blendui: './npm-tools/blendui' },
+102 silly publish   author: { name: 'Clouda+ team' },
+102 silly publish   license: 'MIT',
+102 silly publish   devDependencies:
+102 silly publish    { grunt: '~0.4.1',
+102 silly publish      'grunt-contrib-jshint': '^0.10.0',
+102 silly publish      'grunt-contrib-requirejs': '~0.4.0',
+102 silly publish      'grunt-contrib-uglify': '~0.2.2' },
+102 silly publish   readme: 'BlendUI\n==========\n\n关于BlendUI\n====\n\nBlendUI是Clouda+中的重要组成部分，他能让webapp的用户界面体验和交互能和Native媲美。操作性能是webapp中体验最薄弱的一环，具体而言，这包括：转场动画不流畅、DOM结构过于复杂导致卡顿，用Javascript实现固定头尾布局性能较差等。\n\n因而，我们用Native技术来扩展Javascript，同时我们选择了最易于理解的方式：让Javascript能像操作DOM那样操作多个webview，以及在webview中嵌入Native组件。\n\n* 多Webview控制能力。让一个Webapp拆到多个webview中运行，并能用Javascript来调度，解决了页面过大导致卡顿的问题，同时，webview的转场动画由Native代码实现，也解决了转场动画不流畅的问题。\n* Native组件嵌入能力。能将Native控件嵌入Webview中，这样就能让页面中那些性能较差的部分用Native来实现，以最大化地提高体验和交互。\n\nBlendUI只在最基础的部分使用Native，BlendUI的核心消息机制类似传统的web事件，而所有BlendUI组件都可以采用完完全全的web来编写。总之，我们保持了所有web的风格和灵活性。\n\n文档\n====\n\n请前往[Clouda+官网](http://cloudaplus.duapp.com/blendui/introduction/introduction)阅读\n',
+102 silly publish   readmeFilename: 'README.md',
+102 silly publish   bugs: { url: 'https://github.com/Clouda-team/BlendUI/issues' },
+102 silly publish   homepage: 'https://github.com/Clouda-team/BlendUI',
+102 silly publish   _id: 'BlendUI@0.0.2',
+102 silly publish   _shasum: '4cc4f35773a7b6f6c1e3d556a03940ffe6badbf8',
+102 silly publish   _from: './' }
+103 verbose url raw BlendUI
+104 verbose url resolving [ 'https://registry.npmjs.org/', './BlendUI' ]
+105 verbose url resolved https://registry.npmjs.org/BlendUI
+106 info trying registry request attempt 1 at 19:06:58
+107 http PUT https://registry.npmjs.org/BlendUI
+108 http 403 https://registry.npmjs.org/BlendUI
+109 verbose headers { date: 'Mon, 15 Sep 2014 11:07:01 GMT',
+109 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R14B04)',
+109 verbose headers   'content-type': 'application/json',
+109 verbose headers   'cache-control': 'max-age=60',
+109 verbose headers   'content-length': '76',
+109 verbose headers   'accept-ranges': 'bytes',
+109 verbose headers   via: '1.1 varnish',
+109 verbose headers   'x-served-by': 'cache-ty68-TYO',
+109 verbose headers   'x-cache': 'MISS',
+109 verbose headers   'x-cache-hits': '0',
+109 verbose headers   'x-timer': 'S1410779219.771883,VS0,VE1265',
+109 verbose headers   'keep-alive': 'timeout=10, max=50',
+109 verbose headers   connection: 'Keep-Alive' }
+110 error publish Failed PUT 403
+111 error Error: forbidden New packages must have all-lowercase names: BlendUI
+111 error     at RegClient.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:273:14)
+111 error     at Request._callback (/usr/local/lib/node_modules/npm/node_modules/npm-registry-client/lib/request.js:211:65)
+111 error     at Request.self.callback (/usr/local/lib/node_modules/npm/node_modules/request/request.js:123:22)
+111 error     at Request.EventEmitter.emit (events.js:98:17)
+111 error     at Request.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:893:14)
+111 error     at Request.EventEmitter.emit (events.js:117:20)
+111 error     at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/npm/node_modules/request/request.js:844:12)
+111 error     at IncomingMessage.EventEmitter.emit (events.js:117:20)
+111 error     at _stream_readable.js:919:16
+111 error     at process._tickCallback (node.js:419:13)
+112 error If you need help, you may report this *entire* log,
+112 error including the npm and node versions, at:
+112 error     <http://github.com/npm/npm/issues>
+113 error System Darwin 13.3.0
+114 error command "node" "/usr/local/bin/npm" "publish" "./"
+115 error cwd /Users/fw1/Site/BlendUI
+116 error node -v v0.10.28
+117 error npm -v 1.4.9
+118 verbose exit [ 1, true ]
