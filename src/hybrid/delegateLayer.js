@@ -59,9 +59,9 @@ define(function(require) {
 //$("slider") control > slider in.out
 // $zepto
 
-
+    var get = blend.get;
     blend.get = function(id){
-        var layer = blend.get(id);
+        var layer = get(id);
         if(layer){
             return layer;
         }else{

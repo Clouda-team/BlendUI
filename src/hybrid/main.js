@@ -1,4 +1,4 @@
-require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/hybrid/Slider'], function(blend, Layer, LayerGroup, Slider) {
+require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/hybrid/Slider', 'src/hybrid/delegateLayer'], function(blend, Layer, LayerGroup, Slider) {
     blend = blend||{};
     blend.Layer = Layer;
     blend.LayerGroup = LayerGroup;
