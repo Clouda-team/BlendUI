@@ -42,7 +42,7 @@ define(
 
         //ADDED CURRENTID
         blend.currentLayerId = runtime.layer.getCurrentId();
-        // var delegateLayer = require("./delegateLayer.js");
+        var delegateLayer = require("./delegateLayer.js");
 
         /**
          * 注销控件
