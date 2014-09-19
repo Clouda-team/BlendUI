@@ -25,7 +25,7 @@
         $(document).click(function(e){
             //blend.fire("layercreates","0",{data1:123,data2:[1,2,3]});
 
-            var _layer = window._layer;
+            // var _layer = window._layer;
             var $t = $(e.target).closest('a');
             if (!$t.length) return true;
             
@@ -48,10 +48,11 @@
                 ,"onhide":function(e){
                     console.log("onhide...")
                 }
+                ,"pullToRefresh":true
                 ,"ptrFn":function(){
                     setTimeout(function(){
                         console.log("refresh callback");
-                        _layer.endPullRefresh();
+                        window._layer.endPullRefresh();
 
                     },1500);
                     

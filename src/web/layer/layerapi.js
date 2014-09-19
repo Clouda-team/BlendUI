@@ -102,7 +102,7 @@ define(
             }
 
             var tipLayer = $(".pull-to-refresh-layer",context.main).css("padding-top",container.css("padding-top"));//padding-top
-
+            tipLayer.css("margin-top",container.position().top);
             var isTouched,
                 isMoved,
                 touchesStart = {},

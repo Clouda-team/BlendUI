@@ -1,4 +1,4 @@
-define(["require",'./../common/lib',"./configs","./events",'../../third_party/jquery-2.1.1.js','./api'],
+define(["require",'./../common/lib',"./configs","./events",'../../usecase/js/lib/jquery-2.1.1.js','./api'],
     function(require) {
         var lib = require('./../common/lib');
         var configs = require('./configs');

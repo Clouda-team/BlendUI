@@ -10,7 +10,7 @@ define(
         var blend = require('./blend');
         var lib = require('./../common/lib');
         var Control = require('./Control');
-        var underscroe = require('../../third_party/underscore.js');
+        //var underscroe = require('../../third_party/underscore.js');
 
         /**
          * @constructor
