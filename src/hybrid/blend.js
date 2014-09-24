@@ -83,7 +83,7 @@ define(
             if (blend.readyState || window.nuwa_runtime||window.lc_bridge) {
                 handler();
             }else {
-                var outTimeFun = setTimeout(handler, 3000);
+                var outTimeFun = setTimeout(handler, 200000);
                 document.addEventListener('runtimeready', handler, false);
             }
         };

@@ -1,4 +1,5 @@
-(function () {/**
+(function () {
+/**
  * @license almond 0.2.9 Copyright (c) 2011-2014, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/almond for details
@@ -870,7 +871,13 @@ define(
         var apiFn = function(handler, args) {
             try {
                 var api = window.nuwa_frame || window.lc_bridge;
-                return api[handler].apply(api, args);
+                var value = api[handler].apply(api, args);
+                if(value==="ture"){
+                    value=true;
+                }else if(value==="false"){
+                    value = false;
+                }
+                return value;
             }catch (e) {
                 console.log('BlendUI_Api_Error:'+ handler + '======');
                 console.log(e.stack);
@@ -904,7 +911,7 @@ define(
          * @private
          */
         layer.resume = function(layerId, options) {
-            if (layer.isActive(layerId)) return;
+            if(layer.isActive(layerId)) return;
             var _options = {
                 'fx': 'slide',
                 'reverse': false,
@@ -917,10 +924,10 @@ define(
             }
             apiFn('resumeLayer', [layerId, JSON.stringify(_options)]);
 
-            //todo: 这里为啥要setTimeout
             setTimeout(function() {
                 layer.canGoBack(layerId) && layer.clearHistory(layerId);
             },500);
+
             layer.fire('in', false, layerId);
         };
 
@@ -1593,7 +1600,7 @@ define(
             if (blend.readyState || window.nuwa_runtime||window.lc_bridge) {
                 handler();
             }else {
-                var outTimeFun = setTimeout(handler, 3000);
+                var outTimeFun = setTimeout(handler, 200000);
                 document.addEventListener('runtimeready', handler, false);
             }
         };
@@ -2948,5 +2955,4 @@ require(['src/hybrid/blend', 'src/hybrid/Layer', 'src/hybrid/LayerGroup', 'src/h
 
 
 define("src/hybrid/main", function(){});
-
 }());

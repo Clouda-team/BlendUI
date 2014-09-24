@@ -38,7 +38,13 @@ define(
         var apiFn = function(handler, args) {
             try {
                 var api = window.nuwa_frame || window.lc_bridge;
-                return api[handler].apply(api, args);
+                var value = api[handler].apply(api, args);
+                if(value==="ture"){
+                    value=true;
+                }else if(value==="false"){
+                    value = false;
+                }
+                return value;
             }catch (e) {
                 console.log('BlendUI_Api_Error:'+ handler + '======');
                 console.log(e.stack);
@@ -72,7 +78,7 @@ define(
          * @private
          */
         layer.resume = function(layerId, options) {
-            if (layer.isActive(layerId)) return;
+            if(layer.isActive(layerId)) return;
             var _options = {
                 'fx': 'slide',
                 'reverse': false,
@@ -85,10 +91,10 @@ define(
             }
             apiFn('resumeLayer', [layerId, JSON.stringify(_options)]);
 
-            //todo: 这里为啥要setTimeout
             setTimeout(function() {
                 layer.canGoBack(layerId) && layer.clearHistory(layerId);
             },500);
+
             layer.fire('in', false, layerId);
         };
 
