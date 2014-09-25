@@ -87,7 +87,7 @@ define(function(require) {
         options = options||{};
         if(options.url) options.url= getBasePath(options.url);
         Control.call(this, options);
-        console.info('Time createLayer:'+ (__time = +new Date));
+        console.info('Time createLayer:'+ (__time = +new Date()));
         this._init(options);
         return this;
     };
@@ -167,7 +167,7 @@ define(function(require) {
                 });
             });
 
-            console.info('Time layerCreateSuccess:'+ (new Date - __time));
+            console.info('Time layerCreateSuccess:'+ (new Date() - __time));
             me.afterrender && me.afterrender.apply(me, arguments);
         },me.id, me);
         layerApi.on('layerLoadFinish', function(event) {
@@ -183,7 +183,7 @@ define(function(require) {
                 me.url = event['url'];
                 me.changeUrl && me.changeUrl.call(me, event, me.url);
             }
-            console.info('Time layerLoadFinish:'+ (new Date - __time));
+            console.info('Time layerLoadFinish:'+ (new Date() - __time));
             me.onload && me.onload.apply(me, arguments);
         },me.id, me);
 

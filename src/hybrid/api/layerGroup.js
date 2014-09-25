@@ -24,7 +24,7 @@ define(
                 _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
             }
             return _options;
-        }
+        };
 
         // native api回调
         var apiFn = function(handler, args) {
@@ -134,7 +134,7 @@ define(
                 layerId = layer.getCurrentId();
             }
             setTimeout(function(){
-                apiFn('setCanLayerGroupScroll', [layerId, groupId, isCan])
+                apiFn('setCanLayerGroupScroll', [layerId, groupId, isCan]);
             },100);
         };
 

@@ -19,10 +19,10 @@ define(
                 var api = window.nuwa_widget||window.lc_bridge;
                 return api[handler].apply(api,args);
             }catch(e){
-                console.log("BlendUI_Api_Error:"+handler+"======")
+                console.log("BlendUI_Api_Error:"+handler+"======");
                 console.log(e);
             }
-        }
+        };
 
         /**
          * 增加slider
@@ -36,7 +36,7 @@ define(
                 "fixed":false
             };
             ['left','top','width','height','fixed'].forEach(function(n,i){
-                if(options&&options[n]!=undefined){
+                if(options&&options[n]!==undefined){
                     _options[n] = options[n]*devPR;
                 }
             });
@@ -52,14 +52,14 @@ define(
         slider.addItems = function(id, images){
             apiFn("componentExecuteNative",[id, 'addItems',  JSON.stringify(images)]);
             return slider;
-        }
+        };
         /**
          * 设置背景
          */
         slider.setConfig = function(id, options){
             apiFn("componentExecuteNative",[id, 'setSliderConfig',JSON.stringify(options)]);
             return slider;
-        }
+        };
 
         /**
          * 设置指示器
@@ -72,7 +72,7 @@ define(
             options.unitSpace=Math.round((options.unitSpace||5) * devPR);
             apiFn("componentExecuteNative",[id, 'setupIndicator',JSON.stringify(options)]);
             return slider;
-        }
+        };
 
         /**
          * next
@@ -80,7 +80,7 @@ define(
         slider.next = function(id){
             apiFn("componentExecuteNative",[id, 'next']);
             return slider;
-        }
+        };
 
         /**
          * prev
@@ -135,7 +135,7 @@ define(
          */
         slider.remove = function(id){
             apiFn("removeComponent",[id, 'UIBase']);
-        }
+        };
         return slider;
     }
 );

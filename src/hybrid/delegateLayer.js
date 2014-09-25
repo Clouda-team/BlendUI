@@ -43,11 +43,11 @@ define(function(require) {
                         args:arguments,
                         method:attr
                     });
-                }
+                };
             }else{
                 return function(){
-                    console.log('delegate error')
-                }
+                    console.log('delegate error');
+                };
             }
         })(i);
     }
@@ -67,7 +67,7 @@ define(function(require) {
         }else{
             return new delegateLayer(id);
         }
-    }
+    };
 
     blend.createLayer = function(options){
         if(layerId==='0'){
@@ -76,5 +76,5 @@ define(function(require) {
             blend.fire(delegateCreate,'0',options);
             return blend.getLayer(options.id);
         }
-    }
+    };
 });

@@ -114,7 +114,7 @@ define(
         ['on','off','fire','once','postMessage'].forEach(function(n,i){
             blend[n] = function(){
                 runtime.layer[n].apply(runtime.layer,arguments);
-            }
+            };
         });
 
         //把coreapi和layer上可直接操作的接口直接暴露给blend.api;
@@ -131,12 +131,12 @@ define(
         var mainCall = {};
         blend.start = blend.layerInit = function(id,callback){
             mainCall[id] = callback;
-        }
+        };
 
         blend._lanch = function(id,dom){
             
             mainCall[id]&&mainCall[id].call(blend, dom);
-        }
+        };
 
         //unload的时候注销所有组件;
         window.addEventListener("unload",function(e){

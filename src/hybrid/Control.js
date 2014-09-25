@@ -15,7 +15,7 @@ define(
             options = options || {};
 
             if (!this.id && !options.id) {
-                this.id = lib.getUniqueID() + (1 * new Date);
+                this.id = lib.getUniqueID() + (1 * new Date());
             }
             this.main = options.main ? options.main : this.initMain(options);
 
@@ -267,10 +267,7 @@ define(
              * @param {String} state 状态名
              */
             toggleState: function(state) {
-                var methodName = this.hasState(state)
-                    ? 'removeState'
-                    : 'addState';
-
+                var methodName = this.hasState(state)? 'removeState': 'addState';
                 this[methodName](state);
             },
 

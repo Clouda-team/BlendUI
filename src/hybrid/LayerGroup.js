@@ -194,7 +194,7 @@ define(function(require) {
                     "releaseText":_layer.releaseText,
                     "pullIcon": _layer.pullIcon,
                     "pullBgColor":_layer.pullBgColor
-                })
+                });
             }
             _layer.state = "loaded";
         }, false);
@@ -209,7 +209,7 @@ define(function(require) {
      */
     LayerGroup.prototype.getLayerValueById = function(layerId){
         return this._layer[layerId];
-    }
+    };
 
     /**
      * 创建渲染页面

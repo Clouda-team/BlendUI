@@ -30,10 +30,13 @@ module.exports = function (grunt) {
             }
         },
         jshint : {
-            files: ['Gruntfile.js','src/web/**/*.js'],
+            files: ['Gruntfile.js','src/web/**/*.js','src/hybrid/**/*.js'],
             options: {
+                '-W083' : true,//for循环中function函数
+                '-W054' : true,//new Function
                 '-W061' : true,
                 '-W030' :true,
+                sub : true,
                 globals: {
                     '$': true,
                     console: true,

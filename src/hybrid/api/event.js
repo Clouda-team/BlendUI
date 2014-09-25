@@ -28,7 +28,7 @@ define(
             }else{
                 return val;
             }
-        }
+        };
 
         event.on = function(type, handler, id, context, isonce) {
             var me = this;
@@ -111,7 +111,7 @@ define(
                             break;
                         }
                     }
-                    if (listeners.length == 0 && handlers[type]['listened']) {
+                    if (listeners.length === 0 && handlers[type]['listened']) {
                         document.removeEventListener(type, handlers[type].callback);
                         handlers[type]['listened'] = false;
                     }

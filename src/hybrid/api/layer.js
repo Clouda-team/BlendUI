@@ -33,7 +33,7 @@ define(
                 _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
             }
             return _options;
-        }
+        };
 
         var apiFn = function(handler, args) {
             try {
@@ -116,7 +116,7 @@ define(
          * @private
          */
         layer.reload = function(layerId, url) {
-            if (arguments.length == 1 || arguments.length == 0) {
+            if (arguments.length === 1 || arguments.length === 0) {
                 url = layerId;
                 layerId = layer.getCurrentId();
             }
@@ -163,7 +163,7 @@ define(
             if(!layerId) layerId = layer.getCurrentId();
             options = JSON.stringify(options);
             apiFn('layerSetPullRefresh',[layerId,isCan,options]);
-        }
+        };
         /**
          *
          * 取消拉动刷新
@@ -348,7 +348,7 @@ define(
         layer.setLayout = function( options ){
             var _options = filterOption(options);
             return apiFn('setLayerLayout',[JSON.stringify(_options)]);
-        }
+        };
 
         return layer;
     }
