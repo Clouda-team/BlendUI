@@ -55,12 +55,32 @@ module.exports = function (grunt) {
                 src : ['dist/BlendWebUI.js'],
                 dest : 'dist/BlendWebUI.min.js'
             }
+        },
+        qunit: {
+            all: {
+              options: {
+                urls: [
+                  'test/blendui.html'
+                ]
+              }
+            }
+        },
+        watch: {
+          scripts: {
+            files: ['Gruntfile.js','src/web/**/*.js','src/hybrid/**/*.js'],
+            tasks: ['jshint'],
+            options: {
+              spawn: false,
+            }
+          },
         }
     });
     
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-contrib-qunit');
+    grunt.loadNpmTasks('grunt-contrib-watch');
     
     grunt.registerTask('hybrid', [
         'requirejs:hybrid',
@@ -70,5 +90,9 @@ module.exports = function (grunt) {
         'jshint',
         'requirejs:web',
         'uglify:web'
+    ]);
+    grunt.registerTask('test',[
+        'jshint',
+        'qunit'
     ]);
 };
