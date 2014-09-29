@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>layer功能测试</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+下拉刷新下拉刷新下拉刷新
+<div id="test"></div>
+</body>
+<script>
+require.config({
+    baseUrl:"../../"
+});
+require(['src/hybrid/blend','src/hybrid/LayerGroup','src/hybrid/Layer'], function ( main,LayerGroup,layer) {
+    var layerApi = main.api.layer;
+    main.ready(function(){
+        try{
+            layerApi.on("layerPullDown",function(event){
+                setTimeout(function(){
+                    $("body").before("<p>新内容新内容新内容新内容新内容</p>");
+                    layerApi.stopPullRefresh();
+                },1000)
+            });
+        }catch(e){
+            console.log(e);
+        }
+    });
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>子layer</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>局部layer功能</h2><br/><br/>
+
+<input type="button" id="create" value="创建子layer"/> 
+<input type="button" id="show" value="show"/> 
+<input type="button" id="hide" value="hide"/> 
+<br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</body>
+<script>
+require.config({
+    baseUrl:"../../"
+});
+require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Footbar) {
+    var footbarCase;
+    var subLayer11;
+    var _eval = {
+        create : function(){
+           subLayer11 = new Footbar({
+                id:"subLayertest",
+                "url":"http://m.sogou.com",
+                "active":true,
+                "duration":200,
+                left: 30,
+                top: 150,
+                width: 150,
+                height: 200,
+                subLayer: true,
+                fixed: false
+           });
+        },
+        show:function(){
+            subLayer11.in()
+        },
+        hide:function(){
+            subLayer11.out()
+        }
+    };
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

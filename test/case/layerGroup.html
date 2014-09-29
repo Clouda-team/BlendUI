@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>layer功能测试</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>  
+</head>
+<body>
+
+<h2>layerGroup功能测试</h2>
+<input type="button" id="create" value="创建group "/>
+<input type="button" id="active" value="group切换"/>
+<input type="button" id="disableScroll" value="禁止滚动"/>
+<input type="button" id="toggleScroll" value="toggle滚动"/>
+<input type="button" id="isScroll" value="isScroll滚动"/>
+<input type="button" id="hide" value="隐藏"/>
+<input type="button" id="destroy" value="销毁"/>
+<input type="button" id="setLayout" value="setLayout"/>
+
+
+<div id="test"></div>
+</body>
+<script>
+require.config({
+    baseUrl:"../../"
+});
+require(['src/hybrid/blend','src/hybrid/LayerGroup','src/hybrid/Layer'], function ( main,LayerGroup,layer) {
+    var group;
+    var layerApi = main.api.layerGroup;
+    var message = function(str){
+        $("#test").html(str);
+    }
+
+    var _eval = {
+        create : function(){
+            group = new LayerGroup({
+                'id':"test",
+                "left":0,
+                "top":250,
+                "scrollEnabled":true,
+                "layers":[
+                    
+                    {
+                        id:'8',
+                        url:"layerload.html",
+                        "pullToRefresh":true,
+                        "pullBgColor":"ff0000",
+                        "pullText":"下拉",
+                        "loadingText":"up...",
+                        "releaseText":"释放",
+                        "pullIcon":"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",
+                        'autoload':true
+                    },
+                    {
+                        id:'7',
+                        url: "http://m.163.com",
+                        'autoload':true
+                    }
+                ],
+                onselected: function( event ){
+                    message("切换到layer"+event['layerId'])
+                }
+            });
+        },
+        active : function(){
+            group.active("7");
+        },
+        disableScroll : function(){
+            group.setScroll(false);
+        },
+        toggleScroll : function(){
+            group.toggleScroll()
+        },
+        isScroll:function(){
+            alert(group.isScroll());
+        },
+        hide : function(){
+            group.hide();
+        },
+        destroy : function(){
+            group.destroy()
+        },
+        setLayout:function(){
+            group.setLayout({
+                top:270,
+                width:300,
+                height:3000,
+                left:20
+                
+            })
+        }
+        
+    };
+
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        //alert(111);
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+    });
+
+    //alert(22);
+    //_eval.create();
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>全局接口</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>全局接口</h2><br/><br/>
+
+<input type="button" id="showKey" value="显示键盘"/> 
+<input type="button" id="hideKey" value="隐藏键盘"/>
+<input type="button" id="exitApp" value="退出app"/>
+<div id="keyHeight">
+</div>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</body>
+<script>
+require.config({
+    baseUrl:"../.."
+});
+require(['src/hybrid/blend','src/hybrid/Layer'], function ( blend,Footbar) {
+    var footbarCase;
+    var subLayer11;
+    var posInfo = {
+		left: 0,
+		top: 0,
+		width: 1,
+		height: 1,
+		fixed: false
+	};
+    var _eval = {
+        showKey : function(){
+           blend.keyboard(true);
+           //window.lc_bridge.addComponent("KKKK", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper',JSON.stringify(posInfo));
+           //window.lc_bridge.componentExecuteNative("KKKK", 'show', '{}');
+        },
+        hideKey:function(){
+           blend.keyboard(false);
+           //window.lc_bridge.componentExecuteNative("KKKK", 'hide', '{}');
+        },
+        exitApp:function(){
+             blend.exitApp();
+        }
+    };
+    blend.on("softKeyboardHide",function(event){
+        $("#keyHeight").text(event['softKeyboardHeight']);
+    });
+    blend.on("softKeyboardShow",function(event){
+        $("#keyHeight").text(event['softKeyboardHeight']);
+    });
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

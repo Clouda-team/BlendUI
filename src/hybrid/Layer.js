@@ -103,6 +103,7 @@ define(function(require) {
      * @param {Object} options 创建layer的初始化参数
      */
     Layer.prototype._init = function(options) {
+        var me = this;
         //处理options值;
         if (options.url) {
             this.originalUrl = options.url;
@@ -111,6 +112,17 @@ define(function(require) {
         this._initEvent();
 
         this.render();
+
+        if(options.subLayer){
+            layerApi.setLayout(me.id,{
+                top: me.top,
+                left: me.left,
+                bottom: me.bottom,
+                right: me.right,
+                width:me.width,
+                height:me.height,
+            });
+        }
 
         options.active && this.in();
 
@@ -133,6 +145,11 @@ define(function(require) {
      * @cfg {Boolean} autoStopLoading 是否自动停止loading;
      */
     Layer.prototype.autoStopLoading = true;
+
+    /**
+     * @cfg {Boolean} fixed;
+     */
+    Layer.prototype.fixed = false;
 
     /**
      * @private
@@ -212,17 +229,14 @@ define(function(require) {
         if (isRuntimeEnv) {
             layerApi.prepare(me.id, {
                 url: me.url,
-                top: me.top,
-                left: me.left,
-                bottom: me.bottom,
-                right: me.right,
                 pullToRefresh: me.pullToRefresh,
                 loadingIcon:me.loadingIcon,
                 "pullText": me.pullText,
                 "loadingText": me.loadingText,
                 "releaseText":me.releaseText,
                 "pullIcon": me.pullIcon,
-                "position":me.position
+                "subLayer":me.subLayer,
+                "fixed":me.fixed
             });
         }
         return this;
@@ -256,7 +270,11 @@ define(function(require) {
      */
     Layer.prototype.out = function( toLayerId ) {
         Control.prototype.out.apply(this, arguments);
-        layerApi.back(toLayerId);
+        if(this.subLayer){
+            layerApi.hideSubLayer(this.id);
+        }else{
+          layerApi.back(toLayerId);  
+        }
         return this;
     };
 

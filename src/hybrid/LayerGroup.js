@@ -87,6 +87,16 @@ define(function(require) {
      */
 
     LayerGroup.prototype.scrollEnabled = true;
+
+    /**
+     * position值
+     */
+
+    LayerGroup.prototype.top = 0;
+    LayerGroup.prototype.left = 0;
+    LayerGroup.prototype.width = window.innerWidth;
+    LayerGroup.prototype.height = window.innerHeight;
+
     /**
      * @private
      * 对象初始化, 私有方法;
@@ -222,7 +232,7 @@ define(function(require) {
                 left: me.left,
                 top: me.top,
                 width: me.width,
-                height: me.height,
+                height: me.height-me.top,
                 scrollEnabled: me.scrollEnabled,
                 active: me.activeId
             };
@@ -291,6 +301,7 @@ define(function(require) {
      * @return this
      */
     LayerGroup.prototype.destroy = function() {
+        layerGroupApi.removeLayerGroup(this.id);
         Control.prototype.destroy.apply(this, arguments);
     };
 
@@ -306,6 +317,22 @@ define(function(require) {
         layerGroupApi.toggleScroll(this.layerId, this.id);
     };
 
+    LayerGroup.prototype.hide = function() {
+        layerGroupApi.hideLayerGroup(this.id);
+    };
+
+    LayerGroup.prototype.setLayout = function(options) {
+        var me = this;
+        ['top','left','width','height'].forEach(function(n,i){
+            if(options[n]){
+               me[n] = options[n]
+            }else{
+              options[n] = me[n]  
+            }
+        });
+        //options.height = options.height-options.top;
+        layerGroupApi.layerGroupSetLayout(this.id,options);
+    };
 
     return LayerGroup;
 });

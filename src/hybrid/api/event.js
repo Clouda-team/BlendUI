@@ -14,11 +14,14 @@ define(
             'layerLoadFinish', //layer 页面载入成功
             'layerPullDown', //下拉刷新loading
             'layerPoped',//layer返回事件
-            'tap', //slider点击
-            'slide',//slider 滑动切换
+            'sliderTap', //slider点击 sliderTap
+            'sliderSlide',//slider 滑动切换 sliderSlide
             'menuPressed',//菜单建事件
             'layerGoBack',//layer中返回键goBack回调
-            'backPressedBeforeExit'//返回键退出事件回调
+            'backPressedBeforeExit',//返回键退出事件回调
+            'toolbarMenuSelected', //footbar点中toolbarMenuSelected
+            'softKeyboardShow',
+            'softKeyboardHide'
         ];
 
         var handlers = {};

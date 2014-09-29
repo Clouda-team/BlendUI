@@ -6,36 +6,19 @@ define(
          * @singleton
          * @private
          */
-        var config = require('./config');
         var event = require('./event');
         var layer = require('./layer');
-        var layerGroup = {};
-        var devPR = config.DEVICE_PR;
-        var getBasePath = function(link ) {
-            var a = document.createElement('a');
-            a.href = link;
-            return a.href;
-        };
-        var filterOption = function(options,delKeys){
-            var layerOut = ['left', 'top', 'width', 'height'];
-            var _options = {};
-            for(var n in options){
-                if(options[n] === undefined || (delKeys&&delKeys.indexOf(n)>=0)) continue;
-                _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
-            }
-            return _options;
-        };
+        var util = require('./util');
 
-        // native api回调
-        var apiFn = function(handler, args) {
-            try {
-                var api = window.nuwa_frame || window.lc_bridge;
-                return api[handler].apply(api, args);
-            }catch (e) {
-                console.log('BlendUI_Api_Error:'+ handler + '======');
-                console.log(e);
-            }
-        };
+        var layerGroup = {};
+
+        var getBasePath = util.getBasePath;
+
+        var stringifyFilter = util.stringifyFilter;
+
+        var filterOption = util.filterPositionOption;
+
+        var apiFn = util.apiFn;
 
         /**
          * 通知runtime创建pagerGroup，成功回掉返回 runtime句柄winid
@@ -138,10 +121,19 @@ define(
             },100);
         };
 
+        layerGroup.removeLayerGroup = function(groupId) {
+            apiFn('removeLayerGroup',arguments);
+        };
 
-        //todo: layergroup也支持跨webview的event吧
+        layerGroup.hideLayerGroup = function(groupId) {
+            apiFn('hideLayerGroup',arguments);
+        };
+
+        layerGroup.layerGroupSetLayout = function(groupId, options) {
+            var _options = filterOption(options);
+            return apiFn('layerGroupSetLayout',[groupId,JSON.stringify(_options)]);
+        };
 
         return layerGroup;
-
     }
 );

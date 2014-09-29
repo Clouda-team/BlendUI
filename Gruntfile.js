@@ -44,12 +44,16 @@ module.exports = function (grunt) {
                     document: true
                 }
             }
-            
         },
         uglify : {
             hybrid: {
-                src : 'dist/BlendHybridUI-<%= pkg.version %>.js',
-                dest :'dist/BlendHybridUI-<%= pkg.version %>.min.js'
+                files:[{
+                    src : 'dist/BlendHybridUI-<%= pkg.version %>.js',
+                    dest :'dist/BlendHybridUI-<%= pkg.version %>.min.js'
+                },{
+                    src : 'dist/BlendHybridUI-<%= pkg.version %>.js',
+                    dest :'dist/BlendHybridUI.min.js'
+                }]
             },
             web: {
                 src : ['dist/BlendWebUI.js'],
@@ -83,6 +87,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     
     grunt.registerTask('hybrid', [
+        'jshint',
         'requirejs:hybrid',
         'uglify:hybrid'
     ]);

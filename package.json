@@ -1,7 +1,7 @@
 {
   "name": "blendui",
   "description": "A Hybrid Javascript Framework For Mobile WebApp",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/Clouda-team/BlendUI.git"

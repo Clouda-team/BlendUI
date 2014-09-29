@@ -73,14 +73,14 @@ define(function(require) {
     Slider.prototype._initEvent = function() {
         var me = this;
 
-        sliderApi.on('tap', function(event) {
+        sliderApi.on('sliderTap', function(event) {
             me.tap && me.tap.apply(me, arguments);
-            me.fire('tap', arguments, me);
+            me.fire('sliderTap', arguments, me);
         },me.id, me);
 
-        sliderApi.on('slide', function(event) {
+        sliderApi.on('sliderSlide', function(event) {
             me.slide && me.slide.apply(me, arguments);
-            me.fire('slide', arguments, me);
+            me.fire('sliderSlide', arguments, me);
         },me.id, me);
 
         //销毁之后撤销绑定
@@ -138,12 +138,12 @@ define(function(require) {
 
     //prev
     Slider.prototype.prev = function() {
-        sliderApi.prev(me.id);
+        sliderApi.prev(this.id);
     };
 
     //next
     Slider.prototype.next = function() {
-        sliderApi.next(me.id);
+        sliderApi.next(this.id);
     };
 
     //to

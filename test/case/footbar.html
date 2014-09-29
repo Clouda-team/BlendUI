@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>footbar菜单</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>footbar功能测试</h2><br/><br/>
+
+<input type="button" id="create" value="创建footbar"/> 
+<br/>
+<input type="button" id="show" value="显示"/>
+<br/>
+<input type="button" id="hide" value="隐藏"/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</body>
+<script>
+require.config({
+    baseUrl:"../.."
+});
+require(['src/hybrid/blend','src/hybrid/Footbar'], function ( main,Footbar) {
+    var footbarCase;
+    var _eval = {
+        create : function(){
+           footbarCase = new Footbar({
+                id:"footbartest",
+                menus:[
+                    {id:0,name:"账单",
+                        subMenus:[{id:100,name:"当月账单"},{id:101,name:"历史账单"}]},
+                    {id:1,name:"我的",
+                        subMenus:[{id:100,name:"积分"},{id:101,name:"额度"},{id:102,name:"开卡"},{id:103,name:"缴费"},{id:104,name:"预约"}]},
+                    {id:2,name:"自助查询"},
+                    {id:3,name:"资讯",
+                        subMenus:[{id:101,name:"今日头条"},{id:102,name:"昨日头条"},{id:103,name:"前日头条"},{id:104,name:"大前日头条"}]}
+                ],
+                selected:function(e){
+                    alert(JSON.stringify(e.data));
+                }
+           });
+        },
+        show:function(){
+            footbarCase.show()
+        },
+        hide:function(){
+            footbarCase.hide()
+        }
+    };
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

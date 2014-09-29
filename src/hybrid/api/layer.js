@@ -6,50 +6,17 @@ define(
          * @singleton
          * @private
          */
-        var config = require('./config');
         var event = require('./event');
+        var util = require('./util');
         var layer = {};
-        var devPR = config.DEVICE_PR;
         var initLayerId = '0';
-        var getBasePath = function(link ) {
-            var a = document.createElement('a');
-            a.href = link;
-            return a.href;
-        };
+        var getBasePath = util.getBasePath;
 
-        var stringifyFilter = function(key,val){
-            if(typeof val ==="function"){
-                return val.toString();
-            }else{
-                return val;
-            }
-        };
+        var stringifyFilter = util.stringifyFilter;
 
-        var filterOption = function(options,delKeys){
-            var layerOut = ['left', 'top', 'width', 'height'];
-            var _options = {};
-            for(var n in options){
-                if(options[n] === undefined || (delKeys&&delKeys.indexOf(n)>=0)) continue;
-                _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
-            }
-            return _options;
-        };
+        var filterOption = util.filterPositionOption;
 
-        var apiFn = function(handler, args) {
-            try {
-                var api = window.nuwa_frame || window.lc_bridge;
-                var value = api[handler].apply(api, args);
-                if(value==="ture"){
-                    value=true;
-                }else if(value==="false"){
-                    value = false;
-                }
-                return value;
-            }catch (e) {
-                console.log('BlendUI_Api_Error:'+ handler + '======');
-                console.log(e.stack);
-            }
-        };
+        var apiFn = util.apiFn;
 
         /**
          * 创建独立layer
@@ -106,6 +73,16 @@ define(
         layer.back = function(layerId ) {
             layerId = layerId || "";
             apiFn('backToPreviousLayer', [layerId]);
+        };
+
+        /**
+         * 隐藏sublayer
+         * @method {Function} sublayer
+         * @return null
+         */
+        layer.hideSubLayer = function(layerId ) {
+            layerId = layerId || "";
+            apiFn('hideSubLayer', [layerId]);
         };
 
         /**
@@ -345,9 +322,9 @@ define(
         /**
          * 设置layer的position属性{"left","top","height","width"}
          */
-        layer.setLayout = function( options ){
+        layer.setLayout = function(layerId, options ){
             var _options = filterOption(options);
-            return apiFn('setLayerLayout',[JSON.stringify(_options)]);
+            return apiFn('layerSetLayout',[layerId,JSON.stringify(_options)]);
         };
 
         return layer;

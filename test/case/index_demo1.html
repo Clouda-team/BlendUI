@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>layer功能测试</title>
+    <link rel="stylesheet" href="">
+    <script src="../../../third_party/zepto.js"></script>
+    <script src="../../../dist/BlendUI-0.2.0.js"></script>
+</head>
+<body>
+layer测试<br/><br/>
+
+
+<!-- <input type="button" id="create" value="创建layer"/>window.lc_bridge.prepareLayer<br/>
+<input type="button" id="resumeLayer" value="激活layer"/>window.lc_bridge.resumeLayer<br/> -->
+<input type="button" id="back" value="返回"/>
+
+<input type="button" id="close" value="销毁"/>
+<br>
+<hr>
+<input type="button" id="postMessage" value="postMessage数据给父层"/>
+<br/>
+<br/>
+<hr/>
+<input type="button" id="selfEvent" value="触发父层的自定义事件"/>
+<br/>
+<br/>
+<hr/>
+<a href="http://m.baidu.com">可测试changeUrl事件</a>
+</body>
+<script>
+;(function (main,Layer,LayerGroup) {
+    var _layer;
+    var layerApi = main.api.layer;
+    var _eval = {
+        back:function(){
+            layerApi.back();
+        },
+        close:function(){
+            layerApi.destroy();
+        },
+        postMessage:function(){
+            layerApi.postMessage("12345","top");
+            layerApi.back();
+        },
+        selfEvent:function(){
+            layerApi.fire('baidu',"top","55555555555");  
+        }
+    };
+
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        _eval[id] && _eval[id]();
+    });
+
+/*layerApi.on("layerGoBack",function(){
+    alert('bbbbb');
+});*/
+/*document.addEventListener('menuPressed', function(event) {
+    console.log('menuPressed origin: ' + event['origin']);
+}, false);*/
+
+})(Blend,Blend.Layer,Blend.LayerGroup);
+</script>
+</html>
