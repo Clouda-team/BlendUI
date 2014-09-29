@@ -1363,11 +1363,20 @@ define(
             },100);
         };
 
+        layerGroup.removeLayerGroup = function(groupId) {
+            apiFn('removeLayerGroup',arguments);
+        };
 
-        //todo: layergroup也支持跨webview的event吧
+        layerGroup.hideLayerGroup = function(groupId) {
+            apiFn('hideLayerGroup',arguments);
+        };
+
+        layerGroup.layerGroupSetLayout = function(groupId, options) {
+            var _options = filterOption(options);
+            return apiFn('layerGroupSetLayout',[groupId,JSON.stringify(_options)]);
+        };
 
         return layerGroup;
-
     }
 );
 
@@ -2592,6 +2601,16 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
      */
 
     LayerGroup.prototype.scrollEnabled = true;
+
+    /**
+     * position值
+     */
+
+    LayerGroup.prototype.top = 0;
+    LayerGroup.prototype.left = 0;
+    LayerGroup.prototype.width = window.innerWidth;
+    LayerGroup.prototype.height = window.innerHeight;
+
     /**
      * @private
      * 对象初始化, 私有方法;
@@ -2727,7 +2746,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
                 left: me.left,
                 top: me.top,
                 width: me.width,
-                height: me.height,
+                height: me.height-me.top,
                 scrollEnabled: me.scrollEnabled,
                 active: me.activeId
             };
@@ -2796,6 +2815,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
      * @return this
      */
     LayerGroup.prototype.destroy = function() {
+        layerGroupApi.removeLayerGroup(this.id);
         Control.prototype.destroy.apply(this, arguments);
     };
 
@@ -2811,6 +2831,22 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
         layerGroupApi.toggleScroll(this.layerId, this.id);
     };
 
+    LayerGroup.prototype.hide = function() {
+        layerGroupApi.hideLayerGroup(this.id);
+    };
+
+    LayerGroup.prototype.setLayout = function(options) {
+        var me = this;
+        ['top','left','width','height'].forEach(function(n,i){
+            if(options[n]){
+               me[n] = options[n];
+            }else{
+              options[n] = me[n];
+            }
+        });
+        //options.height = options.height-options.top;
+        layerGroupApi.layerGroupSetLayout(this.id,options);
+    };
 
     return LayerGroup;
 });

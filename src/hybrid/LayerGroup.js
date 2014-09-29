@@ -325,9 +325,9 @@ define(function(require) {
         var me = this;
         ['top','left','width','height'].forEach(function(n,i){
             if(options[n]){
-               me[n] = options[n]
+               me[n] = options[n];
             }else{
-              options[n] = me[n]  
+              options[n] = me[n];
             }
         });
         //options.height = options.height-options.top;
