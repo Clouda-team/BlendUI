@@ -29,6 +29,13 @@ define(function(require) {
      * @param {String} [options.height] slider像素高度，默认全屏
      * @param {String} [options.bgColor] 背景颜色，默认透明
 
+     * @param {String} [options.hasIndicator] 是否显示滑动指示器
+     * @param {String} [options.inactiveColor] 指示器默认颜色
+     * @param {String} [options.activeColor] 指示器focus颜色
+     * @param {String} [options.verticalMargin] 指示器底部距离
+     * @param {String} [options.unitSize] 指示器底部距离
+     * @param {String} [options.unitSpace] 指示器底部距离
+
      * @param {Obeject} [options.images] 图片json数据 {}
 
      * @param {Function} [options.tap] 点击slider的事件回调

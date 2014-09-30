@@ -35,11 +35,14 @@ define(
                 "height":window.innerHeight*devPR,
                 "fixed":false
             };
-            ['left','top','width','height','fixed'].forEach(function(n,i){
+            ['left','top','width','height'].forEach(function(n,i){
                 if(options&&options[n]!==undefined){
                     _options[n] = options[n]*devPR;
                 }
             });
+            if(options.fixed){
+                _options.fixed = true;
+            }
             _options.top += window.pageYOffset*devPR;
             apiFn("addComponent",[id, 'UIBase', 'com.baidu.lightui.component.slider.Slider', JSON.stringify(_options)]);
 

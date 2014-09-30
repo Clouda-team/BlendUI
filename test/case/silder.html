@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>sliderbar菜单</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>slider功能测试</h2><br/><br/>
+
+<input type="button" id="create" value="创建slider"/> 
+<input type="button" id="slideTo" value="滑动到index=2"/>
+<input type="button" id="next" value="滑到到下一个next"/>
+<input type="button" id="prev" value="滑到到下一个prev"/>
+<br/>
+<div id="sliderText"></div>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</body>
+<script>
+require.config({
+    baseUrl:"../.."
+});
+require(['src/hybrid/blend','src/hybrid/Slider'], function ( main,Slider) {
+    var sliderCase;
+    var _eval = {
+        create : function(){
+           sliderCase = new Slider({
+                id:"slidertest",
+                images:[
+                     {
+                    "url":"http://c.hiphotos.baidu.com/news/pic/item/838ba61ea8d3fd1f28dcd036334e251f94ca5fe0.jpg"
+                },
+                {
+                    "url":"http://f.hiphotos.baidu.com/news/pic/item/730e0cf3d7ca7bcbef67a823bd096b63f624a89a.jpg"
+                },{
+                    "url":"http://c.hiphotos.baidu.com/news/pic/item/0bd162d9f2d3572cd740f7d08913632762d0c318.jpg"
+                },{
+                    "url":"http://news.baidu.com/z/resource/r/image/2014-09-30/09a26adf56efe1c05249935836c18914.jpg"
+                }
+                ],
+                "bgColor": "#cccccc",
+                "hasIndicator":true
+                ,"inactiveColor":"#888888"
+                ,"activeColor":"#ff0000"
+                ,"verticalMargin":5
+                ,"unitSpace":8
+                ,"unitSize":6
+                ,"tap":function(e){
+                    console.log(JSON.stringify(e.data));
+                }
+                ,'slide':function(e){
+                    //console.log(JSON.stringify(e.data));
+                    $("#sliderText").text("切换到"+e.data.index);
+                },
+                width:320,
+                top:230,
+                height:175,
+                left:10,
+                fixed:true
+           });
+        },
+        slideTo:function(){
+            sliderCase.slideTo(2);
+        },
+        next:function(){
+            sliderCase.next()
+        },
+        prev:function(){
+            sliderCase.prev()
+        }
+    };
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

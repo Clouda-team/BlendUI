@@ -32,7 +32,7 @@ define(
                 "height":45 * devPR,
                 "fixed":true
             };
-            ['left','top','width','height','fixed'].forEach(function(n,i){
+            ['left','top','width','height'].forEach(function(n,i){
                 if(options&&options[n]!==undefined){
                     _options[n] = options[n]*devPR;
                 }
