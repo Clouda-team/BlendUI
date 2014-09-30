@@ -359,6 +359,21 @@ define(function(require) {
         return layerApi.isActive(this.id);
     };
 
+    /**
+     * setLayout
+     * @return  null
+     */
+    Layer.prototype.setLayout = function(options) {
+        var me = this;
+        ['top','left','width','height'].forEach(function(n,i){
+            if(options[n]){
+               me[n] = options[n];
+            }else{
+              options[n] = me[n];  
+            }
+        });
+        return layerApi.setLayout(this.id,options);
+    };
 
     /**
      * 销毁此layer

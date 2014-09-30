@@ -14,6 +14,7 @@
 <input type="button" id="create" value="创建子layer"/> 
 <input type="button" id="show" value="show"/> 
 <input type="button" id="hide" value="hide"/> 
+<input type="button" id="setLayout" value="改变大小"/> 
 <br/>
 <br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 </body>
@@ -44,6 +45,14 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Footbar) {
         },
         hide:function(){
             subLayer11.out()
+        },
+        setLayout:function(){
+            subLayer11.setLayout({
+                left: 30,
+                top: 180,
+                width: 250,
+                height: 200,
+            });
         }
     };
     $('input[type=button]').click(function(e){

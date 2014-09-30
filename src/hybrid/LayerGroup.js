@@ -327,7 +327,7 @@ define(function(require) {
             if(options[n]){
                me[n] = options[n];
             }else{
-              options[n] = me[n];
+              options[n] = me[n];  
             }
         });
         //options.height = options.height-options.top;
