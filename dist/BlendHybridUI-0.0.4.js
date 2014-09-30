@@ -2497,6 +2497,21 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
         return layerApi.isActive(this.id);
     };
 
+    /**
+     * setLayout
+     * @return  null
+     */
+    Layer.prototype.setLayout = function(options) {
+        var me = this;
+        ['top','left','width','height'].forEach(function(n,i){
+            if(options[n]){
+               me[n] = options[n];
+            }else{
+              options[n] = me[n];  
+            }
+        });
+        return layerApi.setLayout(this.id,options);
+    };
 
     /**
      * 销毁此layer
@@ -2841,7 +2856,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
             if(options[n]){
                me[n] = options[n];
             }else{
-              options[n] = me[n];
+              options[n] = me[n];  
             }
         });
         //options.height = options.height-options.top;
