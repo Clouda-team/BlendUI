@@ -8,18 +8,12 @@ define(
          */
         var config = require('../config');
         var event = require('../event');
+        var util = require('../util');
         var footbar  = {};
         var devPR = config.DEVICE_PR;
 
-        var apiFn = function( handler, args){
-            try{
-                var api = window.nuwa_widget||window.lc_bridge;
-                return api[handler].apply(api,args);
-            }catch(e){
-                console.log("BlendUI_Api_Error:"+handler+"======");
-                console.log(e);
-            }
-        };
+        var filterOption = util.filterPositionOption;
+        var apiFn = util.apiFn;
 
         /**
          * 增加slider
@@ -27,16 +21,14 @@ define(
         footbar.add = function(id, options){
             var _options = {
                 "left":0,
-                "top":(window.innerHeight-45)*devPR,
-                "width":window.innerWidth*devPR,
-                "height":45 * devPR,
+                "top":window.innerHeight-45,
+                "width":window.innerWidth,
+                "height":45,
                 "fixed":true
             };
-            ['left','top','width','height'].forEach(function(n,i){
-                if(options&&options[n]!==undefined){
-                    _options[n] = options[n]*devPR;
-                }
-            });
+
+            _options = filterOption(options,false,_options);
+
             apiFn("addComponent",[id, 'UIBase', 'com.baidu.lightui.component.toolbar.Toolbar', JSON.stringify(_options)]);
 
             return footbar;

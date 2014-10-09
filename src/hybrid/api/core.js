@@ -6,26 +6,12 @@ define(
          * @blendui native核心接口层
          * @private
          */
+        var util = require('./util');
+        var apiFn = util.apiFn;
+
         var core = {};
 
         var keyboard;
-
-        var apiFn = function(handler, args) {
-            try {
-                var api = window.nuwa_core || window.nuwa_runtime;
-                var api2 = window.nuwa_widget || window.lc_bridge;
-                var fn;
-                if(api2&&(fn=api2[handler])){
-                    api = api2; 
-                }else{
-                    fn = api[handler];
-                }
-                return fn.apply(api, args);
-            }catch (e) {
-                console.log('BlendUI_Api_Error:'+ handler +  '======'+fn);
-                console.log(e);
-            }
-        };
 
         /**
          * 移除启动画面

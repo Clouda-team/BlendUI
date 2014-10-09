@@ -8,21 +8,14 @@ define(
          */
         var config = require('../config');
         var event = require('../event');
+        var util = require('../util');
+
         var slider  = {};
         var devPR = config.DEVICE_PR;
-        /*var widgetApi = function(){
-            return window.nuwa_widget||window.lc_bridge;
-        };*/
-        // native api回调
-        var apiFn = function( handler, args){
-            try{
-                var api = window.nuwa_widget||window.lc_bridge;
-                return api[handler].apply(api,args);
-            }catch(e){
-                console.log("BlendUI_Api_Error:"+handler+"======");
-                console.log(e);
-            }
-        };
+        
+
+        var filterOption = util.filterPositionOption;
+        var apiFn = util.apiFn;
 
         /**
          * 增加slider
@@ -31,18 +24,13 @@ define(
             var _options = {
                 "left":0,
                 "top":0,
-                "width":window.innerWidth*devPR,
-                "height":window.innerHeight*devPR,
+                "width":window.innerWidth,
+                "height":window.innerHeight,
                 "fixed":false
             };
-            ['left','top','width','height'].forEach(function(n,i){
-                if(options&&options[n]!==undefined){
-                    _options[n] = options[n]*devPR;
-                }
-            });
-            if(options.fixed){
-                _options.fixed = true;
-            }
+
+            _options = filterOption(options,false,_options);
+
             _options.top += window.pageYOffset*devPR;
             apiFn("addComponent",[id, 'UIBase', 'com.baidu.lightui.component.slider.Slider', JSON.stringify(_options)]);
 

@@ -5,9 +5,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>layer功能测试</title>
     <link rel="stylesheet" href="">
-    <script src="../../../third_party/zepto.js"></script>
-    <script src="../../../third_party/require.js"></script>
-    <script src=" http://weinre123.duapp.com/target/target-script-min.js"></script>
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+    <!--
+    <script src=" http://weinre123.duapp.com/target/target-script-min.js"></script>-->
 </head>
 <body>
 layer测试<br/><br/>
@@ -33,7 +34,7 @@ layer测试<br/><br/>
 </body>
 <script>
 require.config({
-    baseUrl:"../../../"
+    baseUrl:"../../"
 });
 require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
     var _layer;
@@ -54,7 +55,7 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
                 alert("baidu的回调"+data.ccc);
             });
 
-            layerApi.fire('baidu',"top",{"aaa":"ddddd"},function(data){
+            /*layerApi.fire('baidu',"top",{"aaa":"ddddd"},function(data){
                 alert("baidu的回调1"+data.ccc);
             });
 
@@ -62,7 +63,7 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
                 //alert(111);
                 alert("book的回调"+data.ccc);
             });
-
+*/
             layerApi.fire('bbbb',"top");
 
         }

@@ -14,13 +14,13 @@
 <input type="button" id="create" value="创建layer test"/>
 <br/>
 属性默认值
- {"fx":"slide","reverse":false,"duration":"normal",pullToRefresh:"false"}
+ {"fx":"slide","reverse":false,"duration":200,pullToRefresh:"true"}
 <br/>
 <hr/>
 <input type="button" id="create1" value="设置动画slide"/>
 <br/>
 动画设置为slide
- {"fx":"slide","reverse":false,"duration":"normal"}
+ {"fx":"slide","reverse":true,"duration":"quick"}
 <hr/>
 <input type="button" id="create2" value="设置动画pop"/>
 <br/>
@@ -43,7 +43,7 @@
 <br/>
 <hr/>
 <input type="button" id="reload" value="改变layer test的url"/><br/>
-改变layer test的url
+改变layer test的url -> 163.com
 <br/>
 <hr/>
 <input type="button" id="showEvent" value="onshow事件回调"/><br/>
@@ -176,8 +176,6 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
                 'id':"test",
                 "url":"index_demo.html",
                 "active":true,
-                "autoStopLoading":false,
-                "maxLoadingTime": 1500,
                 "pullToRefresh":true,
                 "pullBgColor":"ff0000",
                 "pullText":"下拉",
@@ -192,7 +190,7 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
             _layer.in()
         },
         reload:function(){
-            _layer.reload('index_demo.html');
+            _layer.reload('http://www.163.com');
             _layer.in();
         },
         back :function(){
@@ -292,9 +290,6 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
             },"test");
         },
         backKey:function(){
-            layerApi.on("layerGoBack",function(){
-                alert('test-layer keyBack');
-            },'test');
 
             layerApi.on("layerGoBack",function(){
                 alert("0-layer keyBack");

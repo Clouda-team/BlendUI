@@ -588,33 +588,147 @@ define(
 );
 
 define(
-    'src/hybrid/api/core',['require'],function(require) {
+    'src/hybrid/api/config',['require'],function(require) {
+        /**
+         * @class LayoutRule
+         * 用于控制组件内元素的相对定位，
+         * 对应的值不应被修改
+         */
+
+        var config = {
+
+            /**
+             * Rule that aligns the child's left edge with its RelativeLayout
+             * parent's left edge.
+             */
+            ALIGN_PARENT_LEFT: 9,
+
+            /**
+             * Rule that aligns the child's top edge with its RelativeLayout
+             * parent's top edge.
+             */
+            ALIGN_PARENT_TOP: 10,
+
+            /**
+             * Rule that aligns the child's right edge with its RelativeLayout
+             * parent's right edge.
+             */
+            ALIGN_PARENT_RIGHT: 11,
+            /**
+             * Rule that aligns the child's bottom edge with its RelativeLayout
+             * parent's bottom edge.
+             */
+            ALIGN_PARENT_BOTTOM: 12,
+
+            /**
+             * Rule that centers the child with respect to the bounds of its
+             * RelativeLayout parent.
+             */
+            CENTER_IN_PARENT: 13,
+
+            /**
+             * Rule that centers the child horizontally with respect to the
+             * bounds of its RelativeLayout parent.
+             */
+            CENTER_HORIZONTAL: 14,
+
+            /**
+             * Rule that centers the child vertically with respect to the
+             * bounds of its RelativeLayout parent.
+             */
+            CENTER_VERTICAL: 15,
+
+            IOS: /iP(ad|hone|od)/.test(navigator.userAgent),
+            /**
+             * devicePixelRatio
+             */
+            DEVICE_PR: (/iP(ad|hone|od)/.test(navigator.userAgent)) ? 1 : (window.devicePixelRatio || 2)
+        };
+
+
+        return config;
+
+    }
+);
+
+
+define(
+    'src/hybrid/api/util',['require','./config'],function(require) {
+        /**
+         * api通用函数
+         */
+        var config = require('./config');
+        var devPR = config.DEVICE_PR;
+        
+        var util  = {};
+
+        util.getBasePath = function(link ) {
+            var a = document.createElement('a');
+            a.href = link;
+            return a.href;
+        };
+
+        util.stringifyFilter = function(key,val){
+            if(typeof val ==="function"){
+                return val.toString();
+            }else{
+                return val;
+            }
+        };
+
+        util.filterPositionOption = function(options,delKeys,defaultOptions){
+            var layerOut = ['left', 'top', 'width', 'height','right','bottom'];
+            var _options = defaultOptions||{};
+            for(var n in options){
+                if(options[n] === undefined || (delKeys&&delKeys.indexOf(n)>=0)) continue;
+                _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
+            }
+            return _options;
+        };
+
+        util.apiFn = function(handler, args) {
+            try {
+                var api = window.nuwa_core || window.nuwa_runtime;
+                var api2 = window.nuwa_widget || window.lc_bridge;
+                var fn,value;
+                if(api2&&(fn=api2[handler])){
+                    api = api2; 
+                }else{
+                    fn = api[handler];
+                }
+                value  = fn.apply(api, args);
+                //android 4.4 true false返回为字符串
+                if(value==="ture"){
+                    value = true;
+                }else if(value==="false"){
+                    value = false;
+                }
+                return value;
+            }catch (e) {
+                console.log('BlendUI_Api_Error:'+ handler +  '======'+fn);
+                console.log(e);
+            }
+        };
+
+
+        return util;
+    }
+);
+
+define(
+    'src/hybrid/api/core',['require','./util'],function(require) {
 
         /**
          * @class blend.api.core
          * @blendui native核心接口层
          * @private
          */
+        var util = require('./util');
+        var apiFn = util.apiFn;
+
         var core = {};
 
         var keyboard;
-
-        var apiFn = function(handler, args) {
-            try {
-                var api = window.nuwa_core || window.nuwa_runtime;
-                var api2 = window.nuwa_widget || window.lc_bridge;
-                var fn;
-                if(api2&&(fn=api2[handler])){
-                    api = api2; 
-                }else{
-                    fn = api[handler];
-                }
-                return fn.apply(api, args);
-            }catch (e) {
-                console.log('BlendUI_Api_Error:'+ handler +  '======'+fn);
-                console.log(e);
-            }
-        };
 
         /**
          * 移除启动画面
@@ -788,122 +902,6 @@ define(
         };
 
         return event;
-    }
-);
-
-define(
-    'src/hybrid/api/config',['require'],function(require) {
-        /**
-         * @class LayoutRule
-         * 用于控制组件内元素的相对定位，
-         * 对应的值不应被修改
-         */
-
-        var config = {
-
-            /**
-             * Rule that aligns the child's left edge with its RelativeLayout
-             * parent's left edge.
-             */
-            ALIGN_PARENT_LEFT: 9,
-
-            /**
-             * Rule that aligns the child's top edge with its RelativeLayout
-             * parent's top edge.
-             */
-            ALIGN_PARENT_TOP: 10,
-
-            /**
-             * Rule that aligns the child's right edge with its RelativeLayout
-             * parent's right edge.
-             */
-            ALIGN_PARENT_RIGHT: 11,
-            /**
-             * Rule that aligns the child's bottom edge with its RelativeLayout
-             * parent's bottom edge.
-             */
-            ALIGN_PARENT_BOTTOM: 12,
-
-            /**
-             * Rule that centers the child with respect to the bounds of its
-             * RelativeLayout parent.
-             */
-            CENTER_IN_PARENT: 13,
-
-            /**
-             * Rule that centers the child horizontally with respect to the
-             * bounds of its RelativeLayout parent.
-             */
-            CENTER_HORIZONTAL: 14,
-
-            /**
-             * Rule that centers the child vertically with respect to the
-             * bounds of its RelativeLayout parent.
-             */
-            CENTER_VERTICAL: 15,
-
-            IOS: /iP(ad|hone|od)/.test(navigator.userAgent),
-            /**
-             * devicePixelRatio
-             */
-            DEVICE_PR: (/iP(ad|hone|od)/.test(navigator.userAgent)) ? 1 : (window.devicePixelRatio || 2)
-        };
-
-
-        return config;
-
-    }
-);
-
-
-define(
-    'src/hybrid/api/util',['require','./config'],function(require) {
-
-        var config = require('./config');
-        var devPR = config.DEVICE_PR;
-        
-        var util  = {};
-
-        util.getBasePath = function(link ) {
-            var a = document.createElement('a');
-            a.href = link;
-            return a.href;
-        };
-
-        util.stringifyFilter = function(key,val){
-            if(typeof val ==="function"){
-                return val.toString();
-            }else{
-                return val;
-            }
-        };
-
-        util.filterPositionOption = function(options,delKeys){
-            var layerOut = ['left', 'top', 'width', 'height','right','bottom'];
-            var _options = {};
-            for(var n in options){
-                if(options[n] === undefined || (delKeys&&delKeys.indexOf(n)>=0)) continue;
-                _options[n] = layerOut.indexOf(n)>=0?options[n]*devPR:options[n];
-            }
-            return _options;
-        };
-
-        util.apiFn = function(handler, args) {
-            try {
-                var api = window.nuwa_frame || window.lc_bridge;
-                var value = api[handler].apply(api, args);
-                if(value==="ture"){
-                    value=true;
-                }else if(value==="false"){
-                    value = false;
-                }
-                return value;
-            }catch (e) {
-                console.log('BlendUI_Api_Error:'+ handler + '======');
-                console.log(e.stack);
-            }
-        };
-        return util;
     }
 );
 
@@ -1381,7 +1379,7 @@ define(
 );
 
 define(
-    'src/hybrid/api/component/slider',['require','../config','../event'],function (require) {
+    'src/hybrid/api/component/slider',['require','../config','../event','../util'],function (require) {
 
         /**
          * @class rutime.component.slider 
@@ -1390,21 +1388,14 @@ define(
          */
         var config = require('../config');
         var event = require('../event');
+        var util = require('../util');
+
         var slider  = {};
         var devPR = config.DEVICE_PR;
-        /*var widgetApi = function(){
-            return window.nuwa_widget||window.lc_bridge;
-        };*/
-        // native api回调
-        var apiFn = function( handler, args){
-            try{
-                var api = window.nuwa_widget||window.lc_bridge;
-                return api[handler].apply(api,args);
-            }catch(e){
-                console.log("BlendUI_Api_Error:"+handler+"======");
-                console.log(e);
-            }
-        };
+        
+
+        var filterOption = util.filterPositionOption;
+        var apiFn = util.apiFn;
 
         /**
          * 增加slider
@@ -1413,15 +1404,13 @@ define(
             var _options = {
                 "left":0,
                 "top":0,
-                "width":window.innerWidth*devPR,
-                "height":window.innerHeight*devPR,
+                "width":window.innerWidth,
+                "height":window.innerHeight,
                 "fixed":false
             };
-            ['left','top','width','height','fixed'].forEach(function(n,i){
-                if(options&&options[n]!==undefined){
-                    _options[n] = options[n]*devPR;
-                }
-            });
+
+            _options = filterOption(options,false,_options);
+
             _options.top += window.pageYOffset*devPR;
             apiFn("addComponent",[id, 'UIBase', 'com.baidu.lightui.component.slider.Slider', JSON.stringify(_options)]);
 
@@ -1522,7 +1511,7 @@ define(
     }
 );
 define(
-    'src/hybrid/api/component/footbar',['require','../config','../event'],function (require) {
+    'src/hybrid/api/component/footbar',['require','../config','../event','../util'],function (require) {
 
         /**
          * @class rutime.component.footbar 
@@ -1531,18 +1520,12 @@ define(
          */
         var config = require('../config');
         var event = require('../event');
+        var util = require('../util');
         var footbar  = {};
         var devPR = config.DEVICE_PR;
 
-        var apiFn = function( handler, args){
-            try{
-                var api = window.nuwa_widget||window.lc_bridge;
-                return api[handler].apply(api,args);
-            }catch(e){
-                console.log("BlendUI_Api_Error:"+handler+"======");
-                console.log(e);
-            }
-        };
+        var filterOption = util.filterPositionOption;
+        var apiFn = util.apiFn;
 
         /**
          * 增加slider
@@ -1550,16 +1533,14 @@ define(
         footbar.add = function(id, options){
             var _options = {
                 "left":0,
-                "top":(window.innerHeight-45)*devPR,
-                "width":window.innerWidth*devPR,
-                "height":45 * devPR,
+                "top":window.innerHeight-45,
+                "width":window.innerWidth,
+                "height":45,
                 "fixed":true
             };
-            ['left','top','width','height','fixed'].forEach(function(n,i){
-                if(options&&options[n]!==undefined){
-                    _options[n] = options[n]*devPR;
-                }
-            });
+
+            _options = filterOption(options,false,_options);
+
             apiFn("addComponent",[id, 'UIBase', 'com.baidu.lightui.component.toolbar.Toolbar', JSON.stringify(_options)]);
 
             return footbar;
@@ -2896,6 +2877,13 @@ define('src/hybrid/Slider',['require','./blend','../common/lib','./runtime','./C
      * @param {String} [options.width] slider像素宽度，默认全屏
      * @param {String} [options.height] slider像素高度，默认全屏
      * @param {String} [options.bgColor] 背景颜色，默认透明
+
+     * @param {String} [options.hasIndicator] 是否显示滑动指示器
+     * @param {String} [options.inactiveColor] 指示器默认颜色
+     * @param {String} [options.activeColor] 指示器focus颜色
+     * @param {String} [options.verticalMargin] 指示器底部距离
+     * @param {String} [options.unitSize] 指示器底部距离
+     * @param {String} [options.unitSpace] 指示器底部距离
 
      * @param {Obeject} [options.images] 图片json数据 {}
 
