@@ -1449,7 +1449,7 @@ define(
          * next
          */
         slider.next = function(id){
-            apiFn("componentExecuteNative",[id, 'next']);
+            apiFn("componentExecuteNative",[id, 'next','']);
             return slider;
         };
 
@@ -1457,7 +1457,7 @@ define(
          * prev
          */
         slider.prev = function(id){
-            apiFn("componentExecuteNative",[id, 'prev']);
+            apiFn("componentExecuteNative",[id, 'prev','']);
             return slider;
         };
 
@@ -2224,9 +2224,10 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
     Layer.prototype._init = function(options) {
         var me = this;
         //处理options值;
-        if (options.url) {
-            this.originalUrl = options.url;
+        if (!options.url) {
+            return;
         }
+        this.originalUrl = options.url;
         //监听事件
         this._initEvent();
 
