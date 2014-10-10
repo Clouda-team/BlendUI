@@ -105,9 +105,10 @@ define(function(require) {
     Layer.prototype._init = function(options) {
         var me = this;
         //处理options值;
-        if (options.url) {
-            this.originalUrl = options.url;
+        if (!options.url) {
+            return;
         }
+        this.originalUrl = options.url;
         //监听事件
         this._initEvent();
 

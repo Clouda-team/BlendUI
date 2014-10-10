@@ -69,7 +69,7 @@ define(
          * next
          */
         slider.next = function(id){
-            apiFn("componentExecuteNative",[id, 'next']);
+            apiFn("componentExecuteNative",[id, 'next','']);
             return slider;
         };
 
@@ -77,7 +77,7 @@ define(
          * prev
          */
         slider.prev = function(id){
-            apiFn("componentExecuteNative",[id, 'prev']);
+            apiFn("componentExecuteNative",[id, 'prev','']);
             return slider;
         };
 
