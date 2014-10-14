@@ -14,6 +14,8 @@
 <input type="button" id="showKey" value="显示键盘"/> 
 <input type="button" id="hideKey" value="隐藏键盘"/>
 <input type="button" id="exitApp" value="退出app"/>
+<br/>
+<input type="text" />
 <div id="keyHeight">
 </div>
 <br/>
@@ -47,12 +49,12 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( blend,Footbar) {
              blend.exitApp();
         }
     };
-    blend.on("softKeyboardHide",function(event){
+    //blend.on("softKeyboardHide",function(event){
+        //$("#keyHeight").text(event['softKeyboardHeight']);
+    //});
+    /*blend.on("softKeyboardShow",function(event){
         $("#keyHeight").text(event['softKeyboardHeight']);
-    });
-    blend.on("softKeyboardShow",function(event){
-        $("#keyHeight").text(event['softKeyboardHeight']);
-    });
+    });*/
     $('input[type=button]').click(function(e){
         var id = this.id;
         console.log(id+"=============="+id);

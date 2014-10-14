@@ -21,9 +21,9 @@ define(
         footbar.add = function(id, options){
             var _options = {
                 "left":0,
-                "top":window.innerHeight-45,
-                "width":window.innerWidth,
-                "height":45,
+                "top":(window.innerHeight-45)*devPR,
+                "width":window.innerWidth*devPR,
+                "height":45*devPR,
                 "fixed":true
             };
 

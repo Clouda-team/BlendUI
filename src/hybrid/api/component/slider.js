@@ -24,8 +24,8 @@ define(
             var _options = {
                 "left":0,
                 "top":0,
-                "width":window.innerWidth,
-                "height":window.innerHeight,
+                "width":window.innerWidth*devPR,
+                "height":window.innerHeight*devPR,
                 "fixed":false
             };
 

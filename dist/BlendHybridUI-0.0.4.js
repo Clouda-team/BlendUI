@@ -2743,7 +2743,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
                 left: me.left,
                 top: me.top,
                 width: me.width,
-                height: me.height-me.top,
+                height: me.height,
                 scrollEnabled: me.scrollEnabled,
                 active: me.activeId
             };

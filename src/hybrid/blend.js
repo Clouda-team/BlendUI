@@ -37,7 +37,11 @@ define(
          * @return null
          */
         blend.register = function(control) {
-            controls[control.id] = control;
+            if(controls[control.id]){
+                throw (control.type || "") + " New Object Already Exists"
+            }else{
+              controls[control.id] = control;  
+            }
         };
 
         //ADDED CURRENTID

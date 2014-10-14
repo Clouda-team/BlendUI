@@ -41,13 +41,13 @@ define(
          * 显示/ 隐藏键盘
          * @method {Function} keyboard
          */
-        core.keyboard = function( boolShow ) {
-            if(!keyboard){
-                apiFn('addComponent',["KEYBOARD", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper','{"left":0,"top":0,"width":1,"height":1,"fixed":false}']);
+        core.keyboard = function(boolShow) {
+            if (!keyboard) {
+                apiFn('addComponent', ["KEYBOARD", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper', '{"left":0,"top":0,"width":1,"height":1,"fixed":false}']);
                 keyboard = true;
             }
-            var isShow = boolShow?"show":"hide";
-            apiFn('componentExecuteNative',["KEYBOARD",isShow,'{}']);
+            var isShow = boolShow ? "show" : "hide";
+            apiFn('componentExecuteNative', ["KEYBOARD", isShow, '{}']);
         };
 
         return core;
