@@ -227,6 +227,10 @@ define(function(require) {
 
                 me._layers[id].onshow = me.onshow;
             }
+            if (me.onrender) {
+
+                me._layers[id].onrender = me.onrender;
+            }
 
 
             console.log('start new layer', id, this._layers[id]);

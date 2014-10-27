@@ -11507,6 +11507,7 @@ define(
             $.ajax({
                 url: options.url,
                 type: 'get',
+                dataType:"html",
                 success: function(data) {
                     // console.log("--------",data);
                     //hybird版本的web页面是带有页头和页尾的，所以，需要进行.page筛选。
