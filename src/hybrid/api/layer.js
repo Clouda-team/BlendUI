@@ -23,7 +23,7 @@ define(
          * @method {Function} prepare
 
          * @param {Object} options Layer的参数
-         * @param {String} options.link 页面url
+         * @param {String} options.url 页面url
          * @param {Boolean} options.pullToRefresh 是否可以上拉刷新
          * @return {String} pagerid
          * @private

@@ -66,8 +66,8 @@ define(
          * @private
          * @return groupId
          */
-        layerGroup.addLayer = function(groupId, layerGroup) {
-            apiFn('addLayerInGroup', arguments);
+        layerGroup.addLayer = function(groupId, options) {
+            apiFn('addLayerInGroup', [groupId,JSON.stringify(options)]);
             //@todo return
             return groupId;
         };
@@ -88,7 +88,7 @@ define(
          * @private
          * @return groupId
          */
-        layerGroup.updateLayer = function(groupId, layerId, layerOptions) {
+        layerGroup.updateLayer = function(groupId,layerOptions) {
             apiFn('updateLayerInGroup', arguments);
             //@todo return
             return groupId;

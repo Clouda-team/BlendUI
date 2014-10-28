@@ -230,12 +230,7 @@ define(function(require) {
         if (isRuntimeEnv) {
             layerApi.prepare(me.id, {
                 url: me.url,
-                pullToRefresh: me.pullToRefresh,
                 loadingIcon:me.loadingIcon,
-                "pullText": me.pullText,
-                "loadingText": me.loadingText,
-                "releaseText":me.releaseText,
-                "pullIcon": me.pullIcon,
                 "subLayer":me.subLayer,
                 "fixed":me.fixed
             });

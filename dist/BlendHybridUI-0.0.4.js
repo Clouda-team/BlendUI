@@ -758,19 +758,18 @@ define(
          * 显示/ 隐藏键盘
          * @method {Function} keyboard
          */
-        core.keyboard = function( boolShow ) {
-            if(!keyboard){
-                apiFn('addComponent',["KEYBOARD", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper','{"left":0,"top":0,"width":1,"height":1,"fixed":false}']);
+        core.keyboard = function(boolShow) {
+            if (!keyboard) {
+                apiFn('addComponent', ["KEYBOARD", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper', '{"left":0,"top":0,"width":1,"height":1,"fixed":false}']);
                 keyboard = true;
             }
-            var isShow = boolShow?"show":"hide";
-            apiFn('componentExecuteNative',["KEYBOARD",isShow,'{}']);
+            var isShow = boolShow ? "show" : "hide";
+            apiFn('componentExecuteNative', ["KEYBOARD", isShow, '{}']);
         };
 
         return core;
     }
 );
-
 define(
     'src/hybrid/api/event',['require'],function(require) {
 
@@ -930,7 +929,7 @@ define(
          * @method {Function} prepare
 
          * @param {Object} options Layer的参数
-         * @param {String} options.link 页面url
+         * @param {String} options.url 页面url
          * @param {Boolean} options.pullToRefresh 是否可以上拉刷新
          * @return {String} pagerid
          * @private
@@ -1306,8 +1305,8 @@ define(
          * @private
          * @return groupId
          */
-        layerGroup.addLayer = function(groupId, layerGroup) {
-            apiFn('addLayerInGroup', arguments);
+        layerGroup.addLayer = function(groupId, options) {
+            apiFn('addLayerInGroup', [groupId,JSON.stringify(options)]);
             //@todo return
             return groupId;
         };
@@ -1328,7 +1327,7 @@ define(
          * @private
          * @return groupId
          */
-        layerGroup.updateLayer = function(groupId, layerId, layerOptions) {
+        layerGroup.updateLayer = function(groupId,layerOptions) {
             apiFn('updateLayerInGroup', arguments);
             //@todo return
             return groupId;
@@ -1404,8 +1403,8 @@ define(
             var _options = {
                 "left":0,
                 "top":0,
-                "width":window.innerWidth,
-                "height":window.innerHeight,
+                "width":window.innerWidth*devPR,
+                "height":window.innerHeight*devPR,
                 "fixed":false
             };
 
@@ -1533,9 +1532,9 @@ define(
         footbar.add = function(id, options){
             var _options = {
                 "left":0,
-                "top":window.innerHeight-45,
-                "width":window.innerWidth,
-                "height":45,
+                "top":(window.innerHeight-45)*devPR,
+                "width":window.innerWidth*devPR,
+                "height":45*devPR,
                 "fixed":true
             };
 
@@ -1664,11 +1663,12 @@ define(
          * @return null
          */
         blend.register = function(control) {
-            controls[control.id] = control;
+            if(controls[control.id]){
+                throw (control.type || "") + " New Object Already Exists";
+            }else{
+              controls[control.id] = control;  
+            }
         };
-
-        //ADDED CURRENTID
-        blend.currentLayerId = runtime.layer.getCurrentId();
 
         /**
          * 注销控件
@@ -2349,12 +2349,7 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
         if (isRuntimeEnv) {
             layerApi.prepare(me.id, {
                 url: me.url,
-                pullToRefresh: me.pullToRefresh,
                 loadingIcon:me.loadingIcon,
-                "pullText": me.pullText,
-                "loadingText": me.loadingText,
-                "releaseText":me.releaseText,
-                "pullIcon": me.pullIcon,
                 "subLayer":me.subLayer,
                 "fixed":me.fixed
             });
@@ -2526,7 +2521,6 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
     var isRuntimeEnv = true;//main.inRuntime();//runtime.isRuntimeEnv&&runtime.isRuntimeEnv();
     var layerGroupApi = runtime.layerGroup;
     var layerApi = runtime.layer;
-    var layerId = layerApi.getCurrentId();
     /**
      * @constructor;
      *
@@ -2566,6 +2560,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
             return new LayerGroup(options);
         }*/
         Control.call(this, options);
+        this.layerId = layerApi.getCurrentId();
         this._init(options);
     };
 
@@ -2573,15 +2568,6 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
     lib.inherits(LayerGroup, Control);
 
     LayerGroup.prototype.constructor = LayerGroup;
-
-
-    /**
-     * layerGroup依附的layer id；
-     *
-     * @cfg {String} layerId
-     */
-
-    LayerGroup.prototype.layerId =  layerId;
 
     /**
      * 组件的类型
@@ -2636,9 +2622,6 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
         me._layers = layers;
 
         me.activeId = activeId || me.layers[0].id;
-
-
-        /* alert(me.get('activeId')); */
 
         //监听事件
         me._initEvent();
@@ -2786,7 +2769,7 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
             layerOptions.id = lib.getUniqueID();
         }
 
-        layerGroupApi.addLayer(this.id, layerOptions, index);
+        layerGroupApi.addLayer(this.id, layerOptions);
 
         this._layers[layerOptions.id] = layerOptions;
 
@@ -3166,22 +3149,25 @@ define('src/hybrid/delegateLayer',['require','./blend','./Layer'],function(requi
 
     var delegateMethod = "delegateMethod";
     var delegateCreate = "delegateCreate";
-
-    if(layerId=='0'){
-        //触发函数
-        blend.on(delegateMethod,function(e){
-            var data = e.data;
-            var method = data.method;
-            var args = data.args;
-            var id = data.id;
-            blend.get(id)[method].apply(blend.get(id),args);
-        });
-        //创建layer
-        blend.on(delegateCreate,function(e){
-            //alert(JSON.stringify(e.data));
-            new layerClass(e.data);
-        });
-    }
+    blend.ready(function() {
+        layerId = blend.getLayerId();
+        if(layerId=='0'){
+            //触发函数
+            blend.on(delegateMethod,function(e){
+                var data = e.data;
+                var method = data.method;
+                var args = data.args;
+                var id = data.id;
+                blend.get(id)[method].apply(blend.get(id),args);
+            });
+            //创建layer
+            blend.on(delegateCreate,function(e){
+                //alert(JSON.stringify(e.data));
+                new layerClass(e.data);
+            });
+        }
+    });
+    
 
     for(var i in protos){
         // 方法可以通过delegate进行操作，属性不能直接获取
@@ -3221,7 +3207,7 @@ define('src/hybrid/delegateLayer',['require','./blend','./Layer'],function(requi
     };
 
     blend.createLayer = function(options){
-        if(layerId==='0'){
+        if(blend.getLayerId()==='0'){
             return new Layer(options);
         }else{
             blend.fire(delegateCreate,'0',options);

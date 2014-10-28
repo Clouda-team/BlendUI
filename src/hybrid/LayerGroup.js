@@ -15,7 +15,6 @@ define(function(require) {
     var isRuntimeEnv = true;//main.inRuntime();//runtime.isRuntimeEnv&&runtime.isRuntimeEnv();
     var layerGroupApi = runtime.layerGroup;
     var layerApi = runtime.layer;
-    var layerId = layerApi.getCurrentId();
     /**
      * @constructor;
      *
@@ -55,6 +54,7 @@ define(function(require) {
             return new LayerGroup(options);
         }*/
         Control.call(this, options);
+        this.layerId = layerApi.getCurrentId();
         this._init(options);
     };
 
@@ -62,15 +62,6 @@ define(function(require) {
     lib.inherits(LayerGroup, Control);
 
     LayerGroup.prototype.constructor = LayerGroup;
-
-
-    /**
-     * layerGroup依附的layer id；
-     *
-     * @cfg {String} layerId
-     */
-
-    LayerGroup.prototype.layerId =  layerId;
 
     /**
      * 组件的类型
@@ -125,9 +116,6 @@ define(function(require) {
         me._layers = layers;
 
         me.activeId = activeId || me.layers[0].id;
-
-
-        /* alert(me.get('activeId')); */
 
         //监听事件
         me._initEvent();
@@ -275,7 +263,7 @@ define(function(require) {
             layerOptions.id = lib.getUniqueID();
         }
 
-        layerGroupApi.addLayer(this.id, layerOptions, index);
+        layerGroupApi.addLayer(this.id, layerOptions);
 
         this._layers[layerOptions.id] = layerOptions;
 

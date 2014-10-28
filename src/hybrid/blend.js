@@ -38,14 +38,11 @@ define(
          */
         blend.register = function(control) {
             if(controls[control.id]){
-                throw (control.type || "") + " New Object Already Exists"
+                throw (control.type || "") + " New Object Already Exists";
             }else{
               controls[control.id] = control;  
             }
         };
-
-        //ADDED CURRENTID
-        blend.currentLayerId = runtime.layer.getCurrentId();
 
         /**
          * 注销控件

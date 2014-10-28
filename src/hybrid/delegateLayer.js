@@ -15,22 +15,25 @@ define(function(require) {
 
     var delegateMethod = "delegateMethod";
     var delegateCreate = "delegateCreate";
-
-    if(layerId=='0'){
-        //触发函数
-        blend.on(delegateMethod,function(e){
-            var data = e.data;
-            var method = data.method;
-            var args = data.args;
-            var id = data.id;
-            blend.get(id)[method].apply(blend.get(id),args);
-        });
-        //创建layer
-        blend.on(delegateCreate,function(e){
-            //alert(JSON.stringify(e.data));
-            new layerClass(e.data);
-        });
-    }
+    blend.ready(function() {
+        layerId = blend.getLayerId();
+        if(layerId=='0'){
+            //触发函数
+            blend.on(delegateMethod,function(e){
+                var data = e.data;
+                var method = data.method;
+                var args = data.args;
+                var id = data.id;
+                blend.get(id)[method].apply(blend.get(id),args);
+            });
+            //创建layer
+            blend.on(delegateCreate,function(e){
+                //alert(JSON.stringify(e.data));
+                new layerClass(e.data);
+            });
+        }
+    });
+    
 
     for(var i in protos){
         // 方法可以通过delegate进行操作，属性不能直接获取
@@ -70,7 +73,7 @@ define(function(require) {
     };
 
     blend.createLayer = function(options){
-        if(layerId==='0'){
+        if(blend.getLayerId()==='0'){
             return new Layer(options);
         }else{
             blend.fire(delegateCreate,'0',options);
