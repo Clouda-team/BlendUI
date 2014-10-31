@@ -42,6 +42,22 @@
             </ul>
         </div>
     </div>
+    <script>
+        console.log("info page......");
+        //console.log(blend.get);
+        var mylayer = blend.get("info");
+        $("a.back").click(function(e){
+            console.log("click.... back... out....")
+            mylayer.out();
+            return false;
+        });
+
+        $("a.reload").click(function(e){
+            mylayer.reload("item.html");
+            // e.preventDefault();
+            return false;
+        });
+    </script>
 </div>
 </div>
 

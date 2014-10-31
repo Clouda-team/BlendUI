@@ -11974,6 +11974,55 @@ define(
 );
 
 define(
+    'src/common/loader',['require'],function(require) {
+
+    /**
+     * @class blend.loader
+     * @singleton
+     * @private
+     */
+
+    //baidu-async-module,
+    //这里实现两个方法
+    //A. 加载页面源js
+    //B. 页面内嵌js
+    
+    var loader = {};
+
+    var getScript = function(url,cb){
+        var script = document.createElement('script');
+        script.setAttribute('src', url);
+        document.head.appendChild(script);
+        script.onload = function(){
+                if(cb){cb(script);}
+        };
+    };
+
+
+    loader.getScript = function(layerid,jsarr,callback){
+        var getscript = 0;
+        for(var i = 0,len=jsarr.length;i<len;i++){
+             getScript(jsarr[i],function(){
+                getscript++;
+                if (getscript === len){
+                    callback();
+                }
+            });
+        }
+    };
+    loader.runScript = function(dom){
+        if ($("script",dom).length){
+            $("script",dom).each(function(){
+                eval($(this).html());
+            });
+        }
+
+    };
+    
+    return loader;
+
+});
+define(
 
     /**
      * Layer类，内含一个web容器，可以放置在手机屏幕的任何位置，动画可自定义
@@ -11983,7 +12032,7 @@ define(
      * @inheritable
      */
 
-    'src/web/Layer.js',['require','../common/lib','./WebControl','./blend','./layer/layerapi'],function (require) {
+    'src/web/Layer.js',['require','../common/lib','./WebControl','./blend','./layer/layerapi','../common/loader'],function (require) {
 
 
         var lib = require('../common/lib');
@@ -11994,6 +12043,7 @@ define(
 
         var lowerAnimate = $("html").hasClass("android");
 
+        var loader = require('../common/loader');
 
         /**
          * @constructor
@@ -12141,6 +12191,13 @@ define(
             //     me.onhide && me.onhide(event);
                 
             // });
+            me.on('onrender',function(event){
+                var id = event['detail'];
+                var dom = Blend.ui.get(id).main;
+                
+                loader.runScript(dom);
+
+            });
 
             // me.onshow2 = me.onshow;
             me.on('onshow',function(event){
@@ -12909,6 +12966,10 @@ define('src/web/LayerGroup.js',['require','./blend','../common/lib','./WebContro
             if (me.onshow) {
 
                 me._layers[id].onshow = me.onshow;
+            }
+            if (me.onrender) {
+
+                me._layers[id].onrender = me.onrender;
             }
 
 

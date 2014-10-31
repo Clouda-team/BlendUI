@@ -19,6 +19,7 @@ define(
 
         var lowerAnimate = $("html").hasClass("android");
 
+        var loader = require('../common/loader');
 
         /**
          * @constructor
@@ -166,6 +167,13 @@ define(
             //     me.onhide && me.onhide(event);
                 
             // });
+            me.on('onrender',function(event){
+                var id = event['detail'];
+                var dom = Blend.ui.get(id).main;
+                
+                loader.runScript(dom);
+
+            });
 
             // me.onshow2 = me.onshow;
             me.on('onshow',function(event){
