@@ -955,7 +955,7 @@ define(
             var _options = {
                 'fx': 'slide',
                 'reverse': false,
-                'duration': 'normal'
+                'duration': 300
             };
             if (options) {
                 options['fx'] && (_options['fx'] = options['fx']);
