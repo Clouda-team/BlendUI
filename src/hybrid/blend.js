@@ -44,6 +44,8 @@ define(
             }
         };
 
+        blend.isRuntime = navigator.userAgent.indexOf('BlendUI')>=0;
+
         /**
          * 注销控件
          *

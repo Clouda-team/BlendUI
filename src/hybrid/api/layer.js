@@ -31,7 +31,9 @@ define(
         layer.prepare = function(layerId, options) {
             //subLayer
             var layerOptions = filterOption(options);
-            layerOptions.url = getBasePath(layerOptions.url);
+            if(layerOptions.url){
+                layerOptions.url = getBasePath(layerOptions.url);
+            }
             apiFn('prepareLayer', [layerId, JSON.stringify(layerOptions)]);
             return layerId;
         };
@@ -40,7 +42,7 @@ define(
          * 激活创建的layer
          * @method {Function} resume
 
-         * @param {string} layerId 页面layerId
+         * @param {string} layerId 页面layerId slow 500，normal 300， quick 100
          * @return pagerid
          * @private
          */
@@ -49,19 +51,22 @@ define(
             var _options = {
                 'fx': 'slide',
                 'reverse': false,
-                'duration': 'normal'
+                'duration': 300,
+                'cover':false
             };
-            if (options) {
-                options['fx'] && (_options['fx'] = options['fx']);
-                options['reverse'] && (_options['reverse'] = options['reverse']);
-                options['duration'] && (_options['duration'] = options['duration']);
+            var replaceString = {
+                "slow":500,
+                "normal":300,
+                "quick":100
+            };
+            _options = filterOption(options,false,_options);
+            if(replaceString[_options['duration']]){
+                _options['duration'] = replaceString[_options['duration']];
             }
             apiFn('resumeLayer', [layerId, JSON.stringify(_options)]);
-
             setTimeout(function() {
                 layer.canGoBack(layerId) && layer.clearHistory(layerId);
             },500);
-
             layer.fire('in', false, layerId);
         };
 
@@ -158,7 +163,6 @@ define(
          * @param {String} layerId
          * @return {Boolean} 是否存在
          */
-        //todo: 这几个函数可以用一个数组包起来
         layer.isAvailable = function(layerId ) {
             return apiFn('isLayerAvailable', arguments);
         };

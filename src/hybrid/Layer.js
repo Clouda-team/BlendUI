@@ -50,14 +50,15 @@ define(function(require) {
      * Layer 初始化参数;
      * @param {Object} options 有创建独立layer所需要的条件
      *
-     * @param {String} options.url 页面url
+     * @param {String} options.url 页面url;
+     * @param {dom}  options.url创建的layer内容;
      * @param {String} [options.id] layer实例id
      * @param {String} [options.top=0] layer距离屏幕top的坐标
      * @param {String} [options.left=0] layer距离屏幕left的坐标
      * @param {String} [options.width] layer像素宽度，默认全屏
      * @param {String} [options.height] layer像素高度，默认全屏
      * @param {boolean} [options.active] 是否立即激活
-     *
+     
      * @param {boolean} [options.reverse] =true 动画是否反向
      * @param {String} [options.fx] ="none" 无动画
      * @param {String} [options.fx] ="slide" 默认从右往左，出场从左往右
@@ -105,7 +106,7 @@ define(function(require) {
     Layer.prototype._init = function(options) {
         var me = this;
         //处理options值;
-        if (!options.url) {
+        if (!(options.url || options.dom)) {
             return;
         }
         this.originalUrl = options.url;
@@ -230,6 +231,9 @@ define(function(require) {
         if (isRuntimeEnv) {
             layerApi.prepare(me.id, {
                 url: me.url,
+                dom:me.dom,
+                backgroundColor:me.backgroundColor,
+                reusable:me.reusable,
                 loadingIcon:me.loadingIcon,
                 "subLayer":me.subLayer,
                 "fixed":me.fixed
@@ -252,6 +256,7 @@ define(function(require) {
         layerApi.resume(me.id, {
             reverse: me.reverse,
             fx: me.fx,
+            cover:me.cover,
             duration: me.duration,
             timingFn: me.timingFn
         });

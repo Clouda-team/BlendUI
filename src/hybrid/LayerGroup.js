@@ -309,6 +309,10 @@ define(function(require) {
         layerGroupApi.hideLayerGroup(this.id);
     };
 
+    LayerGroup.prototype.show = function() {
+        layerGroupApi.showLayerGroup(this.id);
+    };
+
     LayerGroup.prototype.setLayout = function(options) {
         var me = this;
         ['top','left','width','height'].forEach(function(n,i){

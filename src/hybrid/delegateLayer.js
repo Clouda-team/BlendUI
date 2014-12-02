@@ -63,7 +63,7 @@ define(function(require) {
 // $zepto
 
     var get = blend.get;
-    blend.get = function(id){
+    blend.getLayer = function(id){
         var layer = get(id);
         if(layer){
             return layer;

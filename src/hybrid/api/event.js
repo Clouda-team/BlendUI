@@ -21,7 +21,10 @@ define(
             'backPressedBeforeExit',//返回键退出事件回调
             'toolbarMenuSelected', //footbar点中toolbarMenuSelected
             'softKeyboardShow',
-            'softKeyboardHide'
+            'softKeyboardHide',
+            "showAlert",
+            "showPrompt",
+            "showConfirm"
         ];
 
         var handlers = {};

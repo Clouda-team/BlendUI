@@ -46,6 +46,9 @@ module.exports = function (grunt) {
             }
         },
         uglify : {
+            options: {
+                banner: '/*! <%= pkg.name %> v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> - http://clouda.com */\n'//添加banner
+            },
             hybrid: {
                 files:[{
                     src : 'dist/BlendHybridUI-<%= pkg.version %>.js',

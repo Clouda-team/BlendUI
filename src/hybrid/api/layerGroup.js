@@ -129,6 +129,10 @@ define(
             apiFn('hideLayerGroup',arguments);
         };
 
+        layerGroup.showLayerGroup = function(groupId) {
+            apiFn('showLayerGroup',arguments);
+        };
+
         layerGroup.layerGroupSetLayout = function(groupId, options) {
             var _options = filterOption(options);
             return apiFn('layerGroupSetLayout',[groupId,JSON.stringify(_options)]);
