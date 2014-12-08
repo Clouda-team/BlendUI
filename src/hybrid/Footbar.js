@@ -1,128 +1,120 @@
 /**
- * Layer类，内含一个web容器，可以放置在手机屏幕的任何位置，动画可自定义
- * @class Layer
- * @extends Control
- * @static
- * @inheritable
+ * @file Footbar.js
+ * @path hybrid/Footbar.js
+ * @desc 底部菜单基类
+ * @author clouda-team(https://github.com/clouda-team)
  */
-define(function(require) {
-
-    var blend = require('./blend');
-    var lib = require('../common/lib');
-    var runtime = require('./runtime');
-    var Control = require('./Control');
-    //是否是runtime运行环境
-    var isRuntimeEnv = true;//main.inRuntime();//runtime.isRuntimeEnv&&runtime.isRuntimeEnv();
-    var footbarApi = runtime.component.footbar;
+define(
+    function(require) {
+        var lib = require('../common/lib');
+        var runtime = require('./runtime');
+        var Control = require('./Control');
+        var footbarApi = runtime.component.footbar;
 
 
-    /**
-     * @constructor
-     *
-     * footbar 初始化参数;
-     * @param {Object} options 有创建独立Footbar所需要的条件
-     *
-     * @param {String} [options.id] Footbar实例id
+        /**
+         * footbar 初始化参数
+         * @constructor
+         * @param {Object} options 有创建独立Footbar所需要的条件
+         * @param {string} [options.id] Footbar实例id
+         * @param {Object} [options.menus] 菜单json数据 {}
+         * @return {Footbar} this
+         */
+        var Footbar = function(options) {
+            Control.call(this, options);
+            this._init(options);
+            return this;
+        };
 
-     * @param {Obeject} [options.menus] 菜单json数据 {}
+        // 继承control类;
+        lib.inherits(Footbar, Control);
 
-     * @return this
-     */
-    var Footbar = function(options) {
-        Control.call(this, options);
-        this._init(options);
-        return this;
-    };
+        Footbar.prototype.constructor = Footbar;
 
-    //继承control类;
-    lib.inherits(Footbar, Control);
+        /**
+         * 实例初始化,根据传参数自动化实例方法调用, 私有方法;
+         * @private
+         * @param {Object} options 创建layer的初始化参数同结构化options参数
+         * @return {Footbar} this
+         */
+        Footbar.prototype._init = function(options) {
+            this._initEvent();
 
-    Footbar.prototype.constructor = Footbar;
+            this.render();
 
-    /**
-     * @private
-     * 实例初始化,根据传参数自动化实例方法调用, 私有方法;
-     * @param {Object} options 创建layer的初始化参数
-     */
-    Footbar.prototype._init = function(options) {
+            return this;
+        };
 
-        this._initEvent();
+        // 默认属性
+        Footbar.prototype.type = 'footbar';
 
-        this.render();
+        /**
+         * 事件初始化
+         * @private
+         * @return {Footbar} this
+         */
+        Footbar.prototype._initEvent = function() {
+            var me = this;
 
-        return this;
-    };
-
-    //默认属性
-    Footbar.prototype.type = 'footbar';
-
-    /**
-     * @private
-     * 事件初始化
-     * @return this
-     */
-    Footbar.prototype._initEvent = function() {
-        var me = this;
-        
-        footbarApi.on('toolbarMenuSelected', function(event) {
-            me.selected && me.selected.apply(me, arguments);
-            me.fire('selected', arguments, me);
-        },me.id, me);
+            footbarApi.on('toolbarMenuSelected', function(event) {
+                me.selected && me.selected.apply(me, arguments);
+                me.fire('selected', arguments, me);
+            }, me.id, me);
 
 
-        //销毁之后撤销绑定
-        me.on('afterdistory', function() {
-            footbarApi.off('toolbarMenuSelected', 'all', me.id, me);
-        });
+            // 销毁之后撤销绑定
+            me.on('afterdistory', function() {
+                footbarApi.off('toolbarMenuSelected', 'all', me.id, me);
+            });
 
-        window.addEventListener('unload', function(e) {
-            me.destroy();
-        });
+            window.addEventListener('unload', function(e) {
+                me.destroy();
+            });
 
-        return me;
-    };
+            return me;
+        };
 
-    /**
-     * 创建渲染页面
-     * @return this 当前实例
-     */
-    Footbar.prototype.paint = function() {
-        var me = this;
-        if (isRuntimeEnv) {
+        /**
+         * 创建渲染页面
+         * @return {Footbar} this 当前实例
+         */
+        Footbar.prototype.paint = function() {
+            var me = this;
             footbarApi.add(me.id, {
                 top: me.top,
                 left: me.left,
                 width: me.width,
                 height: me.height,
                 fixed: me.fixed
+
             });
 
             footbarApi.setMenu(me.id, {
                 menus: me.menus
+
             });
-        }
-        return this;
-    };
+            return this;
+        };
 
-    //show
-    Footbar.prototype.show = function() {
-        footbarApi.show(this.id);
-    };
+        // show
+        Footbar.prototype.show = function() {
+            footbarApi.show(this.id);
+        };
 
-    //hide
-    Footbar.prototype.hide = function() {
-        footbarApi.hide(this.id);
-    };
+        // hide
+        Footbar.prototype.hide = function() {
+            footbarApi.hide(this.id);
+        };
 
- 
-    /**
-     * 销毁
-     * @return this
-     */
-    Footbar.prototype.destroy = function() {
-        footbarApi.remove(this.id);
-        Control.prototype.destroy.apply(this, arguments);
-    };
 
-    return Footbar;
-});
+        /**
+         * 销毁
+         */
+        Footbar.prototype.destroy = function() {
+            footbarApi.remove(this.id);
+            Control.prototype.destroy.apply(this, arguments);
+        };
+
+        return Footbar;
+    }
+);

@@ -1,3 +1,9 @@
+/**
+* @file layerGroup.js
+* @path hybrid/api/layerGroup.js
+* @desc native layerGroup相关api;
+* @author clouda-team(https://github.com/clouda-team)
+*/
 define(
     function(require) {
 
@@ -6,15 +12,12 @@ define(
          * @singleton
          * @private
          */
-        var event = require('./event');
         var layer = require('./layer');
         var util = require('./util');
 
         var layerGroup = {};
 
         var getBasePath = util.getBasePath;
-
-        var stringifyFilter = util.stringifyFilter;
 
         var filterOption = util.filterPositionOption;
 
@@ -23,17 +26,17 @@ define(
         /**
          * 通知runtime创建pagerGroup，成功回掉返回 runtime句柄winid
          *
-         * @param {String} groupId id
+         * @param {string} groupId id
          * @param {Array} layers 本地或网络url链接组成的Array
          * @param {Object} options pager数组
-         * @return null
+         * @return {string} groupId
          * @private
          */
-
         layerGroup.create = function(groupId, layers, options) {
             var layerInfo = {
-                id: groupId || uniqid(),
+                id: groupId,
                 infos: layers
+
             };
             layers.forEach(function(n, i) {
                 n.url = getBasePath(n.url);
@@ -43,99 +46,99 @@ define(
                 layerInfo.active = options.active;
             }
 
-            var groupOptions = filterOption(options,['active']);
-            
-            apiFn('addLayerGroup', [JSON.stringify(layerInfo), JSON.stringify(groupOptions)]);
+            var groupOptions = filterOption(options, [
+                'active'
+            ]);
+
+            apiFn('addLayerGroup', [
+                JSON.stringify(layerInfo),
+                JSON.stringify(groupOptions)
+            ]);
             return groupId;
         };
 
-        /**
-         * 激活GroupId下面的对应的layerId
-         * @method {Function} showLayer
-         * @return groupId
-         * @private
-         */
+        // 激活GroupId下面的对应的layerId
         layerGroup.showLayer = function(groupId, layerId) {
             apiFn('showLayerInGroup', arguments);
-            //@todo return
             return groupId;
         };
 
-        /**
-         * 在group中增加layer
-         * @private
-         * @return groupId
-         */
+        // 在group中增加layer
         layerGroup.addLayer = function(groupId, options) {
-            apiFn('addLayerInGroup', [groupId,JSON.stringify(options)]);
-            //@todo return
+            apiFn('addLayerInGroup', [
+                groupId,
+                JSON.stringify(options)
+            ]);
+            // @todo return
             return groupId;
         };
 
-        /**
-         * 在group中删除layer
-         * @private
-         * @return groupId
-         */
+        // 在group中删除layer
         layerGroup.removeLayer = function(groupId, layerId) {
             apiFn('removeLayerInGroup', arguments);
-            //@todo return
+            // @todo return
             return groupId;
         };
 
-        /**
-         * 在group中更新layer
-         * @private
-         * @return groupId
-         */
-        layerGroup.updateLayer = function(groupId,layerOptions) {
+        // 在group中更新layer
+        layerGroup.updateLayer = function(groupId, layerOptions) {
             apiFn('updateLayerInGroup', arguments);
-            //@todo return
+            // @todo return
             return groupId;
         };
 
-        layerGroup.toggleScroll = function(layerId,groupId) {
-            if(arguments.length==1){
-               groupId =  layerId;
-               layerId = layer.getCurrentId(); 
+        layerGroup.toggleScroll = function(layerId, groupId) {
+            if (arguments.length === 1) {
+                groupId = layerId;
+                layerId = layer.getCurrentId();
             }
-            layerGroup.setScroll(layerId,groupId, !layerGroup.isScroll(layerId, groupId));
+            layerGroup.setScroll(layerId, groupId, !layerGroup.isScroll(layerId, groupId));
         };
 
         layerGroup.isScroll = function(layerId, groupId) {
-            if(arguments.length==1){
-               groupId =  layerId;
-               layerId = layer.getCurrentId(); 
+            if (arguments.length === 1) {
+                groupId = layerId;
+                layerId = layer.getCurrentId();
             }
-            return apiFn('canLayerGroupScroll', [layerId, groupId]);
+            return apiFn('canLayerGroupScroll', [
+                layerId,
+                groupId
+            ]);
         };
 
         layerGroup.setScroll = function(layerId, groupId, isCan) {
-            if(arguments.length==2){
+            if (arguments.length === 2) {
                 isCan = groupId;
                 groupId = layerId;
                 layerId = layer.getCurrentId();
             }
-            setTimeout(function(){
-                apiFn('setCanLayerGroupScroll', [layerId, groupId, isCan]);
-            },100);
+            setTimeout(function() {
+                apiFn('setCanLayerGroupScroll', [
+                    layerId,
+                    groupId,
+                    isCan
+                ]);
+            }, 100);
         };
 
         layerGroup.removeLayerGroup = function(groupId) {
-            apiFn('removeLayerGroup',arguments);
+            apiFn('removeLayerGroup', arguments);
         };
 
         layerGroup.hideLayerGroup = function(groupId) {
-            apiFn('hideLayerGroup',arguments);
+            apiFn('hideLayerGroup', arguments);
         };
 
         layerGroup.showLayerGroup = function(groupId) {
-            apiFn('showLayerGroup',arguments);
+            apiFn('showLayerGroup', arguments);
         };
 
         layerGroup.layerGroupSetLayout = function(groupId, options) {
             var _options = filterOption(options);
-            return apiFn('layerGroupSetLayout',[groupId,JSON.stringify(_options)]);
+            return apiFn('layerGroupSetLayout', [
+                groupId,
+                JSON.stringify(_options)
+            ]);
         };
 
         return layerGroup;
