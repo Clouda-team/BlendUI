@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>layer功能测试</title>
+    <title>LayerGroup功能测试</title>
     <link rel="stylesheet" href="">
     <script src="../../third_party/zepto.js"></script>
     <script src="../../third_party/require.js"></script>  
@@ -13,10 +13,12 @@
 <h2>layerGroup功能测试</h2>
 <input type="button" id="create" value="创建group "/>
 <input type="button" id="active" value="group切换"/>
+<input type="button" id="addLayer" value="增加layer"/>
 <input type="button" id="disableScroll" value="禁止滚动"/>
 <input type="button" id="toggleScroll" value="toggle滚动"/>
 <input type="button" id="isScroll" value="isScroll滚动"/>
 <input type="button" id="hide" value="隐藏"/>
+<input type="button" id="show" value="显示"/>
 <input type="button" id="destroy" value="销毁"/>
 <input type="button" id="setLayout" value="setLayout"/>
 
@@ -44,8 +46,8 @@ require(['src/hybrid/blend','src/hybrid/LayerGroup','src/hybrid/Layer'], functio
                 "layers":[
                     
                     {
-                        id:'8',
-                        url:"layerload.html",
+                        "id":'8',
+                        "url":"layerload.html",
                         "pullToRefresh":true,
                         "pullBgColor":"ff0000",
                         "pullText":"下拉",
@@ -68,6 +70,13 @@ require(['src/hybrid/blend','src/hybrid/LayerGroup','src/hybrid/Layer'], functio
         active : function(){
             group.active("7");
         },
+        addLayer: function(){
+            group.add({
+                id:'10',
+                url: "http://m.sina.com.cn",
+                'autoload':true
+            });
+        },
         disableScroll : function(){
             group.setScroll(false);
         },
@@ -79,6 +88,9 @@ require(['src/hybrid/blend','src/hybrid/LayerGroup','src/hybrid/Layer'], functio
         },
         hide : function(){
             group.hide();
+        },
+        show : function(){
+            group.show();
         },
         destroy : function(){
             group.destroy()

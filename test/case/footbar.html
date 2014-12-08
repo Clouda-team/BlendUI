@@ -35,7 +35,7 @@ require(['src/hybrid/blend','src/hybrid/Footbar'], function ( main,Footbar) {
                         subMenus:[{id:100,name:"积分"},{id:101,name:"额度"},{id:102,name:"开卡"},{id:103,name:"缴费"},{id:104,name:"预约"}]},
                     {id:2,name:"自助查询"},
                     {id:3,name:"资讯",
-                        subMenus:[{id:101,name:"今日头条"},{id:102,name:"昨日头条"},{id:103,name:"前日头条"},{id:104,name:"大前日头条"}]}
+                        subMenus:[{id:101,name:"今日头条",type:"ddd"},{id:102,name:"昨日头条"},{id:103,name:"前日头条"},{id:104,name:"大前日头条"}]}
                 ],
                 selected:function(e){
                     alert(JSON.stringify(e.data));
