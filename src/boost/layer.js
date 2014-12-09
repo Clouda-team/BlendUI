@@ -1,53 +1,8 @@
-define(function () {
-
+define(["src/boost/sizzle", "src/boost/meta"], function (Sizzle, meta) {
+    "use strict";
     var LAYER_TRIGGER = "blend.layer.trigger";
     var LAYER_BACK = "blend.layer.back";
     var LAYER_FX = "blend.layer.fx";
-
-    var layerConfig;
-
-    function getMetaConfig() {
-        var metas = document.getElementsByTagName("META");
-        var metaLen = metas.length;
-        var index;
-        var elem;
-        var name;
-        var content;
-        var config = {};
-
-        /**
-         * no
-         * all
-         * class:class-name
-         * target:target-name
-         * urlmatch:/regexp/
-         * data-xxx-xxx:xxx
-         */
-        config[LAYER_TRIGGER] = "no";
-
-        /**
-         *
-         */
-        config[LAYER_FX] = "slide";
-
-        if (metaLen > 0) {
-            for (index = 0; index < metaLen; index++) {
-                elem = metas[index];
-                name = elem.name;
-                if (config.hasOwnProperty(name)) {
-                    content = elem.content;
-                    config[name] = content;
-                }
-            }
-        }
-
-        return config;
-    }
-
-    function execConfig(str) {
-        //TODO 做更多的解析
-        return str === "all";
-    }
 
     function findParentByTagName(element, tagName) {
         tagName = tagName.toUpperCase();
@@ -64,19 +19,50 @@ define(function () {
 
     var layer;
 
-    function openLayerURL(url) {
-        if (layer) {
+    function openInLayer(url) {
+        if (layer && layer.distory) {
             layer.distory();
         }
 
         layer = new Blend.ui.Layer({
             url: url,
-            active: true
+            active: true,
+            fx: meta.get(LAYER_FX, "slide")
         });
+    }
+
+    var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+
+    function trim(text) {
+        return text == null ?
+            "" :
+            (text + "").replace(rtrim, "");
+    }
+
+    function isBackTrigger(element) {
+        var selector = meta.get(LAYER_BACK);
+        if (selector && Sizzle.matchesSelector(element, selector)) {
+            return true;
+        }
+        return false;
+    }
+
+    function isLayerTrigger(element) {
+        var selector = meta.get(LAYER_TRIGGER);
+        if (selector && Sizzle.matchesSelector(element, selector)) {
+            return true;
+        }
+        return false;
+    }
+
+    function preventDefault(event) {
+        event.preventDefault();
+        event.returnValue = false;
     }
 
     function layerTriggerHandler(event) {
         var target;
+        var href;
 
         if (isDefaultPrevented(event)) {
             return;
@@ -88,16 +74,18 @@ define(function () {
             return;
         }
 
-        href = target.getAttribute("href");
+        href = trim(target.getAttribute("href"));
 
-        //try {
-        if (execConfig(layerConfig[LAYER_TRIGGER])) {
-            event.preventDefault();
-            event.returnValue = false;
-            openLayerURL(href);
+        //判断是否是回退的触发器
+        if (isBackTrigger(target)) {
+            preventDefault(event);
+            Blend.ui.layerBack();
         }
-        //} catch (e) {
-        //}
+        //
+        else if (isLayerTrigger(target)) {
+            preventDefault(event);
+            openInLayer(href);
+        }
     }
 
     var inited = false;
@@ -107,11 +95,7 @@ define(function () {
             return;
         }
         inited = true;
-        layerConfig = getMetaConfig();
-        var triggerConfig = layerConfig[LAYER_TRIGGER];
-        if (triggerConfig !== "no") {
-            document.addEventListener("click", layerTriggerHandler, false);
-        }
+        document.addEventListener("click", layerTriggerHandler, false);
     }
 
     return {
