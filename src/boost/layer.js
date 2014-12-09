@@ -1,12 +1,13 @@
 define(function () {
 
     var LAYER_TRIGGER = "blend.layer.trigger";
+    var LAYER_BACK = "blend.layer.back";
     var LAYER_FX = "blend.layer.fx";
 
     var layerConfig;
 
     function getMetaConfig() {
-        var metas = document.getElemtnetsByTagName("META");
+        var metas = document.getElementsByTagName("META");
         var metaLen = metas.length;
         var index;
         var elem;
@@ -55,7 +56,6 @@ define(function () {
         }
         return element;
     }
-
 
     function isDefaultPrevented(src) {
         return src.defaultPrevented ? src.defaultPrevented() : src.returnValue === false;
@@ -108,7 +108,7 @@ define(function () {
         }
         inited = true;
         layerConfig = getMetaConfig();
-        var triggerConfig = triggerConfig[LAYER_TRIGGER];
+        var triggerConfig = layerConfig[LAYER_TRIGGER];
         if (triggerConfig !== "no") {
             document.addEventListener("click", layerTriggerHandler, false);
         }

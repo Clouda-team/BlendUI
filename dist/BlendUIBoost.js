@@ -430,7 +430,7 @@ define('src/boost/layer',[],function () {
     var layerConfig;
 
     function getMetaConfig() {
-        var metas = document.getElemtnetsByTagName("META");
+        var metas = document.getElementsByTagName("META");
         var metaLen = metas.length;
         var index;
         var elem;
@@ -532,7 +532,7 @@ define('src/boost/layer',[],function () {
         }
         inited = true;
         layerConfig = getMetaConfig();
-        var triggerConfig = triggerConfig[LAYER_TRIGGER];
+        var triggerConfig = layerConfig[LAYER_TRIGGER];
         if (triggerConfig !== "no") {
             document.addEventListener("click", layerTriggerHandler, false);
         }
@@ -544,9 +544,11 @@ define('src/boost/layer',[],function () {
 });
 
 require(["src/boost/layer"], function (layer) {
-    Blend.ui.ready(function () {
-        layer.init();
-    });
+    document.addEventListener("blendready",
+        //Blend.ui.ready(
+        function () {
+            layer.init();
+        });
 }, null, true);
 
 define("src/boost/main", function(){});

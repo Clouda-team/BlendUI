@@ -1,5 +1,7 @@
 require(["src/boost/layer"], function (layer) {
-    Blend.ui.ready(function () {
-        layer.init();
-    });
+    document.addEventListener("blendready",
+        //Blend.ui.ready(
+        function () {
+            layer.init();
+        });
 }, null, true);
