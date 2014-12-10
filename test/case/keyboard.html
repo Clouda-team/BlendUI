@@ -49,12 +49,24 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( blend,Footbar) {
              blend.exitApp();
         }
     };
-    //blend.on("softKeyboardHide",function(event){
-        //$("#keyHeight").text(event['softKeyboardHeight']);
-    //});
-    /*blend.on("softKeyboardShow",function(event){
+    blend.on("softKeyboardHide",function(event){
+        console.log("键盘隐藏事件触发");
         $("#keyHeight").text(event['softKeyboardHeight']);
-    });*/
+    });
+    blend.on("softKeyboardShow",function(event){
+        console.log("键盘显示事件触发");
+        $("#keyHeight").text(event['softKeyboardHeight']);
+    });
+
+    /*
+    document.addEventListener("softKeyboardShow",function(e){
+        alert(333);
+    },false);
+    document.addEventListener("softKeyboardHide",function(e){
+        alert(222);
+    },false);
+    */
+    
     $('input[type=button]').click(function(e){
         var id = this.id;
         console.log(id+"=============="+id);

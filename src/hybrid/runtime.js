@@ -1,3 +1,9 @@
+/**
+* @file runtime.js
+* @path hybrid/runtime.js
+* @desc native相关代码入口文件;
+* @author clouda-team(https://github.com/clouda-team)
+*/
 define(
     function(require) {
 
@@ -6,9 +12,7 @@ define(
          * @private
          * @singleton
          */
-
         var runtime = {};
-
         var core = require('./api/core');
         var layer = require('./api/layer');
         var layerGroup = require('./api/layerGroup');
@@ -20,7 +24,5 @@ define(
         runtime.component = component;
 
         return runtime;
-
     }
-
 );

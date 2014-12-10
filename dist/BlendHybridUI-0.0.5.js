@@ -716,61 +716,6 @@ define(
 );
 
 define(
-    'src/hybrid/api/core',['require','./util'],function(require) {
-
-        /**
-         * @class blend.api.core
-         * @blendui native核心接口层
-         * @private
-         */
-        var util = require('./util');
-        var apiFn = util.apiFn;
-
-        var core = {};
-
-        var keyboard;
-
-        /**
-         * 移除启动画面
-         * @method {Function} removeSplashScreen
-         */
-        core.removeSplashScreen = function() {
-            apiFn('removeSplashScreen', arguments);
-        };
-
-        /**
-         * 退出app应用
-         * @method {Function} exitApp
-         */
-        core.exitApp = function() {
-            apiFn('exitApp', arguments);
-        };
-
-        /**
-         * 启动app应用
-         * @method {Function} exitApp
-         */
-        core.launchApp = function(link) {
-            apiFn('launchLightApp', arguments);
-        };
-
-        /**
-         * 显示/ 隐藏键盘
-         * @method {Function} keyboard
-         */
-        core.keyboard = function(boolShow) {
-            if (!keyboard) {
-                apiFn('addComponent', ["KEYBOARD", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper', '{"left":0,"top":0,"width":1,"height":1,"fixed":false}']);
-                keyboard = true;
-            }
-            var isShow = boolShow ? "show" : "hide";
-            apiFn('componentExecuteNative', ["KEYBOARD", isShow, '{}']);
-        };
-
-        return core;
-    }
-);
-define(
     'src/hybrid/api/event',['require'],function(require) {
 
         /**
@@ -793,7 +738,10 @@ define(
             'backPressedBeforeExit',//返回键退出事件回调
             'toolbarMenuSelected', //footbar点中toolbarMenuSelected
             'softKeyboardShow',
-            'softKeyboardHide'
+            'softKeyboardHide',
+            "showAlert",
+            "showPrompt",
+            "showConfirm"
         ];
 
         var handlers = {};
@@ -937,7 +885,9 @@ define(
         layer.prepare = function(layerId, options) {
             //subLayer
             var layerOptions = filterOption(options);
-            layerOptions.url = getBasePath(layerOptions.url);
+            if(layerOptions.url){
+                layerOptions.url = getBasePath(layerOptions.url);
+            }
             apiFn('prepareLayer', [layerId, JSON.stringify(layerOptions)]);
             return layerId;
         };
@@ -946,7 +896,7 @@ define(
          * 激活创建的layer
          * @method {Function} resume
 
-         * @param {string} layerId 页面layerId
+         * @param {string} layerId 页面layerId slow 500，normal 300， quick 100
          * @return pagerid
          * @private
          */
@@ -955,19 +905,22 @@ define(
             var _options = {
                 'fx': 'slide',
                 'reverse': false,
-                'duration': 300
+                'duration': 300,
+                'cover':false
             };
-            if (options) {
-                options['fx'] && (_options['fx'] = options['fx']);
-                options['reverse'] && (_options['reverse'] = options['reverse']);
-                options['duration'] && (_options['duration'] = options['duration']);
+            var replaceString = {
+                "slow":500,
+                "normal":300,
+                "quick":100
+            };
+            _options = filterOption(options,false,_options);
+            if(replaceString[_options['duration']]){
+                _options['duration'] = replaceString[_options['duration']];
             }
             apiFn('resumeLayer', [layerId, JSON.stringify(_options)]);
-
             setTimeout(function() {
                 layer.canGoBack(layerId) && layer.clearHistory(layerId);
             },500);
-
             layer.fire('in', false, layerId);
         };
 
@@ -1064,7 +1017,6 @@ define(
          * @param {String} layerId
          * @return {Boolean} 是否存在
          */
-        //todo: 这几个函数可以用一个数组包起来
         layer.isAvailable = function(layerId ) {
             return apiFn('isLayerAvailable', arguments);
         };
@@ -1238,6 +1190,111 @@ define(
 );
 
 define(
+    'src/hybrid/api/core',['require','./util','./layer','./event'],function(require) {
+
+        /**
+         * @class blend.api.core
+         * @blendui native核心接口层
+         * @private
+         */
+        var util = require('./util');
+        var layer = require('./layer');
+        var event = require('./event');
+
+        var apiFn = util.apiFn;
+
+        var core = {};
+
+        var keyboard;
+
+        /**
+         * 移除启动画面
+         * @method {Function} removeSplashScreen
+         */
+        core.removeSplashScreen = function() {
+            apiFn('removeSplashScreen', arguments);
+        };
+
+        /**
+         * 退出app应用
+         * @method {Function} exitApp
+         */
+        core.exitApp = function() {
+            apiFn('exitApp', arguments);
+        };
+
+        /**
+         * 启动app应用
+         * @method {Function} exitApp
+         */
+        core.launchApp = function(link) {
+            apiFn('launchLightApp', arguments);
+        };
+
+        /**
+         * 显示/ 隐藏键盘
+         * @method {Function} keyboard
+         */
+        core.keyboard = function(boolShow) {
+            if (!keyboard) {
+                apiFn('addComponent', ["KEYBOARD", 'UIBase', 'com.baidu.lightui.component.keyboard.KeyboardHelper', '{"left":0,"top":0,"width":1,"height":1,"fixed":false}']);
+                keyboard = true;
+            }
+            var isShow = boolShow ? "show" : "hide";
+            apiFn('componentExecuteNative', ["KEYBOARD", isShow, '{}']);
+        };
+
+        /**
+         * dialog对话框组件
+         */
+        core.dialog = {
+            alert : function(options,callback){
+                var title = options.title || "";
+                var message = options.msg||"";
+                var button = options.button||"确定";
+                var layerId = options.layerId||layer.getCurrentId();
+                var alertId = options.alertId||(1*new Date()+"");
+                if(callback){
+                    event.once("showAlert",callback,layerId);
+                }
+                apiFn('showAlert', [layerId, alertId, message, title, button]);
+            },
+            prompt: function(options,callback){
+                var title = options.title || "";
+                var message = options.msg||"";
+                var buttons = JSON.stringify(options.buttons||['确定','取消']);
+                var layerId = options.layerId||layer.getCurrentId();
+                var promptId = options.promptId||(1*new Date()+"");
+                var defaultText = options.defaultText||"";
+                if(callback){
+                    event.once("showPrompt",callback,layerId);
+                }
+                apiFn('showPrompt', [layerId, promptId, message, title, buttons, defaultText]);
+            },
+            confirm : function(options,callback){
+                var title = options.title || "";
+                var message = options.msg||"";
+                var buttons = JSON.stringify(options.buttons||['确定','取消']);
+                var layerId = options.layerId||layer.getCurrentId();
+                var promptId = options.promptId||(1*new Date()+"");
+                if(callback){
+                    event.once("showConfirm",callback,layerId);
+                }
+                apiFn('showConfirmDialog', [layerId, promptId, message, title, buttons]);
+            },
+            toast:function(options){
+                var message = options.msg||"";
+                var layerId = options.layerId||layer.getCurrentId();
+                var promptId = options.promptId||(1*new Date()+"");
+                var duration = options.duration||0;
+                apiFn('showToast', [layerId, promptId, message, duration]);
+            }
+        };
+
+        return core;
+    }
+);
+define(
     'src/hybrid/api/layerGroup',['require','./event','./layer','./util'],function(require) {
 
         /**
@@ -1366,6 +1423,10 @@ define(
 
         layerGroup.hideLayerGroup = function(groupId) {
             apiFn('hideLayerGroup',arguments);
+        };
+
+        layerGroup.showLayerGroup = function(groupId) {
+            apiFn('showLayerGroup',arguments);
         };
 
         layerGroup.layerGroupSetLayout = function(groupId, options) {
@@ -1669,6 +1730,8 @@ define(
               controls[control.id] = control;  
             }
         };
+
+        blend.isRuntime = navigator.userAgent.indexOf('BlendUI')>=0;
 
         /**
          * 注销控件
@@ -2169,14 +2232,15 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
      * Layer 初始化参数;
      * @param {Object} options 有创建独立layer所需要的条件
      *
-     * @param {String} options.url 页面url
+     * @param {String} options.url 页面url;
+     * @param {dom}  options.url创建的layer内容;
      * @param {String} [options.id] layer实例id
      * @param {String} [options.top=0] layer距离屏幕top的坐标
      * @param {String} [options.left=0] layer距离屏幕left的坐标
      * @param {String} [options.width] layer像素宽度，默认全屏
      * @param {String} [options.height] layer像素高度，默认全屏
      * @param {boolean} [options.active] 是否立即激活
-     *
+     
      * @param {boolean} [options.reverse] =true 动画是否反向
      * @param {String} [options.fx] ="none" 无动画
      * @param {String} [options.fx] ="slide" 默认从右往左，出场从左往右
@@ -2224,7 +2288,7 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
     Layer.prototype._init = function(options) {
         var me = this;
         //处理options值;
-        if (!options.url) {
+        if (!(options.url || options.dom)) {
             return;
         }
         this.originalUrl = options.url;
@@ -2349,6 +2413,9 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
         if (isRuntimeEnv) {
             layerApi.prepare(me.id, {
                 url: me.url,
+                dom:me.dom,
+                backgroundColor:me.backgroundColor,
+                reusable:me.reusable,
                 loadingIcon:me.loadingIcon,
                 "subLayer":me.subLayer,
                 "fixed":me.fixed
@@ -2371,6 +2438,7 @@ define('src/hybrid/Layer',['require','./blend','../common/lib','./runtime','./Co
         layerApi.resume(me.id, {
             reverse: me.reverse,
             fx: me.fx,
+            cover:me.cover,
             duration: me.duration,
             timingFn: me.timingFn
         });
@@ -2815,6 +2883,10 @@ define('src/hybrid/LayerGroup',['require','./blend','../common/lib','./runtime',
         layerGroupApi.hideLayerGroup(this.id);
     };
 
+    LayerGroup.prototype.show = function() {
+        layerGroupApi.showLayerGroup(this.id);
+    };
+
     LayerGroup.prototype.setLayout = function(options) {
         var me = this;
         ['top','left','width','height'].forEach(function(n,i){
@@ -3197,7 +3269,7 @@ define('src/hybrid/delegateLayer',['require','./blend','./Layer'],function(requi
 // $zepto
 
     var get = blend.get;
-    blend.get = function(id){
+    blend.getLayer = function(id){
         var layer = get(id);
         if(layer){
             return layer;

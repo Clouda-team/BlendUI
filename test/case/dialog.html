@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>全局接口</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>dialog</h2><br/><br/>
+
+<input type="button" id="alert" value="警告框"/> 
+<pre>
+Blend.ui.dialog.alert({
+    "title":"测试",
+    "msg":"萨芬的撒点粉的说法",
+    "button":"ok"
+},function(event){
+    alert("alertId:"+event.alertId);
+    alert("result:"+event.result);
+});
+</pre>
+<input type="button" id="prompt" value="对话框"/>
+<pre>
+Blend.ui.dialog.prompt({
+    "title":"bbbbb",
+    "msg":"sdfasdlfjdsajfdsafdsafsssssssssssssssssssssssss",
+    "buttons":['确定'，'取消']
+},function(event){
+   alert(event.promptId);
+    alert(event.result);
+    alert(event.buttonIndex);
+    alert(event.inputContxt);
+});
+</pre>
+<input type="button" id="confirm" value="确认框"/>
+<pre>
+Blend.ui.dialog.confirm({
+    "title":"测试",
+    "msg":"你确定撒旦法舒服",
+    "buttons":['确定','取消']
+},function(event){
+    alert(event.promptId);
+    alert(event.result);
+    alert(event.buttonIndex);
+});
+</pre>
+<input type="button" id="toast" value="提示tip"/>
+<pre>
+Blend.ui.dialog.toast({
+    "msg":"测试网络连接"
+});
+</pre>
+<!-- 
+<input type="button" id="exitApp" value="退出app"/> -->
+<br/>
+
+<br/>
+<br/><br/><br/><br/>
+</body>
+<script>
+require.config({
+    baseUrl:"../..",
+    urlArgs: "v=" +  (new Date()).getTime()
+});
+require(['src/hybrid/blend'], function (blend) {
+    var _eval = {
+        "alert" : function(){
+           blend.dialog.alert({
+                "title":"测试",
+                "msg":"萨芬的撒点粉的说法",
+                "button":"ok"
+           },function(event){
+                alert("alertId:"+event.alertId);
+                alert("result:"+event.result);
+           });
+        },
+        prompt:function(){
+           var jsondata=["ok","No"];
+           blend.dialog.prompt({
+                "title":"bbbbb",
+                "msg":"sdfasdlfjdsajfdsafdsafsssssssssssssssssssssssss"
+           },function(event){
+               alert("promptId:"+event.promptId);
+                alert("promptId:"+event.result);
+                alert("buttonIndex:"+event.buttonIndex);
+                alert("inputContext:"+event.inputContext);
+           });
+           //window.lc_bridge.componentExecuteNative("KKKK", 'hide', '{}');
+        },
+        confirm:function(){
+           blend.dialog.confirm({
+                "title":"测试",
+                "msg":"你确定撒旦法舒服"
+           },function(event){
+                alert("confirmId:"+event.confirmId);
+                alert("result:"+event.result);
+                alert("buttonIndex:"+event.buttonIndex);
+           });
+        },
+        toast:function(){
+           blend.dialog.toast({
+                "msg":"测试网络连接"
+           });
+        },
+    };
+  
+    
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>
