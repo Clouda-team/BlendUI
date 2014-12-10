@@ -1,8 +1,8 @@
 define(["src/boost/sizzle", "src/boost/meta"], function (Sizzle, meta) {
     "use strict";
-    var LAYER_TRIGGER = "blend.layer.trigger";
-    var LAYER_BACK = "blend.layer.back";
-    var LAYER_FX = "blend.layer.fx";
+    var LAYER_TRIGGER = "blend-layer-trigger";
+    var LAYER_BACK = "blend-layer-back";
+    var LAYER_FX = "blend-layer-fx";
 
     function findParentByTagName(element, tagName) {
         tagName = tagName.toUpperCase();
@@ -15,7 +15,6 @@ define(["src/boost/sizzle", "src/boost/meta"], function (Sizzle, meta) {
     function isDefaultPrevented(src) {
         return src.defaultPrevented ? src.defaultPrevented() : src.returnValue === false;
     }
-
 
     var layer;
 
@@ -81,7 +80,7 @@ define(["src/boost/sizzle", "src/boost/meta"], function (Sizzle, meta) {
             preventDefault(event);
             Blend.ui.layerBack();
         }
-        //
+        //是否是Layer触发按键
         else if (isLayerTrigger(target)) {
             preventDefault(event);
             openInLayer(href);
