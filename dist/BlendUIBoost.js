@@ -2553,11 +2553,11 @@ define('src/boost/meta',[],function () {
     };
 });
 
-define('src/boost/layer',["src/boost/sizzle", "src/boost/meta"], function (Sizzle, meta) {
+define('src/boost/layerTrigger',["src/boost/sizzle", "src/boost/meta"], function (Sizzle, meta) {
     
-    var LAYER_TRIGGER = "blend.layer.trigger";
-    var LAYER_BACK = "blend.layer.back";
-    var LAYER_FX = "blend.layer.fx";
+    var LAYER_TRIGGER = "blend-layer-trigger";
+    var LAYER_BACK = "blend-layer-back";
+    var LAYER_FX = "blend-layer-fx";
 
     function findParentByTagName(element, tagName) {
         tagName = tagName.toUpperCase();
@@ -2570,7 +2570,6 @@ define('src/boost/layer',["src/boost/sizzle", "src/boost/meta"], function (Sizzl
     function isDefaultPrevented(src) {
         return src.defaultPrevented ? src.defaultPrevented() : src.returnValue === false;
     }
-
 
     var layer;
 
@@ -2636,7 +2635,7 @@ define('src/boost/layer',["src/boost/sizzle", "src/boost/meta"], function (Sizzl
             preventDefault(event);
             Blend.ui.layerBack();
         }
-        //
+        //是否是Layer触发按键
         else if (isLayerTrigger(target)) {
             preventDefault(event);
             openInLayer(href);
@@ -2658,16 +2657,8 @@ define('src/boost/layer',["src/boost/sizzle", "src/boost/meta"], function (Sizzl
     };
 });
 
-require(["src/boost/layer"], function (layer) {
-    layer.init();
-    //document.addEventListener("blendready",
-    //    //Blend.ui.ready(
-    //    function () {
-    //        layer.init();
-    //    });
-    setTimeout(function () {
-        console.log("*********** inited ***********");
-    }, 3000);
+require(["src/boost/layerTrigger"], function (layerTrigger) {
+    layerTrigger.init();
 }, null, true);
 
 define("src/boost/main", function(){});
