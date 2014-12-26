@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>sms验证码</title>
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+    <style type="text/css">
+
+
+    </style>
+</head>
+<body>
+<h2>短信验证码</h2><br/><br/>
+
+<input id="blendui-sms" class="" data-blend="SMSAuth"/><br>
+<p>"来自支付宝 123456"</p>
+<button id="btn1">点击触发监听listen()</button><br>
+<p>"来自支付宝 1234"</p>
+<button id="btn2">点击触发监听listen({dataLength: 4})</button><br>
+<p>"来自dazzle 123456"</p>
+<button id="btn3">点击触发监听listen({keyWord: '来自dazzle'})</button><br>
+
+
+
+</body>
+<script>
+require.config({
+    baseUrl:"../.."
+});
+require(['src/hybrid/Sms'], function (Sms) {
+    
+
+    var sms = new Sms($("#blendui-sms"),{
+        fromPhoneNum: '15118820708',
+        keyWord: '来自支付宝',
+        dataType: 'int',
+        waitTime: 60,
+        dataLength: 6,
+    });
+
+
+    $("#btn1").on('click',function(e){
+        sms.listen();
+    });
+
+    $("#btn2").on('click',function(e){
+        sms.listen({
+            dataLength: 4 
+        });
+    });
+
+    $("#btn3").on('click',function(e){
+        sms.listen({
+            keyWord: '来自dazzle',
+            dataLength: 5 
+        });
+    });
+
+    window.sms = sms;
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>
