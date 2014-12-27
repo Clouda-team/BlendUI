@@ -99,7 +99,7 @@ define(
             var me = this;
             // 处理options值;
             if (!(options.url || options.dom)) {
-                return;
+                throw new Error('Layer必须指定url或者dom内容');;
             }
             this.originalUrl = options.url;
             // 监听事件
@@ -230,7 +230,6 @@ define(
                 'loadingIcon': me.loadingIcon,
                 'subLayer': me.subLayer,
                 'fixed': me.fixed
-
             });
             return this;
         };
@@ -241,20 +240,17 @@ define(
          */
         Layer.prototype. in = function() {
             var me = this;
-            // 检查当前layer是否已经销毁
+            Control.prototype.in.apply(me, arguments);
             if (!layerApi.isAvailable(this.id)) {
                 me.render();
             }
-            Control.prototype. in .apply(me, arguments);
             layerApi.resume(me.id, {
                 reverse: me.reverse,
                 fx: me.fx,
                 cover: me.cover,
                 duration: me.duration,
                 timingFn: me.timingFn
-
             });
-
             return this;
         };
 
@@ -386,6 +382,44 @@ define(
             // this.fire("_initEvent");
             Control.prototype.destroy.apply(this, arguments);
             return this;
+        };
+
+        // Layer的静态方法
+
+        /*
+         * 为layer怎加增加侧边栏,默认为当前layer
+         * @parms {string} layerId 要怎加侧边栏的layerId
+         * @parms {Object} options 侧边栏的设置值
+         * @parms {string} [options.url] 侧边栏url;
+         * @parms {string} [options.bgColor] 侧边栏的底层背景;
+         * @parms {boolean} [options.opacity] 侧边栏是否透明;
+         * @parms {number} options.width 侧边栏宽度
+         */
+        Layer.addSidebar = function(layerId, options){
+            if(!options){
+                options = layerId;
+                layerId = layerApi.getCurrentId();
+            }
+            options.sliderLayer = true;
+            layerApi.prepare(layerId, options);
+        };
+
+        // 显示layer上的侧边栏
+        Layer.showSidebar = function(layerId){
+            layerId = layerId||layerApi.getCurrentId();
+            layerApi.showSlider(layerId);
+        };
+
+        // 隐藏layer上的侧边栏
+        Layer.hideSidebar = function(layerId){
+            layerId = layerId||layerApi.getCurrentId();
+            layerApi.hideSlider(layerId);
+        };
+
+        // 隐藏layer上的侧边栏
+        Layer.destorySidebar = function(layerId){
+            layerId = layerId||layerApi.getCurrentId();
+            layerApi.destroySlider(layerId, options);
         };
 
         return Layer;

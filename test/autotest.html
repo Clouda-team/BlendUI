@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Clouda自动化测试</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link href="../third_party/mocha.css" rel="stylesheet" media="screen" />
+    <script src="../third_party/mocha.js"></script>
+    <script src="../third_party/chai.js"></script>
+    <script src="../third_party/require.js"></script>
+    <script type="text/javascript">
+        mocha.setup({ ui: 'bdd'});
+        require.config({
+            baseUrl:"./",
+            urlArgs: "t="+(1*new Date())
+        });
+    </script>
+  </head>
+  <body>
+  <div id="mocha"></div>
+  <script>
+    document.write('<script src="autotest.js?t='+(1*new Date())+'" > <\/script>');
+  </script>
+  </body>
+</html>

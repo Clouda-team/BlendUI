@@ -47,7 +47,8 @@
 <br/>
 <hr/>
 <input type="button" id="create6" value="传递dom"/>
-
+<br/><hr/>
+<input type="button" id="create7" value="javascirpt"/>
 <br/>
 <hr/>
 <input type="button" id="resumeLayer" value="重新激活layer test"/><br/>
@@ -120,7 +121,8 @@ exitApp -->
 </body>
 <script>
 require.config({
-    baseUrl:"../../"
+    baseUrl:"../../",
+    urlArgs: "bust=" +  (new Date()).getTime()
 });
 require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
     var _layer;
@@ -144,6 +146,16 @@ require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
             _layer = new Layer({
                 'id':"test2",
                 "url":"index_demo.html",
+                "active":true,
+                "fx":"slide",
+                "duration":1000
+            });
+        },
+        create7 : function(){
+            _layer&&_layer.destroy();
+            _layer = new Layer({
+                'id':"test2",
+                "url":"javascript:window.location.href='http://www.baidu.com';document.addEventListener('runtimeready', function(){document.write(document.domain)}, false);",
                 "active":true,
                 "fx":"slide",
                 "duration":1000

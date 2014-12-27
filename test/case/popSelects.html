@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>侧边栏</title>
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>侧边栏layer</h2><br/><br/>
+
+<input type="button" id="create" value="创建级联菜单"/> 
+<input type="button" id="show" value="show"/> 
+<input type="button" id="hide" value="hide"/>
+<a href="http://www.163.com" title="">163</a>
+<br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</body>
+<script>
+/*document.addEventListener("runtimeready", function(e){
+    try{
+    var posInfo = {
+        left: 0,
+        top: 800,
+        width: 0,
+        height: 400
+        //fixed: false
+    }
+    window.lc_bridge.addComponent("cascadingMenu", 'UIBase', 'com.baidu.lappgui.component.cascadingMenu.CascadingMenu', JSON.stringify(posInfo));
+    var data = {
+        menus : [{
+                    id:'0000',
+                    name:'昌平区',
+                    menus:[{
+                        id:'00001',
+                        name:'回龙观'
+                    },{
+                        id:'00002',
+                        name:'天通苑'
+                    },{
+                        id:'00003',
+                        name:'昌平镇'
+                    },{
+                        id:'00004',
+                        name:'小汤山'
+                    },{
+                        id:'00005',
+                        name:'北极家'
+                    },{
+                        id:'00006',
+                        name:'沙河'
+                    }]
+                },{
+                    id:"0001",
+                    name:'朝阳区',
+                    menus:[{
+                        id:'00011',
+                        name:'国贸'
+                    },{
+                        id:'00012',
+                        name:'国贸'
+                    },{
+                        id:'00013',
+                        name:'国贸'
+                    },{
+                        id:'00014',
+                        name:'国贸'
+                    },{
+                        id:'00015',
+                        name:'国贸'
+                    },{
+                        id:'00016',
+                        name:'国贸'
+                    }]
+                },{
+                    id:'0002',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0003',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0004',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0005',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0006',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                }]
+    };
+    
+    window.lc_bridge.componentExecuteNative('cascadingMenu', 'setMenu', JSON.stringify(data));
+    }catch(e){
+        alert(e);   
+    }
+}, false);*/
+
+/*window.lc_bridge.componentExecuteNative('cascadingMenu', 'show', '{}');
+window.lc_bridge.componentExecuteNative('cascadingMenu', 'hide', '{}');*/
+
+
+
+require.config({
+    baseUrl:"../../",
+    urlArgs: "bust=" +  (new Date()).getTime()
+});
+require(['src/hybrid/blend','src/hybrid/CascadingMenu'], function ( main,CascadingMenu) {
+    var cascadingMenu;
+    var _eval = {
+        create : function(){
+            cascadingMenu =new CascadingMenu({
+                id:"cascadingMenu",
+                left: 0,
+                top: 200,
+                width: 0,
+                height: 200,
+                fixed:false,
+                menus:[{
+                    id:'0000',
+                    name:'昌平区',
+                    menus:[{
+                        id:'00001',
+                        name:'回龙观'
+                    },{
+                        id:'00002',
+                        name:'天通苑'
+                    },{
+                        id:'00003',
+                        name:'昌平镇'
+                    },{
+                        id:'00004',
+                        name:'小汤山'
+                    },{
+                        id:'00005',
+                        name:'北极家'
+                    },{
+                        id:'00006',
+                        name:'沙河'
+                    }]
+                },{
+                    id:"0001",
+                    name:'朝阳区',
+                    menus:[{
+                        id:'00011',
+                        name:'国贸'
+                    },{
+                        id:'00012',
+                        name:'国贸'
+                    },{
+                        id:'00013',
+                        name:'国贸'
+                    },{
+                        id:'00014',
+                        name:'国贸'
+                    },{
+                        id:'00015',
+                        name:'国贸'
+                    },{
+                        id:'00016',
+                        name:'国贸'
+                    }]
+                },{
+                    id:'0002',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0003',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0004',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0005',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                },{
+                    id:'0006',
+                    name:'海淀',
+                    menus:[{
+                        id:'00021',
+                        name:'中关村'
+                    },{
+                        id:'00022',
+                        name:'五道口'
+                    },{
+                        id:'00023',
+                        name:'五道口'
+                    },{
+                        id:'00024',
+                        name:'五道口'
+                    },{
+                        id:'00025',
+                        name:'五道口'
+                    },{
+                        id:'00026',
+                        name:'五道口'
+                    },{
+                        id:'00027',
+                        name:'五道口'
+                    }]
+                }]
+            })
+        },
+        show:function(){
+            cascadingMenu.show();
+        },
+        hide:function(){
+            cascadingMenu.hide();
+        }
+    };
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

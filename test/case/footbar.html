@@ -13,6 +13,17 @@
 
 <input type="button" id="create" value="创建footbar"/> 
 <br/>
+<input type="button" id="updataMenu" value="更新数据"/>
+<br/>
+<input type="button" id="updataMenu2" value="更新子菜单"/>
+<br/>
+<input type="button" id="updataMenu0" value="0值"/>
+<input type="button" id="updataMenu9999" value="9999值"/>
+<input type="button" id="updataMenu10000" value="10000值"/>
+<input type="button" id="updataMenuX" value="消失"/>
+<input type="button" id="updataMenuY" value="-2值测试"/>
+<input type="button" id="updataMenuM" value="最大值测试"/>
+<br/>
 <input type="button" id="show" value="显示"/>
 <br/>
 <input type="button" id="hide" value="隐藏"/>
@@ -20,7 +31,8 @@
 </body>
 <script>
 require.config({
-    baseUrl:"../.."
+    baseUrl:"../..",
+    urlArgs: "bust=" +  (new Date()).getTime()
 });
 require(['src/hybrid/blend','src/hybrid/Footbar'], function ( main,Footbar) {
     var footbarCase;
@@ -30,12 +42,14 @@ require(['src/hybrid/blend','src/hybrid/Footbar'], function ( main,Footbar) {
                 id:"footbartest",
                 menus:[
                     {id:0,name:"账单",
-                        subMenus:[{id:100,name:"当月账单"},{id:101,name:"历史账单"}]},
+                        subMenus:[{id:100,name:"当月账单",redPointCount:100},{id:101,name:"历史账单"}]},
                     {id:1,name:"我的",
                         subMenus:[{id:100,name:"积分"},{id:101,name:"额度"},{id:102,name:"开卡"},{id:103,name:"缴费"},{id:104,name:"预约"}]},
-                    {id:2,name:"自助查询"},
+                    {id:2,name:"自助查询",redPointCount:100},
                     {id:3,name:"资讯",
-                        subMenus:[{id:101,name:"今日头条",type:"ddd"},{id:102,name:"昨日头条"},{id:103,name:"前日头条"},{id:104,name:"大前日头条"}]}
+                        subMenus:[{id:101,name:"今日头条",type:"ddd"},{id:102,name:"昨日头条"},{id:103,name:"前日头条"},{id:104,name:"大前日头条"}]},
+                    {id:4,name:"资讯",
+                        subMenus:[{id:105,name:"今日头条",type:"ddd"},{id:106,name:"昨日头条"},{id:107,name:"前日头条"},{id:108,name:"大前日头条"}]}
                 ],
                 selected:function(e){
                     alert(JSON.stringify(e.data));
@@ -47,7 +61,61 @@ require(['src/hybrid/blend','src/hybrid/Footbar'], function ( main,Footbar) {
         },
         hide:function(){
             footbarCase.hide()
+        },
+        updataMenu:function(){
+            footbarCase.updataMenu([{id:2,name:"测试测测测",redPointCount:10000},{id:4,name:"自助查询"}]);
+        },
+        updataMenu2:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101,redPointCount:999
+                },{id:102,name:"testtest"}]}
+            ]);
+        },
+        updataMenu0:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101, redPointCount:0
+                }]}
+            ]);
+        },
+        updataMenu9999:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101, redPointCount:9999
+                }]}
+            ]);
+        },
+        updataMenu10000:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101, redPointCount:10000
+                }]}
+            ]);
+        },
+        updataMenuX:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101, redPointCount:-1
+                }]}
+            ]);
+        },
+        updataMenuY:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101, redPointCount:-2
+                }]}
+            ]);
+        },
+        updataMenuM:function(){
+            footbarCase.updataMenu([
+                {id:3,subMenus:[{
+                   id:101, redPointCount:42949672964294967296
+                }]}
+            ]);
         }
+
+
     };
     $('input[type=button]').click(function(e){
         var id = this.id;

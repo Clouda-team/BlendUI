@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>侧边栏</title>
+    <meta content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport" />
+    <link rel="stylesheet" href="">
+    <script src="../../third_party/zepto.js"></script>
+    <script src="../../third_party/require.js"></script>
+</head>
+<body>
+<h2>侧边栏layer</h2><br/><br/>
+
+<input type="button" id="create" value="创建侧边栏 width=200"/>     test
+<br/><br/>
+<input type="button" id="create1" value="创建侧边栏 width=400"/>  
+
+<input type="button" id="create2" value="创建Layer"/>  
+<input type="button" id="show" value="show"/> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="button" id="hide" value="hide"/>
+<!-- <a href="http://www.163.com" title="">163</a> -->
+<br/>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+</body>
+<script>
+require.config({
+    baseUrl:"../../",
+    urlArgs: "bust=" +  (new Date()).getTime()
+});
+require(['src/hybrid/blend','src/hybrid/Layer'], function ( main,Layer) {
+    var footbarCase;
+    var sliderLayer;
+    var _eval = {
+        create : function(){
+            window.lc_bridge.prepareLayer('0', JSON.stringify({url: 'http://m.baidu.com', sliderLayer: true, bgColor:"#ff0000",
+                        opacity:false,width:"200"}));
+        },
+        create1 : function(){
+            window.lc_bridge.prepareLayer('0', JSON.stringify({url: 'http://m.baidu.com', sliderLayer: true, bgColor:"#FFD700",
+                        opacity:true,width:"400"}));
+        },
+        create2 : function(){
+            sliderLayer1 = new Layer({
+                'id':"sliderLayertest"+(1*new Date()),
+                "url":"http://m.sogou.com",
+                active:true
+           });
+        },
+        show:function(){
+            //sliderLayer.in()
+             window.lc_bridge.showSlider('0');
+        },
+        hide:function(){
+            //sliderLayer.out()
+             window.lc_bridge.hideSlider('0');
+        }
+    };
+    $('input[type=button]').click(function(e){
+        var id = this.id;
+        console.log(id+"=============="+id);
+        if(_eval[id]){
+            _eval[id].call(_eval);
+        }else{
+            alert('没有此case')
+        }
+        return false;
+    });
+
+});
+</script>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+</html>

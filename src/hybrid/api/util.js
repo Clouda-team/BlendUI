@@ -58,7 +58,7 @@ define(
                 }
                 value = fn.apply(api, args);
                 // android 4.4 true false返回为字符串
-                if (value === 'ture') {
+                if (value === 'true') {
                     value = true;
                 }
                 else if (value === 'false') {

@@ -30,7 +30,6 @@ module.exports = function (grunt) {
             },
             boost: {
                 options: {
-
                     baseUrl: "./",
                     name: 'src/almond',
                     include: ["src/boost/main"],
@@ -78,15 +77,6 @@ module.exports = function (grunt) {
                 dest: 'dist/BlendUIBoost.min.js'
             }
         },
-        qunit: {
-            all: {
-                options: {
-                    urls: [
-                        'test/blendui.html'
-                    ]
-                }
-            }
-        },
         watch: {
             scripts: {
                 files: ['Gruntfile.js', 'src/web/**/*.js', 'src/hybrid/**/*.js', 'src/boost/**/*.js'],
@@ -95,14 +85,38 @@ module.exports = function (grunt) {
                     spawn: false,
                 }
             },
+        },
+        mocha:{
+            test:{
+                src: ['test/autotest.html'],
+            }
+        }
+        autoTest:{
+            src: ['test/autotest/*.js']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-requirejs');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-qunit');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-mocha');
+    
+    grunt.registerMultiTask('autoTest','自动化测试脚本合并',function(){
+         var options = this.options();
+         var file = [];
+         this.files.forEach(function(filePair) {
+            //console.log(filePair);
+            filePair.src.forEach(function(src) {
+                file.push('\''+src.replace('test\/','')+'\'');
+            });
+        });
+        console.log(this);
+        var sc = 'require(['+file.join(',')+'],function(){mocha.run();});'
+        grunt.file.write('test/test.js', sc , {
+            encoding:"utf8"
+        });
+    });
 
     grunt.registerTask('hybrid', [
         'jshint',
@@ -110,7 +124,7 @@ module.exports = function (grunt) {
         'uglify:hybrid'
     ]);
     grunt.registerTask('web', [
-        'jshint',
+        //'jshint',
         'requirejs:web',
         'uglify:web'
     ]);
@@ -121,6 +135,6 @@ module.exports = function (grunt) {
     ]);
     grunt.registerTask('test', [
         'jshint',
-        'qunit'
+        'mocha'
     ]);
 };

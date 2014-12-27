@@ -39,7 +39,8 @@ define(
             'softKeyboardHide',
             'showAlert',
             'showPrompt',
-            'showConfirm'
+            'showConfirm',
+            'cascadingMenuSelected'
         ];
 
         var handlers = {};

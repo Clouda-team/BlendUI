@@ -61,7 +61,6 @@ define(
                 me.fire('selected', arguments, me);
             }, me.id, me);
 
-
             // 销毁之后撤销绑定
             me.on('afterdistory', function() {
                 footbarApi.off('toolbarMenuSelected', 'all', me.id, me);
@@ -86,7 +85,6 @@ define(
                 width: me.width,
                 height: me.height,
                 fixed: me.fixed
-
             });
 
             footbarApi.setMenu(me.id, {
@@ -94,6 +92,13 @@ define(
 
             });
             return this;
+        };
+
+        // updata
+        Footbar.prototype.updataMenu = function(data) {
+            footbarApi.updateMenu(this.id,{
+                menus: data
+            });
         };
 
         // show

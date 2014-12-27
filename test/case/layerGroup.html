@@ -12,6 +12,7 @@
 
 <h2>layerGroup功能测试</h2>
 <input type="button" id="create" value="创建group "/>
+<input type="button" id="create1" value="创建javascript url Group "/>
 <input type="button" id="active" value="group切换"/>
 <input type="button" id="addLayer" value="增加layer"/>
 <input type="button" id="disableScroll" value="禁止滚动"/>
@@ -58,6 +59,35 @@ require(['src/hybrid/blend','src/hybrid/LayerGroup','src/hybrid/Layer'], functio
                     },
                     {
                         id:'7',
+                        url: "http://m.163.com",
+                        'autoload':true
+                    }
+                ],
+                onselected: function( event ){
+                    message("切换到layer"+event['layerId'])
+                }
+            });
+        },
+        create1 : function(){
+            group = new LayerGroup({
+                'id':"test22",
+                "left":0,
+                "top":250,
+                "scrollEnabled":true,
+                "layers":[
+                    
+                    {
+                        "id":'9',
+                        "url":"javascript:window.location.href='http://www.baidu.com';document.addEventListener('runtimeready', function(){document.write(document.domain)}, false);",
+                        "pullToRefresh":true,
+                        "pullBgColor":"ff0000",
+                        "pullText":"下拉",
+                        "loadingText":"up...",
+                        "releaseText":"释放",
+                        'autoload':true
+                    },
+                    {
+                        id:'10',
                         url: "http://m.163.com",
                         'autoload':true
                     }

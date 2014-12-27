@@ -1,35 +1,34 @@
 /**
-* @file footbar.js
-* @path hybrid/api/component/footbar.js
-* @desc native footbar组件相关api;
+* @file cascadingMenu.js
+* @path hybrid/api/component/cascadingMenu.js
+* @desc native 级联菜单组件相关api;
 * @author clouda-team(https://github.com/clouda-team)
 */
 define(
     function(require) {
 
         /**
-         * @class rutime.component.footbar
+         * @class rutime.component.cascadingMenu
          * @singleton
          * @private
          */
         var config = require('../config');
         var event = require('../event');
         var util = require('../util');
-        var footbar = {};
+        var cascadingMenu = {};
         var devPR = config.DEVICE_PR;
 
         var filterOption = util.filterPositionOption;
         var apiFn = util.apiFn;
 
         // 增加footbar组件
-        footbar.add = function(id, options) {
+        cascadingMenu.add = function(id, options) {
             var _options = {
                 'left': 0,
-                'top': (window.innerHeight - 45) * devPR,
+                'top': 0,
                 'width': window.innerWidth * devPR,
-                'height': 45 * devPR,
+                'height':window.innerHeight/2 * devPR,
                 'fixed': true
-
             };
 
             _options = filterOption(options, false, _options);
@@ -37,57 +36,58 @@ define(
             apiFn('addComponent', [
                 id,
                 'UIBase',
-                'com.baidu.lightui.component.toolbar.Toolbar',
+                'com.baidu.lappgui.blend.component.cascadingMenu.CascadingMenu',
                 JSON.stringify(_options)
             ]);
 
-            return footbar;
+            return cascadingMenu;
         };
 
-        // 设置组件菜单数据
-        footbar.setMenu = function(id, data) {
+        // 设置菜单数据
+        cascadingMenu.setMenu = function(id, data) {
             apiFn('componentExecuteNative', [
                 id,
                 'setMenu',
                 JSON.stringify(data)
             ]);
-            return footbar;
-        };
-
-        // 设置组件菜单数据
-        footbar.updateMenu = function(id, data) {
-            apiFn('componentExecuteNative', [
-                id,
-                'updateMenu',
-                JSON.stringify(data)
-            ]);
-            return footbar;
+            return cascadingMenu;
         };
 
         // 显示
-        footbar.show = function(id, options) {
+        cascadingMenu.show = function(id, options) {
             options = options || {};
             apiFn('componentExecuteNative', [
                 id,
                 'show',
                 JSON.stringify(options)
             ]);
-            return footbar;
+            return cascadingMenu;
+        };
+
+        // 选择菜单项
+        cascadingMenu.setItemSelected = function(id, options) {
+            options = options || {};
+            apiFn('componentExecuteNative', [
+                id,
+                'setItemSelected',
+                JSON.stringify(options)
+            ]);
+            return cascadingMenu;
         };
 
         // 隐藏
-        footbar.hide = function(id, options) {
+        cascadingMenu.hide = function(id, options) {
             options = options || {};
             apiFn('componentExecuteNative', [
                 id,
                 'hide',
                 JSON.stringify(options)
             ]);
-            return footbar;
+            return cascadingMenu;
         };
-
+        
         // 移除组件
-        footbar.remove = function(id) {
+        cascadingMenu.remove = function(id) {
             apiFn('removeComponent', [
                 id,
                 'UIBase'
@@ -95,10 +95,10 @@ define(
         };
 
         // 事件扩展到footbar组件中
-        footbar.on = event.on;
+        cascadingMenu.on = event.on;
 
-        footbar.off = event.off;
+        cascadingMenu.off = event.off;
 
-        return footbar;
+        return cascadingMenu;
     }
 );

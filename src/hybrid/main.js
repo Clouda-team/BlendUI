@@ -10,13 +10,14 @@ require([
     'src/hybrid/LayerGroup',
     'src/hybrid/Slider',
     'src/hybrid/Footbar',
-    'src/hybrid/delegateLayer'
-], function(blend, Layer, LayerGroup, Slider, Footbar) {
+    'src/hybrid/CascadingMenu'
+], function(blend, Layer, LayerGroup, Slider, Footbar, CascadingMenu) {
         blend = blend || {};
         blend.Layer = Layer;
         blend.LayerGroup = LayerGroup;
         blend.Slider = Slider;
         blend.Footbar = Footbar;
+        blend.CascadingMenu = CascadingMenu;
 
         // 初始化命名空间;
         window.Blend = window.Blend || {};

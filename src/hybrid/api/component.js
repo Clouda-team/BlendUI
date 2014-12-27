@@ -13,6 +13,8 @@ define(
         comp.slider = require('./component/slider');
         // footbar组件
         comp.footbar = require('./component/footbar');
+        // cascadingMenu
+        comp.cascadingMenu = require('./component/cascadingMenu');
 
         return comp;
     }
