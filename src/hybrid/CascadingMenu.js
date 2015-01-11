@@ -109,7 +109,9 @@ define(
 
         // 选择菜单中的某个项
         CascadingMenu.prototype.selectItem= function( data ){
-            cascadingMenuApi.setItemSelected(this.id,data);
+            cascadingMenuApi.setItemSelected(this.id,{
+                menus: [data]
+            });
         }
 
         /**

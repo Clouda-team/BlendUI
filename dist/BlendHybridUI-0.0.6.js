@@ -718,7 +718,7 @@ define(
                 }
                 value = fn.apply(api, args);
                 // android 4.4 true false返回为字符串
-                if (value === 'ture') {
+                if (value === 'true') {
                     value = true;
                 }
                 else if (value === 'false') {
@@ -777,7 +777,8 @@ define(
             'softKeyboardHide',
             'showAlert',
             'showPrompt',
-            'showConfirm'
+            'showConfirm',
+            'cascadingMenuSelected'
         ];
 
         var handlers = {};
@@ -939,6 +940,10 @@ define(
             if (layerOptions.url) {
                 layerOptions.url = getBasePath(layerOptions.url);
             }
+            if(layerOptions.sliderLayer){
+                layerOptions.width = (layerOptions.width||(window.innerWidth*1.5))+"";
+            }
+            
             apiFn('prepareLayer', [
                 layerId,
                 JSON.stringify(layerOptions)
@@ -962,13 +967,11 @@ define(
                 'reverse': false,
                 'duration': 300,
                 'cover': false
-
             };
             var replaceString = {
                 'slow': 500,
                 'normal': 300,
                 'quick': 100
-
             };
             _options = filterOption(options, false, _options);
             if (replaceString[_options['duration']]) {
@@ -1028,7 +1031,7 @@ define(
                     layerId,
                     url
                 ]);
-            }
+            }  
             return layerId;
         };
 
@@ -1193,7 +1196,23 @@ define(
                 layerId
             ]);
         };
+        // showSlider
+        layer.showSlider = function(layerId) {
+            layerId = layerId || layer.getCurrentId();
+            return apiFn('showSlider', [
+                layerId
+            ]);
+        };
 
+        // hideSlider
+        layer.hideSlider = function(layerId) {
+            layerId = layerId || layer.getCurrentId();
+            return apiFn('hideSlider', [
+                layerId
+            ]);
+        };
+
+        // 设置subLayer的大小
         layer.setLayout = function(layerId, options) {
             var _options = filterOption(options);
             return apiFn('layerSetLayout', [
@@ -1770,13 +1789,118 @@ define(
 );
 
 /**
+* @file cascadingMenu.js
+* @path hybrid/api/component/cascadingMenu.js
+* @desc native 级联菜单组件相关api;
+* @author clouda-team(https://github.com/clouda-team)
+*/
+define(
+    'src/hybrid/api/component/cascadingMenu',['require','../config','../event','../util'],function(require) {
+
+        /**
+         * @class rutime.component.cascadingMenu
+         * @singleton
+         * @private
+         */
+        var config = require('../config');
+        var event = require('../event');
+        var util = require('../util');
+        var cascadingMenu = {};
+        var devPR = config.DEVICE_PR;
+
+        var filterOption = util.filterPositionOption;
+        var apiFn = util.apiFn;
+
+        // 增加footbar组件
+        cascadingMenu.add = function(id, options) {
+            var _options = {
+                'left': 0,
+                'top': 0,
+                'width': window.innerWidth * devPR,
+                'height':window.innerHeight/2 * devPR,
+                'fixed': true
+            };
+
+            _options = filterOption(options, false, _options);
+
+            apiFn('addComponent', [
+                id,
+                'UIBase',
+                'com.baidu.lappgui.blend.component.cascadingMenu.CascadingMenu',
+                JSON.stringify(_options)
+            ]);
+
+            return cascadingMenu;
+        };
+
+        // 设置菜单数据
+        cascadingMenu.setMenu = function(id, data) {
+            apiFn('componentExecuteNative', [
+                id,
+                'setMenu',
+                JSON.stringify(data)
+            ]);
+            return cascadingMenu;
+        };
+
+        // 显示
+        cascadingMenu.show = function(id, options) {
+            options = options || {};
+            apiFn('componentExecuteNative', [
+                id,
+                'show',
+                JSON.stringify(options)
+            ]);
+            return cascadingMenu;
+        };
+
+        // 选择菜单项
+        cascadingMenu.setItemSelected = function(id, options) {
+            options = options || {};
+            apiFn('componentExecuteNative', [
+                id,
+                'setItemSelected',
+                JSON.stringify(options)
+            ]);
+            return cascadingMenu;
+        };
+
+        // 隐藏
+        cascadingMenu.hide = function(id, options) {
+            options = options || {};
+            apiFn('componentExecuteNative', [
+                id,
+                'hide',
+                JSON.stringify(options)
+            ]);
+            return cascadingMenu;
+        };
+        
+        // 移除组件
+        cascadingMenu.remove = function(id) {
+            apiFn('removeComponent', [
+                id,
+                'UIBase'
+            ]);
+        };
+
+        // 事件扩展到footbar组件中
+        cascadingMenu.on = event.on;
+
+        cascadingMenu.off = event.off;
+
+        return cascadingMenu;
+    }
+);
+
+/**
 * @file component.js
 * @path hybrid/api/component.js
 * @desc 组件相关代码入口文件;
 * @author clouda-team(https://github.com/clouda-team)
 */
 define(
-    'src/hybrid/api/component',['require','./component/slider','./component/footbar'],function(require) {
+    'src/hybrid/api/component',['require','./component/slider','./component/footbar','./component/cascadingMenu'],function(require) {
 
         var comp = {};
 
@@ -1784,6 +1908,8 @@ define(
         comp.slider = require('./component/slider');
         // footbar组件
         comp.footbar = require('./component/footbar');
+        // cascadingMenu
+        comp.cascadingMenu = require('./component/cascadingMenu');
 
         return comp;
     }
@@ -2399,7 +2525,7 @@ define(
             var me = this;
             // 处理options值;
             if (!(options.url || options.dom)) {
-                return;
+                throw new Error('Layer必须指定url或者dom内容');;
             }
             this.originalUrl = options.url;
             // 监听事件
@@ -2530,7 +2656,6 @@ define(
                 'loadingIcon': me.loadingIcon,
                 'subLayer': me.subLayer,
                 'fixed': me.fixed
-
             });
             return this;
         };
@@ -2541,20 +2666,17 @@ define(
          */
         Layer.prototype. in = function() {
             var me = this;
-            // 检查当前layer是否已经销毁
+            Control.prototype.in.apply(me, arguments);
             if (!layerApi.isAvailable(this.id)) {
                 me.render();
             }
-            Control.prototype. in .apply(me, arguments);
             layerApi.resume(me.id, {
                 reverse: me.reverse,
                 fx: me.fx,
                 cover: me.cover,
                 duration: me.duration,
                 timingFn: me.timingFn
-
             });
-
             return this;
         };
 
@@ -2686,6 +2808,44 @@ define(
             // this.fire("_initEvent");
             Control.prototype.destroy.apply(this, arguments);
             return this;
+        };
+
+        // Layer的静态方法
+
+        /*
+         * 为layer怎加增加侧边栏,默认为当前layer
+         * @parms {string} layerId 要怎加侧边栏的layerId
+         * @parms {Object} options 侧边栏的设置值
+         * @parms {string} [options.url] 侧边栏url;
+         * @parms {string} [options.bgColor] 侧边栏的底层背景;
+         * @parms {boolean} [options.opacity] 侧边栏是否透明;
+         * @parms {number} options.width 侧边栏宽度
+         */
+        Layer.addSidebar = function(layerId, options){
+            if(!options){
+                options = layerId;
+                layerId = layerApi.getCurrentId();
+            }
+            options.sliderLayer = true;
+            layerApi.prepare(layerId, options);
+        };
+
+        // 显示layer上的侧边栏
+        Layer.showSidebar = function(layerId){
+            layerId = layerId||layerApi.getCurrentId();
+            layerApi.showSlider(layerId);
+        };
+
+        // 隐藏layer上的侧边栏
+        Layer.hideSidebar = function(layerId){
+            layerId = layerId||layerApi.getCurrentId();
+            layerApi.hideSlider(layerId);
+        };
+
+        // 隐藏layer上的侧边栏
+        Layer.destorySidebar = function(layerId){
+            layerId = layerId||layerApi.getCurrentId();
+            layerApi.destroySlider(layerId, options);
         };
 
         return Layer;
@@ -3238,7 +3398,6 @@ define(
                 me.fire('selected', arguments, me);
             }, me.id, me);
 
-
             // 销毁之后撤销绑定
             me.on('afterdistory', function() {
                 footbarApi.off('toolbarMenuSelected', 'all', me.id, me);
@@ -3263,7 +3422,6 @@ define(
                 width: me.width,
                 height: me.height,
                 fixed: me.fixed
-
             });
 
             footbarApi.setMenu(me.id, {
@@ -3304,85 +3462,130 @@ define(
 );
 
 /**
-* @file delegateLayer.js
-* @path hybrid/delegateLayer.js
-* @desc 通过插件的形式为blend添加delegate,使其在底层layer上集中创建layer和
-*    使用layer方法,通过消息传递在集中创建layer,为JSON.stringify和
-*    parse增加filter支持函数传递
-* @author clouda-team(https://github.com/clouda-team)
-*/
+ * @file CascadingMenu.js
+ * @path hybrid/CascadingMenu.js
+ * @desc 级联菜单基类
+ * @author clouda-team(https://github.com/clouda-team)
+ */
 define(
-    'src/hybrid/delegateLayer',['require','./blend','./Layer'],function(require) {
-        var blend = require('./blend');
-        var LayerClass = require('./Layer');
-        var protos = new LayerClass();
-        var delegateMethod = 'delegateMethod';
-        var delegateCreate = 'delegateCreate';
-        var DelegateLayer = function(id) {
-            this.id = id || blend.getLayerId();
-        };
-        // 必须等ready后触发;
-        blend.ready(function() {
-            var layerId = blend.getLayerId() + '';
-            if (layerId === '0') {
-                // 触发函数
-                blend.on(delegateMethod, function(e) {
-                    var data = e.data;
-                    var method = data.method;
-                    var args = data.args;
-                    var id = data.id;
-                    blend.get(id)[method].apply(blend.get(id), args);
-                });
-                // 创建layer
-                blend.on(delegateCreate, function(e) {
-                    new LayerClass(e.data);
-                });
-            }
-        });
-        // 循环查找各个属性和函数;
-        for (var i in protos) {
-            // 方法可以通过delegate进行操作，属性不能直接获取
-            DelegateLayer.prototype[i] = (function(attr) {
-                var fn;
-                if (typeof protos[attr] === 'function') {
-                    fn = function() {
-                        var me = this;
-                        blend.fire(delegateMethod, '0', {
-                            id: me.id,
-                            args: arguments,
-                            method: attr
+    'src/hybrid/CascadingMenu',['require','../common/lib','./runtime','./Control'],function(require) {
+        var lib = require('../common/lib');
+        var runtime = require('./runtime');
+        var Control = require('./Control');
+        var cascadingMenuApi = runtime.component.cascadingMenu;
 
-                        });
-                    };
-                }
-                else {
-                    fn = function() {
-                        console.log('delegate error');
-                    };
-                }
-                return fn;
-            })(i);
+
+        /**
+         * cascadingMenuApi 初始化参数
+         * @constructor
+         * @param {Object} options 有创建独立CascadingMenu所需要的条件
+         * @param {string} [options.id] CascadingMenu实例id
+         * @param {Array} [options.menus] 菜单json数据 {}
+         * @param {number} [options.top] 菜单top值
+         * @param {number} [options.left] 菜单left值
+         * @param {number} [options.width] 菜单的宽
+         * @param {number} [options.height] 菜单的高
+         * @return {CascadingMenu} this
+         */
+        var CascadingMenu = function(options) {
+            Control.call(this, options);
+            this._init(options);
+            return this;
+        };
+
+        // 继承control类;
+        lib.inherits(CascadingMenu, Control);
+
+        CascadingMenu.prototype.constructor = CascadingMenu;
+
+        /**
+         * 实例初始化,根据传参数自动化实例方法调用, 私有方法;
+         * @private
+         * @param {Object} options 创建layer的初始化参数同结构化options参数
+         * @return {CascadingMenu} this
+         */
+        CascadingMenu.prototype._init = function(options) {
+            this._initEvent();
+
+            this.render();
+
+            return this;
+        };
+
+        // 默认属性
+        CascadingMenu.prototype.type = 'cascadingMenu';
+
+        /**
+         * 事件初始化
+         * @private
+         * @return {CascadingMenu} this
+         */
+        CascadingMenu.prototype._initEvent = function() {
+            var me = this;
+
+            cascadingMenuApi.on('cascadingMenuSelected', function(event) {
+                me.selected && me.selected.apply(me, arguments);
+                me.fire('selected', arguments, me);
+            }, me.id, me);
+
+            // 销毁之后撤销绑定
+            me.on('afterdistory', function() {
+                cascadingMenuApi.off('cascadingMenuSelected', 'all', me.id, me);
+            });
+
+            window.addEventListener('unload', function(e) {
+                me.destroy();
+            });
+
+            return me;
+        };
+
+        /**
+         * 创建渲染页面
+         * @return {CascadingMenu} this 当前实例
+         */
+        CascadingMenu.prototype.paint = function() {
+            var me = this;
+            cascadingMenuApi.add(me.id, {
+                top: me.top,
+                left: me.left,
+                width: me.width,
+                height: me.height,
+                fixed: me.fixed
+            });
+
+            cascadingMenuApi.setMenu(me.id, {
+                menus: me.menus
+            });
+            return this;
+        };
+
+        // show
+        CascadingMenu.prototype.show = function() {
+            cascadingMenuApi.show(this.id);
+        };
+
+        // hide
+        CascadingMenu.prototype.hide = function() {
+            cascadingMenuApi.hide(this.id);
+        };
+
+        // 选择菜单中的某个项
+        CascadingMenu.prototype.selectItem= function( data ){
+            cascadingMenuApi.setItemSelected(this.id,{
+                menus: [data]
+            });
         }
 
-        blend.getLayer = function(id) {
-            var layer = blend.get(id);
-            if (layer) {
-                return layer;
-            }
-            return new DelegateLayer(id);
+        /**
+         * 销毁
+         */
+        CascadingMenu.prototype.destroy = function() {
+            //cascadingMenuApi.remove(this.id);
+            Control.prototype.destroy.apply(this, arguments);
         };
 
-        blend.createLayer = function(options) {
-            var layer;
-            if (blend.getLayerId() === '0') {
-                layer = new LayerClass(options);
-            }
-            else {
-                blend.fire(delegateCreate, '0', options);
-                layer = blend.getLayer(options.id);
-            }
-            return layer;
-        };
+        return CascadingMenu;
     }
 );
 
@@ -3398,13 +3601,14 @@ require([
     'src/hybrid/LayerGroup',
     'src/hybrid/Slider',
     'src/hybrid/Footbar',
-    'src/hybrid/delegateLayer'
-], function(blend, Layer, LayerGroup, Slider, Footbar) {
+    'src/hybrid/CascadingMenu'
+], function(blend, Layer, LayerGroup, Slider, Footbar, CascadingMenu) {
         blend = blend || {};
         blend.Layer = Layer;
         blend.LayerGroup = LayerGroup;
         blend.Slider = Slider;
         blend.Footbar = Footbar;
+        blend.CascadingMenu = CascadingMenu;
 
         // 初始化命名空间;
         window.Blend = window.Blend || {};
