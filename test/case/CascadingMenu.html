@@ -402,6 +402,20 @@ require(['src/hybrid/blend','src/hybrid/CascadingMenu'], function ( main,Cascadi
                 }],
                 selected:function(e){
                     alert(JSON.stringify(e.data));
+                },
+                config:{
+                    //配置信息
+                    menuBgColor:"#FF0000",
+                    itemBgColorNormal:"#FFFF00",
+                    itemColorSelected:"#00FFFF",
+                    itemBgColorHalfWaySelected:"#0000FF",
+                    itemBgColorPressed:"#BABA00",
+                    itemPaddingH:10,
+                    itemPaddingV:20,
+                    dividerBgColorNormal:"#FF00FF",
+                    dividerBgColorSelected:"#00eeFF",
+                    dividerHeight:10,
+                    dividerInsetWidth:48
                 }
             })
         },

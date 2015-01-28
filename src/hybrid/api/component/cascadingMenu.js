@@ -53,6 +53,16 @@ define(
             return cascadingMenu;
         };
 
+        // 配置信息
+        cascadingMenu.setConfig = function(id,data){
+            apiFn('componentExecuteNative',[
+                id,
+                'setConfig',
+                JSON.stringify(data)
+            ]);
+            return cascadingMenu;
+        };
+
         // 显示
         cascadingMenu.show = function(id, options) {
             options = options || {};

@@ -91,6 +91,8 @@ define(
                 fixed: me.fixed
             });
 
+            cascadingMenuApi.setConfig(me.id,me.config);
+
             cascadingMenuApi.setMenu(me.id, {
                 menus: me.menus
             });
