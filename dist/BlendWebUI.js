@@ -10181,6 +10181,10 @@ define('src/web/blend',["require",'./../common/lib',"./configs","./events",'../.
             return controls[id];
         };
 
+        blend.getLayerId = function(){
+            return Blend.ui.activeLayer.attr("data-blend-id") || '0';
+        }
+
         blend.on = events.on;
         blend.once = events.once;
         blend.off = events.off;
